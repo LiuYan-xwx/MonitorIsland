@@ -1,0 +1,46 @@
+﻿<ci:ComponentBase x:Class="MonitorIsland.Controls.Components.MonitorComponentSettingsControl"
+            xmlns:ci="http://classisland.tech/schemas/xaml/core"
+            x:TypeArguments="settings:MonitorComponentSettings"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:MonitorIsland.Controls.Components"
+            xmlns:settings="clr-namespace:MonitorIsland.Models.ComponentSettings"
+            mc:Ignorable="d" 
+            d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
+       <ScrollViewer>
+           <StackPanel>
+                <ci:SettingsCard IconGlyph="CardTextOutline"
+                                 Header="显示监控信息"
+                                 Description="选择要监控的项目"
+                                 Margin="0 0 0 6">
+                    <ci:SettingsCard.Switcher>
+                        <ComboBox SelectedIndex="{Binding Settings.MonitorType}"
+                                  MinWidth="110">
+                            <ComboBoxItem>内存使用量</ComboBoxItem>
+                            <ComboBoxItem>CPU 利用率</ComboBoxItem>
+                            <ComboBoxItem>CPU 温度</ComboBoxItem>
+                        </ComboBox>
+                    </ci:SettingsCard.Switcher>
+                </ci:SettingsCard>
+               
+                <ci:SettingsCard IconGlyph="CardTextOutline"
+                 Header="刷新间隔"
+                 Description="设置更新数值的频率"
+                 Margin="0 0 0 6">
+                    <ci:SettingsCard.Switcher>
+                        <ComboBox SelectedValue="{Binding Settings.RefreshInterval,Mode=TwoWay}"
+                                  SelectedValuePath="Tag"
+                                  MinWidth="110">
+                            <ComboBoxItem Content="高 (500ms)" Tag="500"/>
+                            <ComboBoxItem Content="中 (1000ms)" Tag="1000"/>
+                            <ComboBoxItem Content="低 (2000ms)" Tag="2000"/>
+                        </ComboBox>
+                    </ci:SettingsCard.Switcher>
+                </ci:SettingsCard>
+            </StackPanel>
+       </ScrollViewer>
+   </Grid>
+</ci:ComponentBase>
