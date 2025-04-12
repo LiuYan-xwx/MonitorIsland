@@ -6,7 +6,7 @@ id: MonitorIsland
 name: MonitorIsland
 description: 在主界面监控您的系统
 entranceAssembly: "MonitorIsland.dll"
-url: https://example.com
+url: https://github.com/LiuYan-xwx/MonitorIsland
 version: 1.0.0
 apiVersion: 1.5.0
 author: 流焰xwx
