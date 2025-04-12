@@ -1,10 +1,4 @@
-﻿using ClassIsland.Core.Converters;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MonitorIsland.Models.ComponentSettings
 {
@@ -14,7 +8,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private float _memoryUsage;
         private float _cpuUsage;
         private float _cpuTemperature;
-        private int _refreshInterval=1000;
+        private int _refreshInterval = 1000;
 
         /// <summary>
         /// 0 - 内存使用量<br/>
