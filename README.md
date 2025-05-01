@@ -14,12 +14,13 @@
 - CPU 温度
 
 ## 图片
-**主界面**
-
-**设置**
+**主界面**  
+![image](https://github.com/user-attachments/assets/985b970b-3217-4718-a38f-c2a75dace30c)  
+**设置**  
+![image](https://github.com/user-attachments/assets/4ce83e09-07df-4e6f-b8f3-4ea8e14c6c6b)  
 
 ## 致谢
-图标由 @LiPolymer 提供😋😋
+插件图标由 @LiPolymer 提供😋😋
 
 本项目使用了以下的第三方库：
 - [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) - 用于获取 CPU 温度
