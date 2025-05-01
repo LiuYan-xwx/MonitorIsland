@@ -65,14 +65,13 @@ namespace MonitorIsland.Controls.Components
         {
             string value = Settings.MonitorType switch
             {
-                0 => $"{Settings.MemoryUsage:F2} MB",
+                0 => $"{Settings.MemoryUsage} MB",
                 1 => $"{Settings.CpuUsage:F2} %",
-                2 => $"{Settings.CpuTemperature:F2} °C",
+                2 => $"{Settings.CpuTemperature} °C",
                 _ => "未知数据"
             };
 
-            // 前缀自动处理空值的情况
-            Settings.DisplayText = $"{Settings.DisplayPrefix} {value}";
+            Settings.DisplayText = $"{Settings.DisplayPrefix}{value}";
         }
 
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
@@ -99,9 +98,8 @@ namespace MonitorIsland.Controls.Components
                     break;
 
                 case nameof(Settings.MonitorType):
-                    // 不设置为null，而是直接设置默认前缀
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
-                    UpdateMonitorData(); // 立即更新新类型的数据
+                    UpdateMonitorData();
                     UpdateDisplayText();
                     break;
 
