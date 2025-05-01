@@ -2,7 +2,7 @@
 # YAML 教程：https://www.runoob.com/w3cnote/yaml-intro.html
 # 插件清单格式：https://docs.classisland.tech/zh-cn/latest/dev/plugins/create-project/#%E6%8F%92%E4%BB%B6%E6%B8%85%E5%8D%95%E6%96%87%E4%BB%B6
 
-id: MonitorIsland
+id: LiuYan_xwx.MonitorIsland
 name: MonitorIsland
 description: 在主界面监控您的系统
 entranceAssembly: "MonitorIsland.dll"
