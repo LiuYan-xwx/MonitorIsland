@@ -14,32 +14,7 @@
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MonitorComponent}}"
           TextElement.FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <TabControl SelectedIndex="{Binding Settings.MonitorType}">
-                <TabItem Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>
-                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
-                            <Run Text="{Binding Settings.MemoryUsage, StringFormat=' {0:F2} MB', Mode=OneWay}"/>
-                        </TextBlock>
-                    </StackPanel>
-                </TabItem>
-                <TabItem Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>
-                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
-                            <Run Text="{Binding Settings.CpuUsage, StringFormat=' {0:F2} %', Mode=OneWay}"/>
-                        </TextBlock>
-                    </StackPanel>
-                </TabItem>
-                <TabItem Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>
-                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
-                            <Run Text="{Binding Settings.CpuTemperature, StringFormat=' {0:F2} °C', Mode=OneWay}"/>
-                        </TextBlock>
-                    </StackPanel>
-                </TabItem>
-            </TabControl>
+            <TextBlock Text="{Binding Settings.DisplayText, Mode=OneWay}"/>
         </StackPanel>
     </Grid>
 </ci:ComponentBase>

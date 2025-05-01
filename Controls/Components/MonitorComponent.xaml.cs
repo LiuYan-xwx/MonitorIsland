@@ -14,7 +14,7 @@ namespace MonitorIsland.Controls.Components
     /// </summary>
     [ComponentInfo(
     "AE533FE2-A53F-4104-8C38-37DA018A98BB",
-    "系统监控",
+    "监控",
     PackIconKind.ThermostatBox,
     "监控您电脑的各种信息"
     )]
@@ -29,82 +29,92 @@ namespace MonitorIsland.Controls.Components
             Logger = logger;
             InitializeComponent();
 
-            // 初始化 MonitorHelper 和定时器
             _monitorHelper = new MonitorHelper();
             _timer = new DispatcherTimer();
-            _timer.Tick += OnTimerTick;
-
-            // 订阅 Loaded 事件
-            Loaded += MonitorComponent_OnLoaded;
-            Unloaded += MonitorComponent_OnUnloaded;
+            _timer.Tick += (s, e) =>
+            {
+                // 更新监控数据
+                UpdateMonitorData();
+                // 更新显示文本
+                UpdateDisplayText();
+            };
         }
 
-        private void OnTimerTick(object? sender, EventArgs e)
+        // 根据监控类型更新相应数据
+        private void UpdateMonitorData()
         {
             switch (Settings.MonitorType)
             {
                 case 0:
                     Settings.MemoryUsage = _monitorHelper.GetMemoryUsage();
-                    //Logger.LogTrace($"内存使用量: {Settings.MemoryUsage} MB");
                     break;
                 case 1:
                     Settings.CpuUsage = _monitorHelper.GetCpuUsage();
-                    //Logger.LogTrace($"CPU 利用率: {Settings.CpuUsage} %");
                     break;
                 case 2:
                     Settings.CpuTemperature = _monitorHelper.GetCpuTemperature();
-                    //Logger.LogTrace($"CPU 温度: {Settings.CpuTemperature} °C");
                     break;
                 default:
-                    Logger.LogWarning("未知的监控类型");
+                    Logger.LogWarning($"未知的监控类型: {Settings.MonitorType}");
                     break;
             }
         }
 
+        // 更新显示文本
+        private void UpdateDisplayText()
+        {
+            string value = Settings.MonitorType switch
+            {
+                0 => $"{Settings.MemoryUsage:F2} MB",
+                1 => $"{Settings.CpuUsage:F2} %",
+                2 => $"{Settings.CpuTemperature:F2} °C",
+                _ => "未知数据"
+            };
+
+            // 前缀自动处理空值的情况
+            Settings.DisplayText = $"{Settings.DisplayPrefix} {value}";
+        }
+
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
-
-            // 设置初始刷新间隔
+            // 初始化设置
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
 
-            // 如果显示前缀为空，则设置为默认值
-            if (string.IsNullOrEmpty(Settings.DisplayPrefix))
-            {
-                Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
-            }
+            // 监听设置变化
+            Settings.PropertyChanged += OnSettingsPropertyChanged;
 
-            // 监听属性变化
-            Settings.PropertyChanged += Settings_PropertyChanged;
-
+            // 初始化显示
+            UpdateDisplayText();
 
             // 启动定时器
             _timer.Start();
         }
 
-        private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnSettingsPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Settings.RefreshInterval))
+            switch (e.PropertyName)
             {
-                _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
-            }
-            else if (e.PropertyName == nameof(Settings.MonitorType))
-            {
-                // 无条件更新为新类型的默认前缀
-                Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+                case nameof(Settings.RefreshInterval):
+                    _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
+                    break;
 
-                // 也可以添加日志以便调试
-                Logger.LogInformation($"监控类型已更改为 {Settings.MonitorType}，前缀更新为 \"{Settings.DisplayPrefix}\"");
+                case nameof(Settings.MonitorType):
+                    // 不设置为null，而是直接设置默认前缀
+                    Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+                    UpdateMonitorData(); // 立即更新新类型的数据
+                    UpdateDisplayText();
+                    break;
+
+                case nameof(Settings.DisplayPrefix):
+                    UpdateDisplayText();
+                    break;
             }
         }
 
         private void MonitorComponent_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            // 停止定时器并取消事件订阅
             _timer.Stop();
-            if (Settings != null)
-            {
-                Settings.PropertyChanged -= Settings_PropertyChanged;
-            }
+            Settings.PropertyChanged -= OnSettingsPropertyChanged;
         }
     }
 }
