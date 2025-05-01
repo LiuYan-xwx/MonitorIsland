@@ -11,6 +11,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private int _refreshInterval = 1000;
         private string _displayPrefix;
         private string _displayText;
+        private bool _isTextPrefixEnabled = true;
 
         /// <summary>
         /// 0 - 内存使用量<br/>
@@ -120,5 +121,16 @@ namespace MonitorIsland.Models.ComponentSettings
             2 => "CPU 温度:",
             _ => string.Empty
         };
+
+        public bool IsTextPrefixEnabled
+        {
+            get => _isTextPrefixEnabled;
+            set
+            {
+                if (value == _isTextPrefixEnabled) return;
+                _isTextPrefixEnabled = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
