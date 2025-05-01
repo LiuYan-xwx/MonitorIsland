@@ -1,5 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using MonitorIsland.Models.ComponentSettings;
+using System.Windows;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -12,5 +13,13 @@ namespace MonitorIsland.Controls.Components
         {
             InitializeComponent();
         }
+        private void ResetDisplayText_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings != null)
+            {
+                Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+            }
+        }
     }
+
 }

@@ -63,26 +63,38 @@ namespace MonitorIsland.Controls.Components
 
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (Settings == null)
-            {
-                Logger.LogError("Settings 属性尚未初始化");
-                return;
-            }
 
             // 设置初始刷新间隔
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
 
-            // 监听 RefreshInterval 的变化
-            Settings.PropertyChanged += (s, args) =>
+            // 如果显示前缀为空，则设置为默认值
+            if (string.IsNullOrEmpty(Settings.DisplayPrefix))
             {
-                if (args.PropertyName == nameof(Settings.RefreshInterval))
-                {
-                    _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
-                }
-            };
+                Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+            }
+
+            // 监听属性变化
+            Settings.PropertyChanged += Settings_PropertyChanged;
+
 
             // 启动定时器
             _timer.Start();
+        }
+
+        private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Settings.RefreshInterval))
+            {
+                _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
+            }
+            else if (e.PropertyName == nameof(Settings.MonitorType))
+            {
+                // 无条件更新为新类型的默认前缀
+                Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+
+                // 也可以添加日志以便调试
+                Logger.LogInformation($"监控类型已更改为 {Settings.MonitorType}，前缀更新为 \"{Settings.DisplayPrefix}\"");
+            }
         }
 
         private void MonitorComponent_OnUnloaded(object sender, RoutedEventArgs e)
@@ -91,13 +103,7 @@ namespace MonitorIsland.Controls.Components
             _timer.Stop();
             if (Settings != null)
             {
-                Settings.PropertyChanged -= (s, args) =>
-                {
-                    if (args.PropertyName == nameof(Settings.RefreshInterval))
-                    {
-                        _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
-                    }
-                };
+                Settings.PropertyChanged -= Settings_PropertyChanged;
             }
         }
     }

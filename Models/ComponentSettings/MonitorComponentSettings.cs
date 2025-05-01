@@ -9,6 +9,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private float _cpuUsage;
         private float _cpuTemperature;
         private int _refreshInterval = 1000;
+        private string _displayPrefix;
 
         /// <summary>
         /// 0 - 内存使用量<br/>
@@ -80,6 +81,27 @@ namespace MonitorIsland.Models.ComponentSettings
                 _refreshInterval = value;
                 OnPropertyChanged();
             }
+        }
+
+        /// <summary>
+        /// 显示文本前缀
+        /// </summary>
+        public string DisplayPrefix
+        {
+            get => _displayPrefix;
+            set => SetProperty(ref _displayPrefix, value);
+        }
+
+        // 获取当前监控类型的默认显示前缀
+        public string GetDefaultDisplayPrefix()
+        {
+            return MonitorType switch
+            {
+                0 => "内存使用量:",
+                1 => "CPU 利用率:",
+                2 => "CPU 温度:",
+                _ => string.Empty
+            };
         }
     }
 }

@@ -17,17 +17,26 @@
             <TabControl SelectedIndex="{Binding Settings.MonitorType}">
                 <TabItem Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Settings.MemoryUsage, StringFormat='内存使用量: {0:F2} MB'}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
+                            <Run Text="{Binding Settings.MemoryUsage, StringFormat=' {0:F2} MB', Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Settings.CpuUsage, StringFormat='CPU 利用率: {0:F2} %'}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
+                            <Run Text="{Binding Settings.CpuUsage, StringFormat=' {0:F2} %', Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                 </TabItem>
                 <TabItem Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Settings.CpuTemperature, StringFormat='CPU 温度: {0:F2} °C'}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
+                            <Run Text="{Binding Settings.CpuTemperature, StringFormat=' {0:F2} °C', Mode=OneWay}"/>
+                        </TextBlock>
                     </StackPanel>
                 </TabItem>
             </TabControl>

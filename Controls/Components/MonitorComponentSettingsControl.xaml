@@ -25,7 +25,18 @@
                         </ComboBox>
                     </ci:SettingsCard.Switcher>
                 </ci:SettingsCard>
-               
+
+                <GroupBox Header="显示设置" Margin="0,0,0,10">
+                    <StackPanel Margin="0,5">
+                        <TextBlock Text="显示文本前缀"/>
+                        <TextBox Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged}" 
+                 Margin="0,5"/>
+                        <Button Content="恢复默认文本" 
+                Click="ResetDisplayText_Click" 
+                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </GroupBox>
+
                 <ci:SettingsCard IconGlyph="CardTextOutline"
                  Header="刷新间隔"
                  Description="设置更新数值的频率"
