@@ -29,8 +29,8 @@
 
 ## 开发
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html)配置插件开发环境，使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 打开即可。  
-`内存使用量` 和 `CPU 利用率`使用 `PerformanceCounter` 获取  
-`CPU 温度`使用第三方库获取
+插件中的`内存使用量` 和 `CPU 利用率`我使用 `PerformanceCounter` 获取  
+`CPU 温度`使用了第三方库获取
 
 ## 致谢
 插件图标由 [<img src="https://github.com/LiPolymer.png" width="20" height="20"/>](https://github.com/LiPolymer)[@LiPolymer](https://github.com/LiPolymer) 提供😋😋
