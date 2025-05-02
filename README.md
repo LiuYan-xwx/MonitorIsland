@@ -28,7 +28,7 @@
 每个设置项在应用内的描述应该易懂，这里不再阐述。
 
 ## 开发
-根据 ClassIsland 文档配置插件开发环境，使用 Microsoft Visual Studio 打开即可。
+根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html)配置插件开发环境，使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 打开即可。
 
 ## 致谢
 插件图标由 [<img src="https://github.com/LiPolymer.png" width="20" height="20"/>](https://github.com/LiPolymer)[@LiPolymer](https://github.com/LiPolymer) 提供😋😋
