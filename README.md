@@ -32,6 +32,12 @@
 插件中的`内存使用量` 和 `CPU 利用率`我使用 `PerformanceCounter` 获取  
 `CPU 温度`使用了第三方库获取
 
+## 反馈
+如果您在使用本插件的过程中**遇到了问题 / bugs**，并且确定是由本插件引起，可以提交 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 让我知道，我会尽快回复。  
+如果您对本插件有**功能请求**或者其他要求，也可提交 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues)。  
+- 提交 bug 反馈时您需要附上相关的日志，报错内容，如何复现等
+- 提交功能请求时请描述清楚您想要的功能，想要的原因
+
 ## 致谢
 插件图标由 [<img src="https://github.com/LiPolymer.png" width="20" height="20"/>](https://github.com/LiPolymer)[@LiPolymer](https://github.com/LiPolymer) 提供😋😋
 
