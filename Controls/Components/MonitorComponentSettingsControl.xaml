@@ -47,7 +47,7 @@
                             <ci:SettingsControl
                                 Description="显示在数据前面的提示文字"
                                 Header="前缀"
-                                IconGlyph="CardTextOutline">
+                                IconGlyph="TagOutline">
                                 <ci:SettingsControl.Switcher>
                                     <TextBox MinWidth="150" Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </ci:SettingsControl.Switcher>
@@ -60,7 +60,7 @@
                     Margin="0,0,0,6"
                     Description="设置更新数值的频率"
                     Header="刷新间隔"
-                    IconGlyph="CardTextOutline">
+                    IconGlyph="TimerOutline">
                     <ci:SettingsCard.Switcher>
                         <ComboBox
                             MinWidth="110"
