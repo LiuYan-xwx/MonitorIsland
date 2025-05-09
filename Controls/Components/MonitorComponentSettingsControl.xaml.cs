@@ -1,6 +1,5 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using MonitorIsland.Models.ComponentSettings;
-using System.Windows;
 
 namespace MonitorIsland.Controls.Components
 {

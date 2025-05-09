@@ -1,11 +1,11 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using System.Windows;
+using System.Windows.Threading;
+using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Helpers;
 using MonitorIsland.Models.ComponentSettings;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace MonitorIsland.Controls.Components
 {
