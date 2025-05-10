@@ -12,6 +12,9 @@
     d:DesignWidth="800"
     x:TypeArguments="settings:MonitorComponentSettings"
     mc:Ignorable="d">
+    <ci:ComponentBase.Resources>
+        <local:IntervalToStringConverter x:Key="IntervalConverter"/>
+    </ci:ComponentBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
         <ScrollViewer>
             <StackPanel>
@@ -19,7 +22,7 @@
                     Margin="0,0,0,6"
                     Description="选择要监控的项目"
                     Header="显示监控信息"
-                    IconGlyph="CardTextOutline">
+                    IconGlyph="ThermostatBox">
                     <ci:SettingsCard.Switcher>
                         <ComboBox MinWidth="110" SelectedIndex="{Binding Settings.MonitorType}">
                             <ComboBoxItem>内存使用量</ComboBoxItem>
@@ -41,13 +44,13 @@
                                 Foreground="{DynamicResource MaterialDesignBody}"
                                 HasSwitcher="False"
                                 Header="显示设置"
-                                IconGlyph="CardTextOutline" />
+                                IconGlyph="TagAdd" />
                         </Expander.Header>
                         <StackPanel Margin="36,0,48,12">
                             <ci:SettingsControl
                                 Description="显示在数据前面的提示文字"
                                 Header="前缀"
-                                IconGlyph="TagOutline">
+                                IconGlyph="TagArrowLeft">
                                 <ci:SettingsControl.Switcher>
                                     <TextBox MinWidth="150" Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </ci:SettingsControl.Switcher>
@@ -60,16 +63,17 @@
                     Margin="0,0,0,6"
                     Description="设置更新数值的频率"
                     Header="刷新间隔"
-                    IconGlyph="TimerOutline">
+                    IconGlyph="TimerPlayOutline">
                     <ci:SettingsCard.Switcher>
-                        <ComboBox
-                            MinWidth="110"
-                            SelectedValue="{Binding Settings.RefreshInterval, Mode=TwoWay}"
-                            SelectedValuePath="Tag">
-                            <ComboBoxItem Content="高 (500ms)" Tag="500" />
-                            <ComboBoxItem Content="中 (1000ms)" Tag="1000" />
-                            <ComboBoxItem Content="低 (2000ms)" Tag="2000" />
-                        </ComboBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Grid.Column="5"
+                                     MinWidth="20"
+                                     HorizontalContentAlignment="Center"
+                                     InputMethod.IsInputMethodEnabled="False"
+                                     PreviewTextInput="TextBoxNumberCheck"
+                                     Text="{Binding Settings.RefreshInterval, Converter={StaticResource IntervalConverter}}"/>
+                            <Label>ms</Label>
+                        </StackPanel>
                     </ci:SettingsCard.Switcher>
                 </ci:SettingsCard>
             </StackPanel>
