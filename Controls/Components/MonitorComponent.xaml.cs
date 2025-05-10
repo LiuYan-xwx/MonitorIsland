@@ -15,7 +15,7 @@ namespace MonitorIsland.Controls.Components
     [ComponentInfo(
     "AE533FE2-A53F-4104-8C38-37DA018A98BB",
     "监控",
-    PackIconKind.ThermostatBox,
+    PackIconKind.Pulse,
     "监控您电脑的各种信息"
     )]
     public partial class MonitorComponent : ComponentBase<MonitorComponentSettings>

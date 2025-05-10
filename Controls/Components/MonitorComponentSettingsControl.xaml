@@ -19,7 +19,7 @@
                     Margin="0,0,0,6"
                     Description="选择要监控的项目"
                     Header="显示监控信息"
-                    IconGlyph="CardTextOutline">
+                    IconGlyph="ThermostatBox">
                     <ci:SettingsCard.Switcher>
                         <ComboBox MinWidth="110" SelectedIndex="{Binding Settings.MonitorType}">
                             <ComboBoxItem>内存使用量</ComboBoxItem>
@@ -41,13 +41,13 @@
                                 Foreground="{DynamicResource MaterialDesignBody}"
                                 HasSwitcher="False"
                                 Header="显示设置"
-                                IconGlyph="CardTextOutline" />
+                                IconGlyph="TagAdd" />
                         </Expander.Header>
                         <StackPanel Margin="36,0,48,12">
                             <ci:SettingsControl
                                 Description="显示在数据前面的提示文字"
                                 Header="前缀"
-                                IconGlyph="TagOutline">
+                                IconGlyph="TagArrowLeft">
                                 <ci:SettingsControl.Switcher>
                                     <TextBox MinWidth="150" Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </ci:SettingsControl.Switcher>
@@ -60,7 +60,7 @@
                     Margin="0,0,0,6"
                     Description="设置更新数值的频率"
                     Header="刷新间隔"
-                    IconGlyph="TimerOutline">
+                    IconGlyph="TimerPlayOutline">
                     <ci:SettingsCard.Switcher>
                         <ComboBox
                             MinWidth="110"
