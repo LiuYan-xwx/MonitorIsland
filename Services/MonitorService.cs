@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using LibreHardwareMonitor.Hardware;
+using MonitorIsland.Interfaces;
 
-namespace MonitorIsland.Helpers
+namespace MonitorIsland.Services
 {
-    public class MonitorHelper : IDisposable
+    public class MonitorService : IMonitorService
     {
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
         private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
@@ -22,7 +23,7 @@ namespace MonitorIsland.Helpers
             return computer;
         });
 
-        private bool _disposed;
+        private int _disposed;
 
         public float GetMemoryUsage()
         {
@@ -66,26 +67,22 @@ namespace MonitorIsland.Helpers
             return temperature;
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Dispose()
         {
-            if (_disposed) return;
+            if (Interlocked.Exchange(ref _disposed, 1) == 1)
+                return;
 
             if (_memoryCounter.IsValueCreated)
-            {
                 _memoryCounter.Value.Dispose();
-            }
 
             if (_cpuCounter.IsValueCreated)
-            {
                 _cpuCounter.Value.Dispose();
-            }
 
             if (_computer.IsValueCreated)
-            {
                 _computer.Value.Close();
-            }
-
-            _disposed = true;
         }
     }
 }

@@ -122,15 +122,15 @@ namespace MonitorIsland.Models.ComponentSettings
             _ => string.Empty
         };
 
-        public bool IsTextPrefixEnabled
-        {
-            get => _isTextPrefixEnabled;
-            set
-            {
-                if (value == _isTextPrefixEnabled) return;
-                _isTextPrefixEnabled = value;
-                OnPropertyChanged();
-            }
-        }
+        //public bool IsTextPrefixEnabled
+        //{
+        //    get => _isTextPrefixEnabled;
+        //    set
+        //    {
+        //        if (value == _isTextPrefixEnabled) return;
+        //        _isTextPrefixEnabled = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
     }
 }

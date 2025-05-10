@@ -4,8 +4,8 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
-using MonitorIsland.Helpers;
 using MonitorIsland.Models.ComponentSettings;
+using MonitorIsland.Interfaces;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -21,15 +21,15 @@ namespace MonitorIsland.Controls.Components
     public partial class MonitorComponent : ComponentBase<MonitorComponentSettings>
     {
         private readonly DispatcherTimer _timer;
-        private readonly MonitorHelper _monitorHelper;
         public ILogger<MonitorComponent> Logger { get; }
+        public IMonitorService MonitorService {  get; }
 
-        public MonitorComponent(ILogger<MonitorComponent> logger)
+        public MonitorComponent(ILogger<MonitorComponent> logger, IMonitorService monitorService)
         {
             Logger = logger;
+            MonitorService = monitorService;
             InitializeComponent();
 
-            _monitorHelper = new MonitorHelper();
             _timer = new DispatcherTimer();
             _timer.Tick += (s, e) =>
             {
@@ -46,13 +46,13 @@ namespace MonitorIsland.Controls.Components
             switch (Settings.MonitorType)
             {
                 case 0:
-                    Settings.MemoryUsage = _monitorHelper.GetMemoryUsage();
+                    Settings.MemoryUsage = MonitorService.GetMemoryUsage();
                     break;
                 case 1:
-                    Settings.CpuUsage = _monitorHelper.GetCpuUsage();
+                    Settings.CpuUsage = MonitorService.GetCpuUsage();
                     break;
                 case 2:
-                    Settings.CpuTemperature = _monitorHelper.GetCpuTemperature();
+                    Settings.CpuTemperature = MonitorService.GetCpuTemperature();
                     break;
                 default:
                     Logger.LogWarning($"未知的监控类型: {Settings.MonitorType}");
@@ -83,6 +83,7 @@ namespace MonitorIsland.Controls.Components
             Settings.PropertyChanged += OnSettingsPropertyChanged;
 
             // 初始化显示
+            UpdateMonitorData();
             UpdateDisplayText();
 
             // 启动定时器
@@ -113,7 +114,7 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
-            _monitorHelper.Dispose();
+            MonitorService.Dispose();
         }
     }
 }
