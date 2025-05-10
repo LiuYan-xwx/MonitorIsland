@@ -31,33 +31,50 @@ namespace MonitorIsland.Controls.Components
             InitializeComponent();
 
             _timer = new DispatcherTimer();
-            _timer.Tick += (s, e) =>
+            _timer.Tick += async (s, e) =>
             {
-                // 更新监控数据
-                UpdateMonitorData();
-                // 更新显示文本
-                UpdateDisplayText();
+                await UpdateMonitorDataAsync();
             };
         }
 
         // 根据监控类型更新相应数据
-        private void UpdateMonitorData()
+        private async Task UpdateMonitorDataAsync()
         {
+            float memoryUsage = Settings.MemoryUsage;
+            float cpuUsage = Settings.CpuUsage;
+            float cpuTemperature = Settings.CpuTemperature;
+
             switch (Settings.MonitorType)
             {
                 case 0:
-                    Settings.MemoryUsage = MonitorService.GetMemoryUsage();
+                    memoryUsage = await Task.Run(() => MonitorService.GetMemoryUsage());
                     break;
                 case 1:
-                    Settings.CpuUsage = MonitorService.GetCpuUsage();
+                    cpuUsage = await Task.Run(() => MonitorService.GetCpuUsage());
                     break;
                 case 2:
-                    Settings.CpuTemperature = MonitorService.GetCpuTemperature();
+                    cpuTemperature = await Task.Run(() => MonitorService.GetCpuTemperature());
                     break;
                 default:
                     Logger.LogWarning($"未知的监控类型: {Settings.MonitorType}");
                     break;
             }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                switch (Settings.MonitorType)
+                {
+                    case 0:
+                        Settings.MemoryUsage = memoryUsage;
+                        break;
+                    case 1:
+                        Settings.CpuUsage = cpuUsage;
+                        break;
+                    case 2:
+                        Settings.CpuTemperature = cpuTemperature;
+                        break;
+                }
+                UpdateDisplayText();
+            });
         }
 
         // 更新显示文本
@@ -74,23 +91,17 @@ namespace MonitorIsland.Controls.Components
             Settings.DisplayText = $"{Settings.DisplayPrefix}{value}";
         }
 
-        private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
+        private async void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
-            // 初始化设置
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
-
-            // 监听设置变化
             Settings.PropertyChanged += OnSettingsPropertyChanged;
 
-            // 初始化显示
-            UpdateMonitorData();
-            UpdateDisplayText();
+            await UpdateMonitorDataAsync();
 
-            // 启动定时器
             _timer.Start();
         }
 
-        private void OnSettingsPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void OnSettingsPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -100,8 +111,7 @@ namespace MonitorIsland.Controls.Components
 
                 case nameof(Settings.MonitorType):
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
-                    UpdateMonitorData();
-                    UpdateDisplayText();
+                    await UpdateMonitorDataAsync();
                     break;
 
                 case nameof(Settings.DisplayPrefix):
