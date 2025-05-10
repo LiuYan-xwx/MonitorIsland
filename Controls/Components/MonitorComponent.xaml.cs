@@ -55,9 +55,6 @@ namespace MonitorIsland.Controls.Components
                 case 2:
                     cpuTemperature = await Task.Run(() => MonitorService.GetCpuTemperature());
                     break;
-                default:
-                    Logger.LogWarning($"未知的监控类型: {Settings.MonitorType}");
-                    break;
             }
             Application.Current.Dispatcher.Invoke(() =>
             {

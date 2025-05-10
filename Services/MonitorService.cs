@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using Grpc.Core.Logging;
 using LibreHardwareMonitor.Hardware;
+using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 
 namespace MonitorIsland.Services
 {
-    public class MonitorService : IMonitorService
+    public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
         private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
@@ -27,14 +29,30 @@ namespace MonitorIsland.Services
 
         public float GetMemoryUsage()
         {
-            var totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
-            var availableMemory = _memoryCounter.Value.NextValue();
-            return totalMemory - availableMemory;
+            try
+            {
+                var totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
+                var availableMemory = _memoryCounter.Value.NextValue();
+                return totalMemory - availableMemory;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"获取内存使用量失败: {ex.Message}");
+                return -1;
+            }
         }
 
         public float GetCpuUsage()
         {
-            return _cpuCounter.Value.NextValue();
+            try
+            {
+                return _cpuCounter.Value.NextValue();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"获取 CPU 利用率失败: {ex.Message}");
+                return -1;
+            }
         }
 
         public float GetCpuTemperature()
@@ -61,7 +79,7 @@ namespace MonitorIsland.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"获取 CPU 温度失败: {ex.Message}");
+                logger.LogError($"获取 CPU 温度失败: {ex.Message}");
             }
 
             return temperature;
