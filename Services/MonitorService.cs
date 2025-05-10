@@ -8,6 +8,7 @@ namespace MonitorIsland.Services
 {
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
+        private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
         private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
         {
@@ -31,9 +32,8 @@ namespace MonitorIsland.Services
         {
             try
             {
-                var totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
                 var availableMemory = _memoryCounter.Value.NextValue();
-                return totalMemory - availableMemory;
+                return _totalMemory - availableMemory;
             }
             catch (Exception ex)
             {
