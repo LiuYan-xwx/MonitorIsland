@@ -12,6 +12,9 @@
     d:DesignWidth="800"
     x:TypeArguments="settings:MonitorComponentSettings"
     mc:Ignorable="d">
+    <ci:ComponentBase.Resources>
+        <local:IntervalToStringConverter x:Key="IntervalConverter"/>
+    </ci:ComponentBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
         <ScrollViewer>
             <StackPanel>
@@ -62,14 +65,15 @@
                     Header="刷新间隔"
                     IconGlyph="TimerPlayOutline">
                     <ci:SettingsCard.Switcher>
-                        <ComboBox
-                            MinWidth="110"
-                            SelectedValue="{Binding Settings.RefreshInterval, Mode=TwoWay}"
-                            SelectedValuePath="Tag">
-                            <ComboBoxItem Content="高 (500ms)" Tag="500" />
-                            <ComboBoxItem Content="中 (1000ms)" Tag="1000" />
-                            <ComboBoxItem Content="低 (2000ms)" Tag="2000" />
-                        </ComboBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Grid.Column="5"
+                                     MinWidth="20"
+                                     HorizontalContentAlignment="Center"
+                                     InputMethod.IsInputMethodEnabled="False"
+                                     PreviewTextInput="TextBoxNumberCheck"
+                                     Text="{Binding Settings.RefreshInterval, Converter={StaticResource IntervalConverter}}"/>
+                            <Label>ms</Label>
+                        </StackPanel>
                     </ci:SettingsCard.Switcher>
                 </ci:SettingsCard>
             </StackPanel>
