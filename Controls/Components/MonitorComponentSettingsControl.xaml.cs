@@ -37,9 +37,9 @@ namespace MonitorIsland.Controls.Components
             try
             {
                 int i = System.Convert.ToInt32((string)value!);
-                if (i < 100)
+                if (i < 250)
                 {
-                    i = 100;
+                    i = 250;
                 }
                 return i;
             }
