@@ -13,7 +13,7 @@
     Loaded="MonitorComponent_OnLoaded"
     Unloaded="MonitorComponent_OnUnloaded"
     mc:Ignorable="d">
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MonitorComponent}}" TextElement.FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MonitorComponent}}" TextElement.FontSize="{DynamicResource MainWindowBodyFontSize}">
         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
             <TextBlock Text="{Binding Settings.DisplayText, Mode=OneWay}" />
         </StackPanel>
