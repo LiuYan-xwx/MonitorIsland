@@ -3,66 +3,50 @@ using LibreHardwareMonitor.Hardware;
 
 namespace MonitorIsland.Helpers
 {
-    public class MonitorHelper
+    public class MonitorHelper : IDisposable
     {
-        private readonly PerformanceCounter _memoryCounter;
-        private readonly PerformanceCounter _cpuCounter;
-        private readonly Computer _computer;
-
-        public MonitorHelper()
+        private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
+        private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
         {
-            // 初始化内存计数器
-            _memoryCounter = new PerformanceCounter("Memory", "Available MBytes");
-
-            // 初始化 CPU 计数器
-            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-
-            // 预热 CPU 计数器，丢弃第一次调用的值
-            _cpuCounter.NextValue();
-
-            // 初始化 LibreHardwareMonitor
-            _computer = new Computer
+            var counter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            counter.NextValue(); // 预热
+            return counter;
+        });
+        private readonly Lazy<Computer> _computer = new(() =>
+        {
+            var computer = new Computer
             {
                 IsCpuEnabled = true // 启用 CPU 监控
             };
-            _computer.Open();
-        }
+            computer.Open();
+            return computer;
+        });
 
-        /// <summary>
-        /// 获取当前系统的内存使用量（MB）
-        /// </summary>
-        /// <returns>已使用内存（MB）</returns>
+        private bool _disposed;
+
         public float GetMemoryUsage()
         {
             var totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
-            var availableMemory = _memoryCounter.NextValue();
+            var availableMemory = _memoryCounter.Value.NextValue();
             return totalMemory - availableMemory;
         }
 
-        /// <summary>
-        /// 获取当前系统的 CPU 使用率（%）
-        /// </summary>
-        /// <returns>CPU 使用率（%）</returns>
         public float GetCpuUsage()
         {
-            return _cpuCounter.NextValue();
+            return _cpuCounter.Value.NextValue();
         }
 
-        /// <summary>
-        /// 获取当前系统的 CPU 温度（摄氏度）
-        /// </summary>
-        /// <returns>CPU 温度（摄氏度）</returns>
         public float GetCpuTemperature()
         {
             float temperature = -1;
 
             try
             {
-                foreach (var hardware in _computer.Hardware)
+                foreach (var hardware in _computer.Value.Hardware)
                 {
                     if (hardware.HardwareType == HardwareType.Cpu)
                     {
-                        hardware.Update(); // 更新硬件数据
+                        hardware.Update();
                         foreach (var sensor in hardware.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Temperature)
@@ -80,6 +64,28 @@ namespace MonitorIsland.Helpers
             }
 
             return temperature;
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+
+            if (_memoryCounter.IsValueCreated)
+            {
+                _memoryCounter.Value.Dispose();
+            }
+
+            if (_cpuCounter.IsValueCreated)
+            {
+                _cpuCounter.Value.Dispose();
+            }
+
+            if (_computer.IsValueCreated)
+            {
+                _computer.Value.Close();
+            }
+
+            _disposed = true;
         }
     }
 }
