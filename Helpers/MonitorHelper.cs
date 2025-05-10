@@ -1,5 +1,5 @@
-﻿using LibreHardwareMonitor.Hardware;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using LibreHardwareMonitor.Hardware;
 
 namespace MonitorIsland.Helpers
 {

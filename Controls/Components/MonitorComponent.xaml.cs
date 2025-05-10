@@ -1,11 +1,11 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using System.Windows;
+using System.Windows.Threading;
+using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Helpers;
 using MonitorIsland.Models.ComponentSettings;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -15,7 +15,7 @@ namespace MonitorIsland.Controls.Components
     [ComponentInfo(
     "AE533FE2-A53F-4104-8C38-37DA018A98BB",
     "监控",
-    PackIconKind.ThermostatBox,
+    PackIconKind.Pulse,
     "监控您电脑的各种信息"
     )]
     public partial class MonitorComponent : ComponentBase<MonitorComponentSettings>
