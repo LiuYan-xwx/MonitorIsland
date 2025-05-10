@@ -11,7 +11,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private int _refreshInterval = 1000;
         private string _displayPrefix;
         private string _displayText;
-        private bool _isTextPrefixEnabled = true;
+        //private bool _isTextPrefixEnabled = true;
 
         /// <summary>
         /// 0 - 内存使用量<br/>
