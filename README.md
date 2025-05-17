@@ -29,8 +29,9 @@
 
 ## 开发
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html)配置插件开发环境，使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 打开即可。  
-插件中的`内存使用量` 和 `CPU 利用率`我使用 `PerformanceCounter` 获取  
-`CPU 温度`使用了第三方库获取
+
+- 插件中的`内存使用量` 和 `CPU 利用率`我使用了 `PerformanceCounter` 获取  
+- `CPU 温度`使用了第三方库获取
 
 ## 反馈
 如果您在使用本插件的过程中**遇到了问题 / bugs**，并且确定是由本插件引起，可以提交 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 让我知道，我会尽快回复。  
