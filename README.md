@@ -14,6 +14,7 @@
 - CPU 温度
 
 ## 图片
+> 图片待更新
 **主界面**  
 ![image](https://github.com/user-attachments/assets/985b970b-3217-4718-a38f-c2a75dace30c)  
 **设置**  
