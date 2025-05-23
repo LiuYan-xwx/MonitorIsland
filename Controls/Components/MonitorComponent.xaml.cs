@@ -40,52 +40,25 @@ namespace MonitorIsland.Controls.Components
         // 根据监控类型更新相应数据
         private async Task UpdateMonitorDataAsync()
         {
-            float memoryUsage = Settings.MemoryUsage;
-            float cpuUsage = Settings.CpuUsage;
-            float cpuTemperature = Settings.CpuTemperature;
-
-            switch (Settings.MonitorType)
+            float value = Settings.MonitorType switch
             {
-                case 0:
-                    memoryUsage = await Task.Run(() => MonitorService.GetMemoryUsage());
-                    break;
-                case 1:
-                    cpuUsage = await Task.Run(() => MonitorService.GetCpuUsage());
-                    break;
-                case 2:
-                    cpuTemperature = await Task.Run(() => MonitorService.GetCpuTemperature());
-                    break;
-            }
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                switch (Settings.MonitorType)
-                {
-                    case 0:
-                        Settings.MemoryUsage = memoryUsage;
-                        break;
-                    case 1:
-                        Settings.CpuUsage = cpuUsage;
-                        break;
-                    case 2:
-                        Settings.CpuTemperature = cpuTemperature;
-                        break;
-                }
-                UpdateDisplayText();
-            });
-        }
-
-        // 更新显示文本
-        private void UpdateDisplayText()
-        {
-            string value = Settings.MonitorType switch
-            {
-                0 => $"{Settings.MemoryUsage} MB",
-                1 => $"{Settings.CpuUsage:F2} %",
-                2 => $"{Settings.CpuTemperature} °C",
-                _ => "未知数据"
+                0 => await Task.Run(() => MonitorService.GetMemoryUsage()),
+                1 => await Task.Run(() => MonitorService.GetCpuUsage()),
+                2 => await Task.Run(() => MonitorService.GetCpuTemperature()),
+                _ => -1
             };
 
-            Settings.DisplayText = $"{Settings.DisplayPrefix}{value}";
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var displayValue = Settings.MonitorType switch
+                {
+                    0 => $"{value} MB",
+                    1 => $"{value:F2} %",
+                    2 => $"{value} °C",
+                    _ => "未知数据"
+                };
+                Settings.DisplayText = $"{Settings.DisplayPrefix}{displayValue}";
+            });
         }
 
         private async void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
@@ -109,10 +82,6 @@ namespace MonitorIsland.Controls.Components
                 case nameof(Settings.MonitorType):
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
                     await UpdateMonitorDataAsync();
-                    break;
-
-                case nameof(Settings.DisplayPrefix):
-                    UpdateDisplayText();
                     break;
             }
         }
