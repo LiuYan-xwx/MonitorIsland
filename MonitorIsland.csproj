@@ -28,6 +28,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="icon2.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="manifest.yml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
