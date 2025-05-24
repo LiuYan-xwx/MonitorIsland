@@ -1,20 +1,29 @@
-﻿using System.Diagnostics;
-using Grpc.Core.Logging;
-using LibreHardwareMonitor.Hardware;
+﻿using LibreHardwareMonitor.Hardware;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
+using System.Diagnostics;
 
 namespace MonitorIsland.Services
 {
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
-        private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
-        private readonly Lazy<PerformanceCounter> _cpuCounter = new(() => new PerformanceCounter("Processor", "% Processor Time", "_Total"));
-
-        private readonly Lazy<Computer> _computer = new(() =>
+        private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
         {
-            var computer = new Computer
+            logger.LogDebug("初始化内存计数器");
+            return new PerformanceCounter("Memory", "Available MBytes");
+        });
+
+        private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
+        {
+            logger.LogDebug("初始化 CPU 利用率计数器");
+            return new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        });
+
+        private readonly Lazy<LibreHardwareMonitor.Hardware.Computer> _computer = new(() =>
+        {
+            logger.LogDebug("初始化硬件监控组件");
+            var computer = new LibreHardwareMonitor.Hardware.Computer
             {
                 IsCpuEnabled = true
             };
@@ -104,13 +113,23 @@ namespace MonitorIsland.Services
                 return;
 
             if (_memoryCounter.IsValueCreated)
+            {
                 _memoryCounter.Value.Dispose();
+                logger.LogDebug("释放内存计数器资源");
+            }
 
             if (_cpuCounter.IsValueCreated)
+            {
                 _cpuCounter.Value.Dispose();
-
+                logger.LogDebug("释放 CPU 利用率计数器资源");
+            }
             if (_computer.IsValueCreated)
+            {
                 _computer.Value.Close();
+                logger.LogDebug("释放硬件监控组件资源");
+            }
+
+            logger.LogDebug("MonitorService 已释放资源");
         }
     }
 }
