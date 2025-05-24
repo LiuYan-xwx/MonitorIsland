@@ -40,17 +40,15 @@ namespace MonitorIsland.Controls.Components
         private async void UpdateMonitorData()
         {
             int monitorType = Settings.MonitorType;
-            string displayPrefix = Settings.DisplayPrefix;
-
             string displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
 
             if (Dispatcher.CheckAccess())
             {
-                Settings.DisplayText = $"{displayPrefix}{displayValue}";
+                Settings.DisplayData = displayValue;
             }
             else
             {
-                Dispatcher.Invoke(() => Settings.DisplayText = $"{displayPrefix}{displayValue}");
+                Dispatcher.Invoke(() => Settings.DisplayData = displayValue);
             }
         }
 

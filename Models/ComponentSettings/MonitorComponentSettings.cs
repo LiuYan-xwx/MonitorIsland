@@ -7,7 +7,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private int _monitorType;
         private int _refreshInterval = 1000;
         private string? _displayPrefix;
-        private string? _displayText;
+        private string? _displayData;
 
         /// <summary>
         /// 0 - 内存使用量<br/>
@@ -54,15 +54,15 @@ namespace MonitorIsland.Models.ComponentSettings
         }
 
         /// <summary>
-        /// 显示文本
+        /// 显示数据
         /// </summary>
-        public string DisplayText
+        public string DisplayData
         {
-            get => _displayText ?? string.Empty;
+            get => _displayData ?? string.Empty;
             set
             {
-                if (value == _displayText) return;
-                _displayText = value;
+                if (value == _displayData) return;
+                _displayData = value;
                 OnPropertyChanged();
             }
         }
