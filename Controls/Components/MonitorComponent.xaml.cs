@@ -31,47 +31,32 @@ namespace MonitorIsland.Controls.Components
             InitializeComponent();
 
             _timer = new DispatcherTimer();
-            _timer.Tick += async (s, e) =>
+            _timer.Tick += (s, e) =>
             {
-                await UpdateMonitorDataAsync();
+                UpdateMonitorData();
             };
         }
 
         // 根据监控类型更新相应数据
-        private async Task UpdateMonitorDataAsync()
+        private void UpdateMonitorData()
         {
-            float value = Settings.MonitorType switch
-            {
-                0 => await Task.Run(() => MonitorService.GetMemoryUsage()),
-                1 => await Task.Run(() => MonitorService.GetCpuUsage()),
-                2 => await Task.Run(() => MonitorService.GetCpuTemperature()),
-                _ => -1
-            };
+            string displayValue = MonitorService.GetFormattedMonitorValue(Settings.MonitorType);
+            
+            Settings.DisplayText = $"{Settings.DisplayPrefix}{displayValue}";
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                var displayValue = Settings.MonitorType switch
-                {
-                    0 => $"{value} MB",
-                    1 => $"{value:F2} %",
-                    2 => $"{value} °C",
-                    _ => "未知数据"
-                };
-                Settings.DisplayText = $"{Settings.DisplayPrefix}{displayValue}";
-            });
         }
 
-        private async void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
+        private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
             Settings.PropertyChanged += OnSettingsPropertyChanged;
 
-            await UpdateMonitorDataAsync();
+            UpdateMonitorData();
 
             _timer.Start();
         }
 
-        private async void OnSettingsPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnSettingsPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -81,7 +66,7 @@ namespace MonitorIsland.Controls.Components
 
                 case nameof(Settings.MonitorType):
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
-                    await UpdateMonitorDataAsync();
+                    UpdateMonitorData();
                     break;
             }
         }

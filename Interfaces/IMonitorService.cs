@@ -8,6 +8,7 @@ namespace MonitorIsland.Interfaces
 {
     public interface IMonitorService : IDisposable
     {
+        string GetFormattedMonitorValue(int monitorType);
         float GetMemoryUsage();
         float GetCpuUsage();
         float GetCpuTemperature();

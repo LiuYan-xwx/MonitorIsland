@@ -28,6 +28,17 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
+        public string GetFormattedMonitorValue(int monitorType)
+        {
+            return monitorType switch
+            {
+                0 => $"{GetMemoryUsage()} MB",
+                1 => $"{GetCpuUsage():F2} %",
+                2 => $"{GetCpuTemperature()} °C",
+                _ => "未知数据"
+            };
+        }
+
         public float GetMemoryUsage()
         {
             try
