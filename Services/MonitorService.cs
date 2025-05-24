@@ -10,17 +10,13 @@ namespace MonitorIsland.Services
     {
         private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() => new PerformanceCounter("Memory", "Available MBytes"));
-        private readonly Lazy<PerformanceCounter> _cpuCounter = new(() =>
-        {
-            var counter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            counter.NextValue(); // 预热
-            return counter;
-        });
+        private readonly Lazy<PerformanceCounter> _cpuCounter = new(() => new PerformanceCounter("Processor", "% Processor Time", "_Total"));
+
         private readonly Lazy<Computer> _computer = new(() =>
         {
             var computer = new Computer
             {
-                IsCpuEnabled = true // 启用 CPU 监控
+                IsCpuEnabled = true
             };
             computer.Open();
             return computer;
@@ -68,33 +64,36 @@ namespace MonitorIsland.Services
 
         public float GetCpuTemperature()
         {
-            float temperature = -1;
-
             try
             {
-                foreach (var hardware in _computer.Value.Hardware)
-                {
-                    if (hardware.HardwareType == HardwareType.Cpu)
-                    {
-                        hardware.Update();
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Temperature)
-                            {
-                                temperature = sensor.Value.GetValueOrDefault();
-                                break;
-                            }
-                        }
-                    }
-                }
+                var cpu = _computer.Value.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
+                if (cpu == null)
+                    return -1f;
+
+                cpu.Update();
+
+                // 优先找 "CPU Package"
+                var packageSensor = cpu.Sensors
+                    .FirstOrDefault(s => s.SensorType == SensorType.Temperature &&
+                                         s.Name.Equals("CPU Package", StringComparison.OrdinalIgnoreCase) &&
+                                         s.Value.HasValue);
+
+                if (packageSensor != null)
+                    return packageSensor.Value.Value;
+
+                // 没有 "CPU Package" 就取第一个可用温度
+                var firstTemp = cpu.Sensors
+                    .FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Value.HasValue);
+
+                return firstTemp?.Value ?? -1f;
             }
             catch (Exception ex)
             {
-                logger.LogError($"获取 CPU 温度失败: {ex.Message}");
+                logger.LogError($"获取CPU温度失败: {ex.Message}");
+                return -1f;
             }
-
-            return temperature;
         }
+
 
         /// <summary>
         /// 释放资源
