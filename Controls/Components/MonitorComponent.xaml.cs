@@ -37,13 +37,21 @@ namespace MonitorIsland.Controls.Components
             };
         }
 
-        // 根据监控类型更新相应数据
-        private void UpdateMonitorData()
+        private async void UpdateMonitorData()
         {
-            string displayValue = MonitorService.GetFormattedMonitorValue(Settings.MonitorType);
-            
-            Settings.DisplayText = $"{Settings.DisplayPrefix}{displayValue}";
+            int monitorType = Settings.MonitorType;
+            string displayPrefix = Settings.DisplayPrefix;
 
+            string displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
+
+            if (Dispatcher.CheckAccess())
+            {
+                Settings.DisplayText = $"{displayPrefix}{displayValue}";
+            }
+            else
+            {
+                Dispatcher.Invoke(() => Settings.DisplayText = $"{displayPrefix}{displayValue}");
+            }
         }
 
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
