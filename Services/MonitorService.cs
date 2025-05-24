@@ -44,7 +44,7 @@ namespace MonitorIsland.Services
             }
             catch (Exception ex)
             {
-                logger.LogError($"获取内存使用量失败: {ex.Message}");
+                logger.LogError(ex, "获取内存使用量失败");
                 return -1;
             }
         }
@@ -57,7 +57,7 @@ namespace MonitorIsland.Services
             }
             catch (Exception ex)
             {
-                logger.LogError($"获取 CPU 利用率失败: {ex.Message}");
+                logger.LogError(ex, "获取 CPU 利用率失败");
                 return -1;
             }
         }
@@ -72,16 +72,16 @@ namespace MonitorIsland.Services
 
                 cpu.Update();
 
-                // 优先找 "CPU Package"
+                // 优先找 "CPU Package"  
                 var packageSensor = cpu.Sensors
                     .FirstOrDefault(s => s.SensorType == SensorType.Temperature &&
                                          s.Name.Equals("CPU Package", StringComparison.OrdinalIgnoreCase) &&
                                          s.Value.HasValue);
 
-                if (packageSensor != null)
+                if (packageSensor?.Value != null)
                     return packageSensor.Value.Value;
 
-                // 没有 "CPU Package" 就取第一个可用温度
+                // 没有 "CPU Package" 就取第一个可用温度  
                 var firstTemp = cpu.Sensors
                     .FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Value.HasValue);
 
@@ -89,7 +89,7 @@ namespace MonitorIsland.Services
             }
             catch (Exception ex)
             {
-                logger.LogError($"获取CPU温度失败: {ex.Message}");
+                logger.LogError(ex, "获取 CPU 温度失败");
                 return -1f;
             }
         }
