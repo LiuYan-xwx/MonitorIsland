@@ -8,7 +8,7 @@ description: 在主界面监控您的系统
 entranceAssembly: "MonitorIsland.dll"
 url: https://github.com/LiuYan-xwx/MonitorIsland
 version: 1.2.0
-apiVersion: 1.5.0
+apiVersion: 1.6.2.0
 author: 流焰xwx
 repoOwner: LiuYan-xwx
 repoName: MonitorIsland
