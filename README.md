@@ -14,20 +14,22 @@
 - CPU 温度
 
 ## 图片
-> 图片待更新
-
 **主界面**  
-![image](https://github.com/user-attachments/assets/985b970b-3217-4718-a38f-c2a75dace30c)  
+![image](https://github.com/user-attachments/assets/d1d6f477-d211-4aa8-8a20-b4c7aee08632)  
 **设置**  
-![image](https://github.com/user-attachments/assets/4ce83e09-07df-4e6f-b8f3-4ea8e14c6c6b)  
+![image](https://github.com/user-attachments/assets/f279d0e8-d0a0-40b8-919a-4d0058ded8fa)  
 
 ## 安装
+>[!warning]
+> ~~由于我也不知道什么原因~~，本插件需要 ClassIsland 版本大于或等于 **1.6.2.0** 才能正常运行！
+
 在插件市场找到本插件，安装即可。  
 有时插件索引还没来得及更新，您也可以从 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 中下载 .cipx 文件，再进行手动安装。  
 
 ## 使用
-本插件只添加了一个叫 `监控` 的**组件**，把它放到主界面上，然后在组件设置中按照您的喜好自行设置。  
-每个设置项在应用内的描述应该易懂，这里不再阐述。
+**请先确保您的 ClassIsland 版本大于或等于 1.6.2.0**  
+本插件有一个叫 `监控` 的**组件**，把它放到主界面上，然后在组件设置中按照您的喜好自行设置就行。  
+每个设置项在应用内的描述应该易懂，这里不再阐述。  
 
 ## 开发
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html)配置插件开发环境，使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 打开即可。  
