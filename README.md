@@ -29,7 +29,10 @@
 ## 使用
 **请先确保您的 ClassIsland 版本大于或等于 1.6.2.0**  
 本插件有一个叫 `监控` 的**组件**，把它放到主界面上，然后在组件设置中按照您的喜好自行设置就行。  
-每个设置项在应用内的描述应该易懂，这里不再阐述。  
+每个设置项在应用内的描述应该易懂，这里不再阐述。 
+
+如果您在使用的过程中发现某个监控项返回的数值为 **-1**，这是刻意为之的，表明获取数据时发生了错误。点开 ClassIsland 的日志应该可以发现相关的报错。
+ 
 
 ## 开发
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html)配置插件开发环境，使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 打开即可。  
@@ -42,8 +45,6 @@
 如果您对本插件有**功能请求**或者其他要求，也可提交 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues)。  
 - 提交 bug 反馈时您需要附上相关的日志，报错内容，如何复现等
 - 提交功能请求时请描述清楚您想要的功能，想要的原因
-
-如果您在使用的过程中发现某个监控项返回的数值为 **-1**，这是刻意为之的，表明获取数据时发生了错误。点开 ClassIsland 的日志应该可以发现相关的报错。
 
 ## 致谢
 插件图标由 [<img src="https://github.com/LiPolymer.png" width="20" height="20"/>](https://github.com/LiPolymer)[@LiPolymer](https://github.com/LiPolymer) 提供😋😋
