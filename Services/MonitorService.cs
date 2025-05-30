@@ -1,6 +1,7 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
+using MonitorIsland.Models;
 using System.Diagnostics;
 
 namespace MonitorIsland.Services
@@ -33,14 +34,14 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
-        public string GetFormattedMonitorValue(int monitorType)
+        public string GetFormattedMonitorValue(MonitorOption monitorType)
         {
             return monitorType switch
             {
-                0 => $"{GetMemoryUsage()} MB",
-                1 => $"{GetCpuUsage():F2} %",
-                2 => $"{GetCpuTemperature()} °C",
-                _ => "未知数据"
+                MonitorOption.MemoryUsage => $"{GetMemoryUsage()} MB",
+                MonitorOption.CpuUsage => $"{GetCpuUsage():F2} %",
+                MonitorOption.CpuTemperature => $"{GetCpuTemperature()} °C",
+                _ => "未知类型"
             };
         }
 

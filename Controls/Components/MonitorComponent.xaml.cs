@@ -6,6 +6,7 @@ using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Models.ComponentSettings;
 using MonitorIsland.Interfaces;
+using MonitorIsland.Models;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -39,7 +40,7 @@ namespace MonitorIsland.Controls.Components
 
         private async void UpdateMonitorData()
         {
-            int monitorType = Settings.MonitorType;
+            MonitorOption monitorType = Settings.MonitorType;
             string displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
 
             if (Dispatcher.CheckAccess())

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonitorIsland.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,9 @@ namespace MonitorIsland.Interfaces
         /// <summary>
         /// 获取指定监控类型的格式化监控值。
         /// </summary>
-        /// <param name="monitorType">
-        /// 监控类型：
-        /// 0 - 内存使用量，
-        /// 1 - CPU 利用率，
-        /// 2 - CPU 温度。
-        /// </param>
+        /// <param name="monitorType">监控类型枚举。</param>
         /// <returns>格式化后的监控值字符串。</returns>
-        string GetFormattedMonitorValue(int monitorType);
+        string GetFormattedMonitorValue(MonitorOption monitorType);
 
         /// <summary>
         /// 获取当前内存使用量（单位：MB）。

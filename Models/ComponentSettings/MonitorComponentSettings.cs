@@ -4,17 +4,15 @@ namespace MonitorIsland.Models.ComponentSettings
 {
     public class MonitorComponentSettings : ObservableRecipient
     {
-        private int _monitorType;
+        private MonitorOption _monitorType = MonitorOption.MemoryUsage;
         private int _refreshInterval = 1000;
         private string? _displayPrefix;
         private string? _displayData;
 
         /// <summary>
-        /// 0 - 内存使用量<br/>
-        /// 1 - CPU 利用率<br/>
-        /// 2 - CPU 温度<br/>
+        /// 选择要监控的项目类型。
         /// </summary>
-        public int MonitorType
+        public MonitorOption MonitorType
         {
             get => _monitorType;
             set
@@ -70,9 +68,9 @@ namespace MonitorIsland.Models.ComponentSettings
         // 获取当前监控类型的默认显示前缀
         public string GetDefaultDisplayPrefix() => MonitorType switch
         {
-            0 => "内存使用量: ",
-            1 => "CPU 利用率: ",
-            2 => "CPU 温度: ",
+            MonitorOption.MemoryUsage => "内存使用量: ",
+            MonitorOption.CpuUsage => "CPU 利用率: ",
+            MonitorOption.CpuTemperature => "CPU 温度: ",
             _ => string.Empty
         };
     }
