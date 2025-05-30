@@ -8,12 +8,26 @@
     xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settings="clr-namespace:MonitorIsland.Models.ComponentSettings"
+    xmlns:models="clr-namespace:MonitorIsland.Models"
+    xmlns:converters="clr-namespace:MonitorIsland.Converters"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="settings:MonitorComponentSettings"
     mc:Ignorable="d">
     <ci:ComponentBase.Resources>
         <local:IntervalToStringConverter x:Key="IntervalConverter"/>
+        <converters:MonitorOptionToStringConverter x:Key="MonitorOptionConverter"/>
+        <!-- 新增转换器实例 -->
+
+        <!-- 使用 ObjectDataProvider 提供枚举值 -->
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="MonitorOptionsProvider">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:MonitorOption"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </ci:ComponentBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
         <ScrollViewer>
@@ -24,10 +38,14 @@
                     Header="显示监控信息"
                     IconGlyph="ThermostatBox">
                     <ci:SettingsCard.Switcher>
-                        <ComboBox MinWidth="110" SelectedIndex="{Binding Settings.MonitorType}">
-                            <ComboBoxItem>内存使用量</ComboBoxItem>
-                            <ComboBoxItem>CPU 利用率</ComboBoxItem>
-                            <ComboBoxItem>CPU 温度</ComboBoxItem>
+                        <ComboBox MinWidth="110" 
+                                  ItemsSource="{Binding Source={StaticResource MonitorOptionsProvider}}"
+                                  SelectedItem="{Binding Settings.MonitorType, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:MonitorOption}">
+                                    <TextBlock Text="{Binding Converter={StaticResource MonitorOptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
                     </ci:SettingsCard.Switcher>
                 </ci:SettingsCard>
