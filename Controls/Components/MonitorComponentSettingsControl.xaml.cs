@@ -1,5 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using MonitorIsland.Models.ComponentSettings;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -29,24 +30,24 @@ namespace MonitorIsland.Controls.Components
     {
         public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
-            return System.Convert.ToString((int)value!);
+            if (value is int intValue)
+            {
+                return intValue.ToString(culture);
+            }
+            return 1000;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
-            try
+            if (value is string strValue && int.TryParse(strValue, NumberStyles.Integer, culture, out int i))
             {
-                int i = System.Convert.ToInt32((string)value!);
                 if (i < 250)
                 {
-                    i = 250;
+                    return 250;
                 }
                 return i;
             }
-            catch
-            {
-                return 1000;
-            }
+            return 1000;
         }
     }
 
