@@ -78,7 +78,10 @@ namespace MonitorIsland.Services
             {
                 var cpu = _computer.Value.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
                 if (cpu == null)
-                    return -1f;
+                {
+                    logger.LogError("未找到 CPU 硬件信息");
+                    return -1;
+                }
 
                 cpu.Update();
 
@@ -95,12 +98,12 @@ namespace MonitorIsland.Services
                 var firstTemp = cpu.Sensors
                     .FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Value.HasValue);
 
-                return firstTemp?.Value ?? -1f;
+                return firstTemp?.Value ?? 0;
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "获取 CPU 温度失败");
-                return -1f;
+                return -1;
             }
         }
 
