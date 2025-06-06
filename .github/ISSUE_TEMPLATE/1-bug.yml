@@ -5,8 +5,7 @@ labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: |
-        请认真并详细地填写 Issue 表单，以便开发者更好地解决问题。
+      value: 请认真并详细地填写 Issue 表单，以便开发者更好地解决问题。
   - type: checkboxes
     attributes:
       label: 请先确认以下几件事
