@@ -17,6 +17,7 @@ public class Plugin : PluginBase
     public override void Initialize(HostBuilderContext context, IServiceCollection services)
     {
         services.AddComponent<MonitorComponent, MonitorComponentSettingsControl>();
+        services.AddSingleton<LibreHardwareMonitorService>();
         services.AddTransient<IMonitorService, MonitorService>();
     }
 }
