@@ -1,0 +1,26 @@
+name: 功能请求
+description: 提出一个想要的功能
+title: '[Feat]: (您对此功能的简短描述)'
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: 请认真并详细地填写 Issue 表单，以便开发者更好地解决问题。
+  - type: checkboxes
+    attributes:
+      label: 请先确认以下几件事
+      options:
+        - label: 更新到 Release 中的最新版本，有些功能可能已在新版中实现
+          required: true
+  - type: textarea
+    attributes:
+      label: 对此功能的描述
+      description: 详细描述这个功能的目的，是干什么的
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 原因
+      description: 详细描述要此功能的原因
+    validations:
+      required: true
