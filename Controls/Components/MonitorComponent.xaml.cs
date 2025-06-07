@@ -82,7 +82,7 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
-            MonitorService.Dispose();
+            //MonitorService.Dispose();
         }
     }
 }
