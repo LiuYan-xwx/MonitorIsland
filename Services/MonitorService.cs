@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace MonitorIsland.Services
 {
-    public class MonitorService(ILogger<MonitorService> logger, LibreHardwareMonitorService hardwareMonitor) : IMonitorService
+    public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
@@ -21,7 +21,17 @@ namespace MonitorIsland.Services
             return new PerformanceCounter("Processor", "% Processor Time", "_Total");
         });
 
-        private readonly LibreHardwareMonitorService _hardwareMonitor = hardwareMonitor;
+        private readonly Lazy<LibreHardwareMonitor.Hardware.Computer> _computer = new(() =>
+        {
+            logger.LogDebug("初始化硬件监控组件");
+            var computer = new LibreHardwareMonitor.Hardware.Computer
+            {
+                IsCpuEnabled = true
+            };
+            computer.Open();
+            return computer;
+        });
+
         private int _disposed;
 
         public string GetFormattedMonitorValue(MonitorOption monitorType)
@@ -64,9 +74,43 @@ namespace MonitorIsland.Services
 
         public float GetCpuTemperature()
         {
-            return _hardwareMonitor.GetCpuTemperature();
+            try
+            {
+                var cpu = _computer.Value.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
+                if (cpu == null)
+                {
+                    logger.LogError("未找到 CPU 硬件信息");
+                    return -1;
+                }
+
+                cpu.Update();
+
+                // 优先找 "CPU Package"  
+                var packageSensor = cpu.Sensors
+                    .FirstOrDefault(s => s.SensorType == SensorType.Temperature &&
+                                         s.Name.Equals("CPU Package", StringComparison.OrdinalIgnoreCase) &&
+                                         s.Value.HasValue);
+
+                if (packageSensor?.Value != null)
+                    return packageSensor.Value.Value;
+
+                // 没有 "CPU Package" 就取第一个可用温度  
+                var firstTemp = cpu.Sensors
+                    .FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Value.HasValue);
+
+                return firstTemp?.Value ?? 0;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "获取 CPU 温度失败");
+                return -1;
+            }
         }
 
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Dispose()
         {
             if (Interlocked.Exchange(ref _disposed, 1) == 1)
@@ -83,8 +127,11 @@ namespace MonitorIsland.Services
                 _cpuCounter.Value.Dispose();
                 logger.LogDebug("释放 CPU 利用率计数器资源");
             }
-
-            _hardwareMonitor.Dispose();
+            if (_computer.IsValueCreated)
+            {
+                _computer.Value.Close();
+                logger.LogDebug("释放硬件监控组件资源");
+            }
 
             logger.LogDebug("MonitorService 已释放资源");
         }
