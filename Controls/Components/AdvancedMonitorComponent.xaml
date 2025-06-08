@@ -1,0 +1,21 @@
+﻿<ci:ComponentBase
+    x:Class="MonitorIsland.Controls.Components.AdvancedMonitorComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:MonitorIsland.Controls.Components"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:settings="clr-namespace:MonitorIsland.Models.ComponentSettings"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="800"
+    x:TypeArguments="settings:AdvancedMonitorComponentSettings"
+    Loaded="AdvancedMonitorComponent_OnLoaded"
+    Unloaded="AdvancedMonitorComponent_OnUnloaded">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:AdvancedMonitorComponent}}" TextElement.FontSize="{DynamicResource MainWindowBodyFontSize}">
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <TextBlock Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
+            <TextBlock Text="{Binding Settings.DisplayData, Mode=OneWay}" />
+        </StackPanel>
+    </Grid>
+</ci:ComponentBase>

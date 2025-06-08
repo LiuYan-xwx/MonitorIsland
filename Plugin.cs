@@ -15,8 +15,10 @@ namespace MonitorIsland;
 public class Plugin : PluginBase
 {
     public override void Initialize(HostBuilderContext context, IServiceCollection services)
-    {
+    { 
+        services.AddSingleton<IMonitorService, MonitorService>();
+        services.AddSingleton<IAdvancedMonitorService, AdvancedMonitorService>();
         services.AddComponent<MonitorComponent, MonitorComponentSettingsControl>();
-        services.AddSingleton<IMonitorService, MonitorService>();  // 改为单例模式
+        services.AddComponent<AdvancedMonitorComponent, AdvancedMonitorComponentSettingsControl>();
     }
 }

@@ -15,7 +15,7 @@
     mc:Ignorable="d">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MonitorComponent}}" TextElement.FontSize="{DynamicResource MainWindowBodyFontSize}">
         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-            <TextBlock Text="{Binding Settings.DisplayPrefix, Mode=OneWay}"/>
+            <TextBlock Text="{Binding Settings.DisplayPrefix, Mode=OneWay}" />
             <TextBlock Text="{Binding Settings.DisplayData, Mode=OneWay}" />
         </StackPanel>
     </Grid>
