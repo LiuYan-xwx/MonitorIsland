@@ -8,7 +8,7 @@
 
 ## 简介
 
-这是一个 [ClassIsland](https://github.com/ClassIsland/ClassIsland) 插件，提供了一个 `监控` 组件，可以实时显示电脑当前的各类系统信息。
+这是一个 [ClassIsland](https://github.com/ClassIsland/ClassIsland) 插件，提供了一个 `监控` 组件，可以实时显示电脑当前的各类硬件信息。
 
 **目前支持的监控项：**
 - `内存使用量`：显示内存占用情况
