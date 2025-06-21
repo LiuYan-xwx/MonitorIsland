@@ -4,7 +4,7 @@
 
 id: LiuYan_xwx.MonitorIsland
 name: MonitorIsland
-description: 在主界面监控您的系统
+description: 在主界面监控您的硬件信息
 entranceAssembly: "MonitorIsland.dll"
 url: https://github.com/LiuYan-xwx/MonitorIsland
 version: 1.4.0
