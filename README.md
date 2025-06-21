@@ -13,7 +13,7 @@
 **目前支持的监控项：**
 - `内存使用量`：显示内存占用情况
 - `CPU 利用率`：显示 CPU 当前使用率
-- `CPU 温度`：显示 CPU Package 温度
+- `CPU 温度`：显示 CPU Package / Core Avarage 温度
 
 ## 截图
 
@@ -41,13 +41,12 @@
 
 ## 常见问题
 
-- **Q: 某个数值为 `-1` ？？**  
-  A: 这应该是数据获取失败了，`-1` 是刻意设置的数字，可能是由于权限不足或者硬件不支持等奇奇怪怪的原因，建议**查看日志**并前往 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 反馈。
+- **Q: 某个数值为 `N/A` ？**  
+  A: 这应该是数据获取失败了，可能是由于权限不足或者硬件不支持等奇奇怪怪的原因，建议**查看日志**并前往 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 反馈。
 
 ## 开发
 
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html) 配置插件开发环境。  
-建议使用 [Visual Studio 2022](https://visualstudio.microsoft.com/) 进行开发。
 
 - `内存使用量` 和 `CPU 利用率` 我用了 `PerformanceCounter` 获取
 - `CPU 温度` 使用了第三方库获取
