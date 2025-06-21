@@ -4,6 +4,7 @@ using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace MonitorIsland.Services
 {
@@ -40,11 +41,21 @@ namespace MonitorIsland.Services
         {
             return monitorType switch
             {
-                MonitorOption.MemoryUsage => $"{GetMemoryUsage()} MB",
-                MonitorOption.CpuUsage => $"{GetCpuUsage():F2} %",
-                MonitorOption.CpuTemperature => $"{GetCpuTemperature()} °C",
+                MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), "MB"),
+                MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), "%", "F2"),
+                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), "°C", "F1"),
                 _ => "未知类型"
             };
+        }
+
+        private string FormatValue(float value, string unit, string format = "")
+        {
+            if (value < 0)
+                return "N/A";
+            
+            return string.IsNullOrEmpty(format) 
+                ? $"{value} {unit}" 
+                : $"{value.ToString(format)} {unit}";
         }
 
         public float GetMemoryUsage()
@@ -78,14 +89,14 @@ namespace MonitorIsland.Services
         {
             try
             {
-                if (_tempSensor != null && _tempSensor.Values != null)
+                if (_tempSensor != null && _tempSensor.Value.HasValue)
                 {
                     _tempSensor.Hardware.Update();
-                    return (float)_tempSensor.Value;
+                    return _tempSensor.Value.Value;
                 }
 
                 var computer = _computer.Value;
-                
+
                 foreach (var hardware in computer.Hardware.Where(h => h.HardwareType == HardwareType.Cpu))
                 {
                     hardware.Update();
@@ -93,14 +104,14 @@ namespace MonitorIsland.Services
                     _tempSensor = hardware.Sensors.FirstOrDefault(s =>
                         s.SensorType == SensorType.Temperature && s.Name == "CPU Package");
 
-                    if (_tempSensor != null && _tempSensor.Values != null)
-                        return (float)_tempSensor.Value;
+                    if (_tempSensor != null && _tempSensor.Value.HasValue)
+                        return _tempSensor.Value.Value;
 
                     _tempSensor = hardware.Sensors.FirstOrDefault(s =>
                         s.SensorType == SensorType.Temperature && s.Name == "Core Average");
 
-                    if (_tempSensor != null && _tempSensor.Values != null)
-                        return (float)_tempSensor.Value;
+                    if (_tempSensor != null && _tempSensor.Value.HasValue)
+                        return _tempSensor.Value.Value;
                 }
             }
             catch (Exception ex)
