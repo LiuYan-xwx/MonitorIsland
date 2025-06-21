@@ -17,6 +17,6 @@ public class Plugin : PluginBase
     public override void Initialize(HostBuilderContext context, IServiceCollection services)
     {
         services.AddComponent<MonitorComponent, MonitorComponentSettingsControl>();
-        services.AddSingleton<IMonitorService, MonitorService>();  // 改为单例模式
+        services.AddSingleton<IMonitorService, MonitorService>();
     }
 }

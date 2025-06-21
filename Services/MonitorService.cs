@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonitorIsland.Services
 {
@@ -77,32 +78,29 @@ namespace MonitorIsland.Services
         {
             try
             {
-                if (_tempSensor != null)
+                if (_tempSensor != null && _tempSensor.Values != null)
                 {
                     _tempSensor.Hardware.Update();
-                    return _tempSensor.Value ?? 0;
+                    return (float)_tempSensor.Value;
                 }
-                foreach (var hardware in _computer.Value.Hardware)
+
+                var computer = _computer.Value;
+                
+                foreach (var hardware in computer.Hardware.Where(h => h.HardwareType == HardwareType.Cpu))
                 {
-                    if (hardware.HardwareType == HardwareType.Cpu)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name == "CPU Package")
-                            {
-                                _tempSensor = sensor;
-                                return _tempSensor.Value ?? 0;
-                            }
-                        }
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name == "Core Average")
-                            {
-                                _tempSensor = sensor;
-                                return _tempSensor.Value ?? 0;
-                            }
-                        }
-                    }
+                    hardware.Update();
+
+                    _tempSensor = hardware.Sensors.FirstOrDefault(s =>
+                        s.SensorType == SensorType.Temperature && s.Name == "CPU Package");
+
+                    if (_tempSensor != null && _tempSensor.Values != null)
+                        return (float)_tempSensor.Value;
+
+                    _tempSensor = hardware.Sensors.FirstOrDefault(s =>
+                        s.SensorType == SensorType.Temperature && s.Name == "Core Average");
+
+                    if (_tempSensor != null && _tempSensor.Values != null)
+                        return (float)_tempSensor.Value;
                 }
             }
             catch (Exception ex)
