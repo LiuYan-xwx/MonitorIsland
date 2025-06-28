@@ -48,7 +48,7 @@ namespace MonitorIsland.Services
             };
         }
 
-        private string FormatValue(float value, string unit, string format = "")
+        private static string FormatValue(float value, string unit, string format = "")
         {
             if (value < 0)
                 return "N/A";
@@ -112,11 +112,15 @@ namespace MonitorIsland.Services
 
                     if (_tempSensor != null && _tempSensor.Value.HasValue)
                         return _tempSensor.Value.Value;
+                    
+                    logger.LogError("未找到可用的 CPU 温度传感器");
+                    _tempSensor = null;
                 }
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "获取 CPU 温度失败");
+                _tempSensor = null;
             }
             return -1;
         }
