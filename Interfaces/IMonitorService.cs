@@ -23,18 +23,18 @@ namespace MonitorIsland.Interfaces
         /// 获取当前内存使用量（单位：MB）。
         /// </summary>
         /// <returns>内存使用量。</returns>
-        float GetMemoryUsage();
+        float? GetMemoryUsage();
 
         /// <summary>
         /// 获取当前CPU利用率（百分比）。
         /// </summary>
         /// <returns>CPU利用率。</returns>
-        float GetCpuUsage();
+        float? GetCpuUsage();
 
         /// <summary>
         /// 获取当前CPU温度（单位：摄氏度）。
         /// </summary>
         /// <returns>CPU温度。</returns>
-        float GetCpuTemperature();
+        float? GetCpuTemperature();
     }
 }

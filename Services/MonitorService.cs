@@ -48,17 +48,17 @@ namespace MonitorIsland.Services
             };
         }
 
-        private static string FormatValue(float value, string unit, string format = "")
+        private static string FormatValue(float? value, string unit, string format = "")
         {
-            if (value < 0)
+            if (!value.HasValue)
                 return "N/A";
-            
-            return string.IsNullOrEmpty(format) 
-                ? $"{value} {unit}" 
-                : $"{value.ToString(format)} {unit}";
+
+            return string.IsNullOrEmpty(format)
+                ? $"{value.Value} {unit}"
+                : $"{value.Value.ToString(format)} {unit}";
         }
 
-        public float GetMemoryUsage()
+        public float? GetMemoryUsage()
         {
             try
             {
@@ -68,11 +68,11 @@ namespace MonitorIsland.Services
             catch (Exception ex)
             {
                 logger.LogError(ex, "获取内存使用量失败");
-                return -1;
+                return null;
             }
         }
 
-        public float GetCpuUsage()
+        public float? GetCpuUsage()
         {
             try
             {
@@ -81,11 +81,11 @@ namespace MonitorIsland.Services
             catch (Exception ex)
             {
                 logger.LogError(ex, "获取 CPU 利用率失败");
-                return -1;
+                return null;
             }
         }
 
-        public float GetCpuTemperature()
+        public float? GetCpuTemperature()
         {
             try
             {
@@ -122,7 +122,7 @@ namespace MonitorIsland.Services
                 logger.LogError(ex, "获取 CPU 温度失败");
                 _tempSensor = null;
             }
-            return -1;
+            return null;
         }
 
 
