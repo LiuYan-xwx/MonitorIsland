@@ -11,8 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: List files
-        run: ls
+#      - name: List files
+#        run: ls
       
       - name: Install .NET Core
         uses: actions/setup-dotnet@v4
