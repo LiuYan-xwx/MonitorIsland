@@ -9,19 +9,18 @@ jobs:
     name: Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
       
       - name: List files
         run: ls
       
-      # Install the .NET Core workload
       - name: Install .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.x
+          cache: true
 
       - name: Build
         run: pwsh -ep bypass ./tools/publish.ps1
