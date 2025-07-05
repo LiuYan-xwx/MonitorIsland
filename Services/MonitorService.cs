@@ -4,6 +4,7 @@ using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Threading;
 
 namespace MonitorIsland.Services
@@ -11,7 +12,16 @@ namespace MonitorIsland.Services
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private ISensor? _tempSensor;
-        private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
+        private readonly Lazy<ulong> _totalMemory = new(() =>
+        {
+            logger.LogDebug("获取总内存大小");
+            using var searcher = new System.Management.ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem");
+            foreach (System.Management.ManagementObject obj in searcher.Get())
+            {
+                return Convert.ToUInt64(obj["TotalPhysicalMemory"]) / (1024 * 1024);
+            }
+            return 0;
+        });
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
         {
             logger.LogDebug("初始化内存计数器");
@@ -63,7 +73,7 @@ namespace MonitorIsland.Services
             try
             {
                 var availableMemory = _memoryCounter.Value.NextValue();
-                return _totalMemory - availableMemory;
+                return _totalMemory.Value - availableMemory;
             }
             catch (Exception ex)
             {
@@ -96,6 +106,7 @@ namespace MonitorIsland.Services
                 }
 
                 var computer = _computer.Value;
+                bool sensorFound = false;
 
                 foreach (var hardware in computer.Hardware.Where(h => h.HardwareType == HardwareType.Cpu))
                 {
@@ -105,14 +116,23 @@ namespace MonitorIsland.Services
                         s.SensorType == SensorType.Temperature && s.Name == "CPU Package");
 
                     if (_tempSensor != null && _tempSensor.Value.HasValue)
+                    {
+                        sensorFound = true;
                         return _tempSensor.Value.Value;
+                    }
 
                     _tempSensor = hardware.Sensors.FirstOrDefault(s =>
                         s.SensorType == SensorType.Temperature && s.Name == "Core Average");
 
                     if (_tempSensor != null && _tempSensor.Value.HasValue)
+                    {
+                        sensorFound = true;
                         return _tempSensor.Value.Value;
-                    
+                    }
+                }
+
+                if (!sensorFound)
+                {
                     logger.LogError("未找到可用的 CPU 温度传感器");
                     _tempSensor = null;
                 }
@@ -145,10 +165,11 @@ namespace MonitorIsland.Services
                 _cpuCounter.Value.Dispose();
                 logger.LogDebug("释放 CPU 利用率计数器资源");
             }
+            
             if (_computer.IsValueCreated)
             {
                 _computer.Value.Close();
-                _tempSensor=null;
+                _tempSensor = null;
                 logger.LogDebug("释放硬件监控组件资源");
             }
 

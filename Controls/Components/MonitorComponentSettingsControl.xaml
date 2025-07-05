@@ -88,7 +88,7 @@
                                      MinWidth="20"
                                      HorizontalContentAlignment="Center"
                                      InputMethod.IsInputMethodEnabled="False"
-                                     PreviewTextInput="TextBoxNumberCheck"
+                                     PreviewTextInput="OnTextBoxPreviewTextInput"
                                      Text="{Binding Settings.RefreshInterval, Converter={StaticResource IntervalConverter}}"/>
                             <Label>ms</Label>
                         </StackPanel>
