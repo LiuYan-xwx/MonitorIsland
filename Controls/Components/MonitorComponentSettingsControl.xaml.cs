@@ -19,7 +19,13 @@ namespace MonitorIsland.Controls.Components
 
         [GeneratedRegex("[^0-9]+")]
         private static partial Regex NumberRegex();
-        void TextBoxNumberCheck(object sender, TextCompositionEventArgs e)
+        
+        /// <summary>
+        /// 验证文本框输入，仅允许数字字符。
+        /// </summary>
+        /// <param name="sender">事件发送者</param>
+        /// <param name="e">文本组合事件参数</param>
+        private void OnTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex re = NumberRegex();
             e.Handled = re.IsMatch(e.Text);
@@ -28,26 +34,29 @@ namespace MonitorIsland.Controls.Components
 
     public class IntervalToStringConverter : IValueConverter
     {
+        private const int DefaultInterval = 1000;
+        private const int MinimumInterval = 250;
+
         public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value is int intValue)
             {
                 return intValue.ToString(culture);
             }
-            return 1000;
+            return DefaultInterval;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value is string strValue && int.TryParse(strValue, NumberStyles.Integer, culture, out int i))
             {
-                if (i < 250)
+                if (i < MinimumInterval)
                 {
-                    return 250;
+                    return MinimumInterval;
                 }
                 return i;
             }
-            return 1000;
+            return DefaultInterval;
         }
     }
 

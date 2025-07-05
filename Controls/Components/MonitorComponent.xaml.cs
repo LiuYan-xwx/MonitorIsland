@@ -40,17 +40,24 @@ namespace MonitorIsland.Controls.Components
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            UpdateMonitorData();
+            _ = UpdateMonitorDataAsync();
         }
 
         /// <summary>
         /// 异步更新监控数据
         /// </summary>
-        private async void UpdateMonitorData()
+        private async Task UpdateMonitorDataAsync()
         {
-            var monitorType = Settings.MonitorType;
-            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
-            Settings.DisplayData = displayValue;
+            try
+            {
+                var monitorType = Settings.MonitorType;
+                var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
+                Settings.DisplayData = displayValue;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "更新监控数据失败");
+            }
         }
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
