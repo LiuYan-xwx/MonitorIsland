@@ -1,15 +1,13 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-using ClassIsland.Core.Abstractions.Controls;
+﻿using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
-using MonitorIsland.Models.ComponentSettings;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
+using MonitorIsland.Models.ComponentSettings;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -50,7 +48,7 @@ namespace MonitorIsland.Controls.Components
         {
             var monitorType = Settings.MonitorType;
             var driveName = monitorType == MonitorOption.DiskSpace ? Settings.DriveName : null;
-            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, driveName));
+            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, Settings.SelectedUnit, driveName));
             Settings.DisplayData = displayValue;
         }
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)

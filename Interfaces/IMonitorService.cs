@@ -1,9 +1,4 @@
 ﻿using MonitorIsland.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonitorIsland.Interfaces
 {
@@ -16,12 +11,13 @@ namespace MonitorIsland.Interfaces
         /// 获取指定监控类型格式化后的值。
         /// </summary>
         /// <param name="monitorType">监控类型枚举。</param>
+        /// <param name="unit">显示单位</param>
         /// <param name="driveName">磁盘盘符（仅在监控磁盘空间时使用）</param>
         /// <returns>格式化后的监控值字符串。</returns>
-        string GetFormattedMonitorValue(MonitorOption monitorType, string? driveName = null);
+        string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null);
 
         /// <summary>
-        /// 获取当前内存使用量（单位：MB）。
+        /// 获取当前内存使用量（单位：字节）。
         /// </summary>
         /// <returns>内存使用量。</returns>
         float? GetMemoryUsage();

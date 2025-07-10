@@ -4,15 +4,13 @@ using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading;
 
 namespace MonitorIsland.Services
 {
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private ISensor? _tempSensor;
-        private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
+        private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
 
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
         {
@@ -39,34 +37,49 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
-        public string GetFormattedMonitorValue(MonitorOption monitorType, string? driveName = null)
+        public string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null)
         {
             return monitorType switch
             {
-                MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), "MB"),
-                MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, "%", "F2"),
-                MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), "%", "F2"),
-                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), "°C", "F1"),
-                MonitorOption.DiskSpace => FormatValue(GetDiskFreeSpace(driveName ?? "C") / 1024 / 1024 / 1024, "GB", "F1"),
+                MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), unit, "F1"),
+                MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, unit, "F2"),
+                MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), unit, "F2"),
+                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), unit, "F1"),
+                MonitorOption.DiskSpace => FormatValue(GetDiskFreeSpace(driveName ?? "C"), unit, "F1"),
                 _ => "未知类型"
             };
         }
 
-        private static string FormatValue(float? value, string unit, string format = "")
+        private static string FormatValue(float? value, DisplayUnit unit, string format = "")
         {
             if (!value.HasValue)
                 return "N/A";
 
+            var (convertedValue, unitString) = ConvertValue(value.Value, unit);
+
             return string.IsNullOrEmpty(format)
-                ? $"{value.Value} {unit}"
-                : $"{value.Value.ToString(format)} {unit}";
+                ? $"{convertedValue} {unitString}"
+                : $"{convertedValue.ToString(format)} {unitString}";
+        }
+
+        private static (float, string) ConvertValue(float value, DisplayUnit unit)
+        {
+            return unit switch
+            {
+                DisplayUnit.MB => (value / 1024 / 1024, "MB"),
+                DisplayUnit.GB => (value / 1024 / 1024 / 1024, "GB"),
+                DisplayUnit.TB => (value / 1024 / 1024 / 1024 / 1024, "TB"),
+                DisplayUnit.Percent => (value, "%"),
+                DisplayUnit.Celsius => (value, "°C"),
+                _ => (value, "")
+            };
         }
 
         public float? GetMemoryUsage()
         {
             try
             {
-                var availableMemory = _memoryCounter.Value.NextValue();
+                var availableMemory = _memoryCounter.Value.NextValue() * 1024 * 1024; // to bytes
                 return _totalMemory - availableMemory;
             }
             catch (Exception ex)
@@ -86,7 +99,7 @@ namespace MonitorIsland.Services
                     logger.LogError($"磁盘 {driveName} 未就绪");
                     return null;
                 }
-                
+
                 return drive.TotalFreeSpace;
             }
             catch (Exception ex)
@@ -136,7 +149,7 @@ namespace MonitorIsland.Services
 
                     if (_tempSensor != null && _tempSensor.Value.HasValue)
                         return _tempSensor.Value.Value;
-                    
+
                     logger.LogError("未找到可用的 CPU 温度传感器");
                     _tempSensor = null;
                 }
@@ -171,7 +184,7 @@ namespace MonitorIsland.Services
             if (_computer.IsValueCreated)
             {
                 _computer.Value.Close();
-                _tempSensor=null;
+                _tempSensor = null;
                 logger.LogDebug("释放硬件监控组件资源");
             }
 

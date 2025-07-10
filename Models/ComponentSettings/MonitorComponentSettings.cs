@@ -8,7 +8,14 @@ namespace MonitorIsland.Models.ComponentSettings
         private int _refreshInterval = 1000;
         private string? _displayPrefix;
         private string? _displayData;
-        private string _driveName = "C";
+        private string _driveName = "C:\\";
+        private DisplayUnit _selectedUnit;
+        private List<DisplayUnit> _availableUnits = [];
+
+        public MonitorComponentSettings()
+        {
+            UpdateAvailableUnits();
+        }
 
         /// <summary>
         /// 选择要监控的项目类型。
@@ -21,6 +28,7 @@ namespace MonitorIsland.Models.ComponentSettings
                 if (value == _monitorType) return;
                 _monitorType = value;
                 OnPropertyChanged();
+                UpdateAvailableUnits();
             }
         }
 
@@ -78,6 +86,56 @@ namespace MonitorIsland.Models.ComponentSettings
                 _displayData = value;
                 OnPropertyChanged();
             }
+        }
+
+        /// <summary>
+        /// 选择的显示单位
+        /// </summary>
+        public DisplayUnit SelectedUnit
+        {
+            get => _selectedUnit;
+            set
+            {
+                if (value == _selectedUnit) return;
+                _selectedUnit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 可用的显示单位
+        /// </summary>
+        public List<DisplayUnit> AvailableUnits
+        {
+            get => _availableUnits;
+            set
+            {
+                if (Equals(value, _availableUnits)) return;
+                _availableUnits = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void UpdateAvailableUnits()
+        {
+            AvailableUnits = GetUnitsForMonitorType(MonitorType);
+            if (!AvailableUnits.Contains(SelectedUnit))
+            {
+                SelectedUnit = AvailableUnits.FirstOrDefault();
+            }
+        }
+
+        private List<DisplayUnit> GetUnitsForMonitorType(MonitorOption monitorType)
+        {
+            return monitorType switch
+            {
+                MonitorOption.MemoryUsage => [DisplayUnit.MB, DisplayUnit.GB],
+                MonitorOption.DiskSpace => [DisplayUnit.MB, DisplayUnit.GB, DisplayUnit.TB],
+                MonitorOption.MemoryUsageRate => [DisplayUnit.Percent],
+                MonitorOption.CpuUsage => [DisplayUnit.Percent],
+                MonitorOption.CpuTemperature => [DisplayUnit.Celsius],
+                _ => []
+            };
         }
 
         // 获取当前监控类型的默认显示前缀

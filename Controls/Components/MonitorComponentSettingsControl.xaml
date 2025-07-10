@@ -20,6 +20,8 @@
         <local:IntervalToStringConverter x:Key="IntervalConverter" />
         <converters:MonitorOptionToStringConverter x:Key="MonitorOptionConverter" />
         <converters:MonitorTypeToDiskVisibilityConverter x:Key="DiskVisibilityConverter" />
+        <converters:MonitorTypeToUnitVisibilityConverter x:Key="UnitVisibilityConverter" />
+        <converters:DisplayUnitToStringConverter x:Key="DisplayUnitConverter" />
 
         <!--  使用 ObjectDataProvider 提供枚举值  -->
         <ObjectDataProvider
@@ -83,11 +85,31 @@
                         </Expander.Header>
                         <StackPanel Margin="36,0,48,12">
                             <ci:SettingsControl
+                                Margin="0,0,0,6"
                                 Description="显示在数据前面的提示文字"
                                 Header="前缀"
                                 IconGlyph="TagArrowLeft">
                                 <ci:SettingsControl.Switcher>
                                     <TextBox MinWidth="150" Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                </ci:SettingsControl.Switcher>
+                            </ci:SettingsControl>
+                            <ci:SettingsControl
+                                Margin="0,0,0,6"
+                                Description="选择显示单位"
+                                Header="单位"
+                                IconGlyph="Ruler"
+                                Visibility="{Binding Settings.MonitorType, Converter={StaticResource UnitVisibilityConverter}}">
+                                <ci:SettingsControl.Switcher>
+                                    <ComboBox
+                                        MinWidth="80"
+                                        ItemsSource="{Binding Settings.AvailableUnits}"
+                                        SelectedItem="{Binding Settings.SelectedUnit, Mode=TwoWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:DisplayUnit}">
+                                                <TextBlock Text="{Binding Converter={StaticResource DisplayUnitConverter}}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </ci:SettingsControl.Switcher>
                             </ci:SettingsControl>
                         </StackPanel>
