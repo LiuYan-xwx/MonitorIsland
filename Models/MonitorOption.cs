@@ -16,12 +16,20 @@ namespace MonitorIsland.Models
         /// </summary>
         MemoryUsage,
         /// <summary>
+        /// 内存使用率
+        /// </summary>
+        MemoryUsageRate,
+        /// <summary>
         /// CPU 利用率
         /// </summary>
         CpuUsage,
         /// <summary>
         /// CPU 温度
         /// </summary>
-        CpuTemperature
+        CpuTemperature,
+        /// <summary>
+        /// C盘剩余空间
+        /// </summary>
+        CDriveFreeSpace
     }
 }

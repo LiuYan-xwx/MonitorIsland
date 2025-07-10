@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -42,8 +43,10 @@ namespace MonitorIsland.Services
             return monitorType switch
             {
                 MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), "MB"),
+                MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, "%", "F2"),
                 MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), "%", "F2"),
                 MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), "°C", "F1"),
+                MonitorOption.CDriveFreeSpace => FormatValue(GetCDriveFreeSpace() / 1024 / 1024 / 1024, "GB", "F2"),
                 _ => "未知类型"
             };
         }
@@ -68,6 +71,20 @@ namespace MonitorIsland.Services
             catch (Exception ex)
             {
                 logger.LogError(ex, "获取内存使用量失败");
+                return null;
+            }
+        }
+
+        public float? GetCDriveFreeSpace()
+        {
+            try
+            {
+                DriveInfo drive = new("C:");
+                return drive.AvailableFreeSpace;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "获取 C 盘剩余空间失败");
                 return null;
             }
         }

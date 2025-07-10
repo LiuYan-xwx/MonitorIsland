@@ -69,8 +69,10 @@ namespace MonitorIsland.Models.ComponentSettings
         public string GetDefaultDisplayPrefix() => MonitorType switch
         {
             MonitorOption.MemoryUsage => "内存使用量: ",
+            MonitorOption.MemoryUsageRate => "内存使用率: ",
             MonitorOption.CpuUsage => "CPU 利用率: ",
             MonitorOption.CpuTemperature => "CPU 温度: ",
+            MonitorOption.CDriveFreeSpace => "C盘剩余空间: ",
             _ => string.Empty
         };
     }
