@@ -12,8 +12,10 @@
 
 **目前支持的监控项：**
 - `内存使用量`：显示内存占用情况
+- `内存使用率`：显示内存当前使用率
 - `CPU 利用率`：显示 CPU 当前使用率
 - `CPU 温度`：显示 CPU Package / Core Average 温度
+- `C盘剩余空间`：显示 C 盘当前剩余空间
 
 *以后会有更多（）*
 
@@ -50,7 +52,8 @@
 
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html) 配置插件开发环境。  
 
-- `内存使用量` 和 `CPU 利用率` 我用了 `PerformanceCounter` 获取
+- `内存使用量`、`内存使用率` 和 `CPU 利用率` 我用了 `PerformanceCounter` 获取
+- `C盘剩余空间` 我用了 `DriveInfo` 获取
 - `CPU 温度` 使用了第三方库获取
 
 ## 反馈与贡献
