@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace MonitorIsland.Models.ComponentSettings
 {
@@ -77,6 +78,7 @@ namespace MonitorIsland.Models.ComponentSettings
         /// <summary>
         /// 显示数据
         /// </summary>
+        [JsonIgnore]
         public string DisplayData
         {
             get => _displayData ?? string.Empty;
