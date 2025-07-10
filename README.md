@@ -67,7 +67,15 @@
 - 插件图标由 [<img src="https://github.com/LiPolymer.png" width="20" height="20"/>](https://github.com/LiPolymer)[@LiPolymer](https://github.com/LiPolymer) 提供😋😋
 - 本项目使用了以下的第三方库：
   - [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) - 用于获取 CPU 温度
-- 开发过程中使用了 Github Copilot 辅助
+- 开发过程中使用了 Copilot 辅助
+
+## 贡献者
+
+非常感谢以下人员对本仓库做出的贡献：
+
+<a href="https://github.com/LiuYan-xwx/MonitorIsland/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=LiuYan-xwx/MonitorIsland" />
+</a>
 
 ---
 
