@@ -33,10 +33,10 @@ namespace MonitorIsland.Controls.Components
             InitializeComponent();
 
             _timer = new DispatcherTimer();
-            _timer.Tick += Timer_Tick;
+            _timer.Tick += OnTimer_Ticked;
         }
 
-        private void Timer_Tick(object? sender, EventArgs e)
+        private void OnTimer_Ticked(object? sender, EventArgs e)
         {
             UpdateMonitorData();
         }
