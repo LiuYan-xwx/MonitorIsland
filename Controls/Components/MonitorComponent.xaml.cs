@@ -49,7 +49,8 @@ namespace MonitorIsland.Controls.Components
         private async void UpdateMonitorData()
         {
             var monitorType = Settings.MonitorType;
-            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType));
+            var driveName = monitorType == MonitorOption.DiskSpace ? Settings.DriveName : null;
+            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, driveName));
             Settings.DisplayData = displayValue;
         }
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
@@ -73,6 +74,7 @@ namespace MonitorIsland.Controls.Components
                     _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
                     break;
                 case nameof(Settings.MonitorType):
+                case nameof(Settings.DriveName):
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
                     break;
             }

@@ -28,8 +28,8 @@ namespace MonitorIsland.Models
         /// </summary>
         CpuTemperature,
         /// <summary>
-        /// C盘剩余空间
+        /// 磁盘空间
         /// </summary>
-        CDriveFreeSpace
+        DiskSpace
     }
 }

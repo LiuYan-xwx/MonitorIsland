@@ -13,6 +13,7 @@ namespace MonitorIsland.Services
     {
         private ISensor? _tempSensor;
         private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024);
+
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
         {
             logger.LogDebug("初始化内存计数器");
@@ -38,7 +39,7 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
-        public string GetFormattedMonitorValue(MonitorOption monitorType)
+        public string GetFormattedMonitorValue(MonitorOption monitorType, string? driveName = null)
         {
             return monitorType switch
             {
@@ -46,7 +47,7 @@ namespace MonitorIsland.Services
                 MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, "%", "F2"),
                 MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), "%", "F2"),
                 MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), "°C", "F1"),
-                MonitorOption.CDriveFreeSpace => FormatValue(GetCDriveFreeSpace() / 1024 / 1024 / 1024, "GB", "F2"),
+                MonitorOption.DiskSpace => FormatValue(GetDiskFreeSpace(driveName ?? "C") / 1024 / 1024 / 1024, "GB", "F1"),
                 _ => "未知类型"
             };
         }
@@ -75,16 +76,22 @@ namespace MonitorIsland.Services
             }
         }
 
-        public float? GetCDriveFreeSpace()
+        public float? GetDiskFreeSpace(string driveName)
         {
             try
             {
-                DriveInfo drive = new("C:");
-                return drive.AvailableFreeSpace;
+                DriveInfo drive = new(driveName);
+                if (!drive.IsReady)
+                {
+                    logger.LogError($"磁盘 {driveName} 未就绪");
+                    return null;
+                }
+                
+                return drive.TotalFreeSpace;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "获取 C 盘剩余空间失败");
+                logger.LogError(ex, $"获取 {driveName[0]} 盘剩余空间失败");
                 return null;
             }
         }
@@ -141,7 +148,6 @@ namespace MonitorIsland.Services
             }
             return null;
         }
-
 
         /// <summary>
         /// 释放资源

@@ -21,7 +21,7 @@ namespace MonitorIsland.Converters
                     MonitorOption.MemoryUsageRate => "内存使用率",
                     MonitorOption.CpuUsage => "CPU 利用率",
                     MonitorOption.CpuTemperature => "CPU 温度",
-                    MonitorOption.CDriveFreeSpace => "C盘剩余空间",
+                    MonitorOption.DiskSpace => "磁盘空间",
                     _ => value.ToString() ?? string.Empty // 作为备选方案，显示枚举的原始名称
                 };
             }

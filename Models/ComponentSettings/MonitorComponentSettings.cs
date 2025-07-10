@@ -8,6 +8,7 @@ namespace MonitorIsland.Models.ComponentSettings
         private int _refreshInterval = 1000;
         private string? _displayPrefix;
         private string? _displayData;
+        private string _driveName = "C";
 
         /// <summary>
         /// 选择要监控的项目类型。
@@ -33,6 +34,20 @@ namespace MonitorIsland.Models.ComponentSettings
             {
                 if (value == _refreshInterval) return;
                 _refreshInterval = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 要监控的磁盘盘符（仅在监控类型为磁盘空间时使用）
+        /// </summary>
+        public string DriveName
+        {
+            get => _driveName;
+            set
+            {
+                if (value == _driveName) return;
+                _driveName = value;
                 OnPropertyChanged();
             }
         }
@@ -72,7 +87,7 @@ namespace MonitorIsland.Models.ComponentSettings
             MonitorOption.MemoryUsageRate => "内存使用率: ",
             MonitorOption.CpuUsage => "CPU 利用率: ",
             MonitorOption.CpuTemperature => "CPU 温度: ",
-            MonitorOption.CDriveFreeSpace => "C盘剩余空间: ",
+            MonitorOption.DiskSpace => $"{DriveName[0]}盘剩余空间: ",
             _ => string.Empty
         };
     }
