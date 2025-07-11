@@ -9,7 +9,7 @@ namespace MonitorIsland.Services
 {
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
-        private ISensor? _tempSensor;
+        private readonly Dictionary<string, ISensor> _temperatureSensors = [];
         private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
 
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
@@ -37,14 +37,14 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
-        public string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null)
+        public string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null, string? cpuTemperatureSensorId = null)
         {
             return monitorType switch
             {
                 MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), unit, "F1"),
                 MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, unit, "F2"),
                 MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), unit, "F2"),
-                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(), unit, "F1"),
+                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(cpuTemperatureSensorId), unit, "F1"),
                 MonitorOption.DiskSpace => FormatValue(GetDiskFreeSpace(driveName ?? "C"), unit, "F1"),
                 _ => "未知类型"
             };
@@ -122,44 +122,70 @@ namespace MonitorIsland.Services
             }
         }
 
-        public float? GetCpuTemperature()
+        public float? GetCpuTemperature(string? sensorId = null)
         {
             try
             {
-                if (_tempSensor != null && _tempSensor.Value.HasValue)
+                // 如果没有指定传感器ID，返回null
+                if (string.IsNullOrEmpty(sensorId))
                 {
-                    _tempSensor.Hardware.Update();
-                    return _tempSensor.Value.Value;
+                    logger.LogWarning("未指定 CPU 温度传感器ID");
+                    return null;
                 }
 
+                if (!_temperatureSensors.TryGetValue(sensorId, out var sensor))
+                {
+                    logger.LogWarning("未找到指定的 CPU 温度传感器ID: {SensorId}", sensorId);
+                    return null;
+                }
+
+                sensor.Hardware.Update();
+
+                if (sensor.Value.HasValue)
+                    return sensor.Value.Value;
+
+                logger.LogWarning("传感器 {SensorId} 没有可用的温度值", sensorId);
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "获取 CPU 温度失败");
+            }
+            return null;
+        }
+
+        public List<CpuTemperatureSensorInfo> GetAvailableCpuTemperatureSensors()
+        {
+            var sensors = new List<CpuTemperatureSensorInfo>();
+            _temperatureSensors.Clear();
+
+            try
+            {
                 var computer = _computer.Value;
 
                 foreach (var hardware in computer.Hardware.Where(h => h.HardwareType == HardwareType.Cpu))
                 {
                     hardware.Update();
 
-                    _tempSensor = hardware.Sensors.FirstOrDefault(s =>
-                        s.SensorType == SensorType.Temperature && s.Name == "CPU Package");
+                    foreach (var sensor in hardware.Sensors.Where(s => s.SensorType == SensorType.Temperature))
+                    {
+                        var sensorInfo = new CpuTemperatureSensorInfo
+                        {
+                            Id = $"{hardware.Identifier}_{sensor.Identifier}",
+                            Name = sensor.Name,
+                            HardwareName = hardware.Name
+                        };
 
-                    if (_tempSensor != null && _tempSensor.Value.HasValue)
-                        return _tempSensor.Value.Value;
-
-                    _tempSensor = hardware.Sensors.FirstOrDefault(s =>
-                        s.SensorType == SensorType.Temperature && s.Name == "Core Average");
-
-                    if (_tempSensor != null && _tempSensor.Value.HasValue)
-                        return _tempSensor.Value.Value;
-
-                    logger.LogError("未找到可用的 CPU 温度传感器");
-                    _tempSensor = null;
+                        sensors.Add(sensorInfo);
+                        _temperatureSensors[sensorInfo.Id] = sensor;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "获取 CPU 温度失败");
-                _tempSensor = null;
+                logger.LogError(ex, "获取可用 CPU 温度传感器失败");
             }
-            return null;
+            return sensors;
         }
 
         /// <summary>
@@ -184,7 +210,7 @@ namespace MonitorIsland.Services
             if (_computer.IsValueCreated)
             {
                 _computer.Value.Close();
-                _tempSensor = null;
+                _temperatureSensors.Clear();
                 logger.LogDebug("释放硬件监控组件资源");
             }
 

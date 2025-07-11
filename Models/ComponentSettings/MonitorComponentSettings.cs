@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MonitorIsland.Controls.Components;
+using MonitorIsland.Models;
 using System.Text.Json.Serialization;
 
 namespace MonitorIsland.Models.ComponentSettings
@@ -12,6 +14,8 @@ namespace MonitorIsland.Models.ComponentSettings
         private string _driveName = "C:\\";
         private DisplayUnit _selectedUnit;
         private List<DisplayUnit> _availableUnits = [];
+        private string? _selectedCpuTemperatureSensorId;
+        private List<CpuTemperatureSensorInfo> _availableCpuTemperatureSensors = [];
 
         public MonitorComponentSettings()
         {
@@ -57,6 +61,35 @@ namespace MonitorIsland.Models.ComponentSettings
             {
                 if (value == _driveName) return;
                 _driveName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 选择的CPU温度传感器ID（仅在监控类型为CPU温度时使用）
+        /// </summary>
+        public string? SelectedCpuTemperatureSensorId
+        {
+            get => _selectedCpuTemperatureSensorId;
+            set
+            {
+                if (value == _selectedCpuTemperatureSensorId) return;
+                _selectedCpuTemperatureSensorId = value ?? AvailableCpuTemperatureSensors.FirstOrDefault()?.Id;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 可用的CPU温度传感器列表
+        /// </summary>
+        [JsonIgnore]
+        public List<CpuTemperatureSensorInfo> AvailableCpuTemperatureSensors
+        {
+            get => _availableCpuTemperatureSensors;
+            set
+            {
+                if (Equals(value, _availableCpuTemperatureSensors)) return;
+                _availableCpuTemperatureSensors = value;
                 OnPropertyChanged();
             }
         }
@@ -127,7 +160,7 @@ namespace MonitorIsland.Models.ComponentSettings
             }
         }
 
-        private List<DisplayUnit> GetUnitsForMonitorType(MonitorOption monitorType)
+        private static List<DisplayUnit> GetUnitsForMonitorType(MonitorOption monitorType)
         {
             return monitorType switch
             {

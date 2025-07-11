@@ -21,6 +21,7 @@
         <converters:MonitorOptionToStringConverter x:Key="MonitorOptionConverter" />
         <converters:MonitorTypeToDiskVisibilityConverter x:Key="DiskVisibilityConverter" />
         <converters:MonitorTypeToUnitVisibilityConverter x:Key="UnitVisibilityConverter" />
+        <converters:MonitorTypeToCpuTemperatureSensorVisibilityConverter x:Key="CpuTemperatureSensorVisibilityConverter" />
         <converters:DisplayUnitToStringConverter x:Key="DisplayUnitConverter" />
 
         <!--  使用 ObjectDataProvider 提供枚举值  -->
@@ -66,6 +67,27 @@
                             MinWidth="80"
                             ItemsSource="{Binding AvailableDriveNames}"
                             SelectedItem="{Binding Settings.DriveName, Mode=TwoWay}" />
+                    </ci:SettingsCard.Switcher>
+                </ci:SettingsCard>
+
+                <ci:SettingsCard
+                    Margin="0,0,0,6"
+                    Description="选择要监控的 CPU 温度传感器"
+                    Header="CPU 温度传感器"
+                    IconGlyph="Thermometer"
+                    Visibility="{Binding Settings.MonitorType, Converter={StaticResource CpuTemperatureSensorVisibilityConverter}}">
+                    <ci:SettingsCard.Switcher>
+                        <ComboBox
+                            MinWidth="200"
+                            ItemsSource="{Binding Settings.AvailableCpuTemperatureSensors}"
+                            SelectedValue="{Binding Settings.SelectedCpuTemperatureSensorId, Mode=TwoWay}"
+                            SelectedValuePath="Id">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:CpuTemperatureSensorInfo}">
+                                    <TextBlock Text="{Binding DisplayText}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ci:SettingsCard.Switcher>
                 </ci:SettingsCard>
 
