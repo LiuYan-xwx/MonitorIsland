@@ -133,8 +133,6 @@ namespace MonitorIsland.Services
                     return null;
                 }
 
-// (No replacement lines; the block is removed entirely)
-
                 if (!_temperatureSensors.TryGetValue(sensorId, out var sensor))
                 {
                     logger.LogWarning("未找到指定的 CPU 温度传感器ID: {SensorId}", sensorId);
