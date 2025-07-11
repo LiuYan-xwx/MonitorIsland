@@ -133,10 +133,7 @@ namespace MonitorIsland.Services
                     return null;
                 }
 
-                //if (_temperatureSensors == null || !_computer.IsValueCreated)
-                //{
-                //    var computer = _computer.Value;
-                //}
+// (No replacement lines; the block is removed entirely)
 
                 if (!_temperatureSensors.TryGetValue(sensorId, out var sensor))
                 {
