@@ -35,7 +35,7 @@
 > ~~由于我也不知道什么原因~~，插件需要 ClassIsland 版本 **≥ 1.6.2.0** 才能运行。
 
 - 在插件市场找到 `MonitorIsland` 并安装。
-- 有时插件索引还没更新，可以前往 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 下载最新 `.cipx` 文件，手动安装。
+- 有时插件索引还没更新或者访问不了，可以前往 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 下载最新 `.cipx` 文件，手动安装。
 
 ## 使用方法
 
@@ -46,7 +46,7 @@
 ## 常见问题
 
 - **Q: 某个数值为 `N/A` ？**  
-  A: 这应该是数据获取失败了，可能是由于权限不足或者硬件不支持等奇奇怪怪的原因，建议**查看日志**并前往 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 反馈。
+  A: 这是数据获取失败了，可能是由于权限不足或者硬件不支持等奇奇怪怪的原因，建议**查看日志**，然后可以前往 [Issues](https://github.com/LiuYan-xwx/MonitorIsland/issues) 反馈。
 
 ## 开发
 
