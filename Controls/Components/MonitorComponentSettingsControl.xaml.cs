@@ -1,7 +1,10 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using Microsoft.Extensions.Logging;
+using MonitorIsland.Interfaces;
+using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;

@@ -47,14 +47,65 @@ namespace MonitorIsland.Controls.Components
         private async void UpdateMonitorData()
         {
             var monitorType = Settings.MonitorType;
+            if (monitorType == MonitorOption.CpuTemperature && string.IsNullOrEmpty(Settings.SelectedCpuTemperatureSensorId))
+                return;
+
             var driveName = monitorType == MonitorOption.DiskSpace ? Settings.DriveName : null;
-            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, Settings.SelectedUnit, driveName));
+            var cpuTemperatureSensorId = monitorType == MonitorOption.CpuTemperature ? Settings.SelectedCpuTemperatureSensorId : null;
+            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, Settings.SelectedUnit, driveName, cpuTemperatureSensorId));
+
             Settings.DisplayData = displayValue;
         }
+
+        private void LoadAvailableCpuTemperatureSensors()
+        {
+            try
+            {
+                var sensors = MonitorService.GetAvailableCpuTemperatureSensors();
+                Settings.AvailableCpuTemperatureSensors = sensors;
+
+                // 如果当前没有选择传感器或选择的传感器不在可用列表中，使用默认选择逻辑
+                if (string.IsNullOrEmpty(Settings.SelectedCpuTemperatureSensorId) ||
+                    !sensors.Any(s => s.Id == Settings.SelectedCpuTemperatureSensorId))
+                {
+                    SelectDefaultCpuTemperatureSensor(sensors);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "加载可用CPU温度传感器时发生错误");
+            }
+        }
+
+        private void SelectDefaultCpuTemperatureSensor(List<Models.CpuTemperatureSensorInfo> sensors)
+        {
+            if (sensors.Count == 0)
+            {
+                Settings.SelectedCpuTemperatureSensorId = null;
+                return;
+            }
+
+            // 优先选择"CPU Package"传感器
+            var cpuPackageSensor = sensors.FirstOrDefault(s => s.Name == "CPU Package");
+            if (cpuPackageSensor != null)
+            {
+                Settings.SelectedCpuTemperatureSensorId = cpuPackageSensor.Id;
+                return;
+            }
+
+            // 如果没有找到CPU Package，选择第一个可用的传感器
+            var firstSensor = sensors[0];
+            Settings.SelectedCpuTemperatureSensorId = firstSensor.Id;
+        }
+
         private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
         {
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
             Settings.PropertyChanged += OnSettingsPropertyChanged;
+            if (Settings.MonitorType == MonitorOption.CpuTemperature)
+            {
+                LoadAvailableCpuTemperatureSensors();
+            }
             _timer.Start();
         }
 
@@ -74,6 +125,10 @@ namespace MonitorIsland.Controls.Components
                 case nameof(Settings.MonitorType):
                 case nameof(Settings.DriveName):
                     Settings.DisplayPrefix = Settings.GetDefaultDisplayPrefix();
+                    if (Settings.MonitorType == MonitorOption.CpuTemperature)
+                    {
+                        LoadAvailableCpuTemperatureSensors();
+                    }
                     break;
             }
         }
