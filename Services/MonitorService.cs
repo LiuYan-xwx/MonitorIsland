@@ -139,7 +139,10 @@ namespace MonitorIsland.Services
                 //}
 
                 if (!_temperatureSensors.TryGetValue(sensorId, out var sensor))
+                {
+                    logger.LogWarning("未找到指定的 CPU 温度传感器ID: {SensorId}", sensorId);
                     return null;
+                }
 
                 sensor.Hardware.Update();
 
