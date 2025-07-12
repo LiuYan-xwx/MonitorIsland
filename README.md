@@ -4,6 +4,12 @@
 
 # MonitorIsland
 
+![GitHub License](https://img.shields.io/github/license/LiuYan-xwx/MonitorIsland)
+![GitHub top language](https://img.shields.io/github/languages/top/LiuYan-xwx/MonitorIsland)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/LiuYan-xwx/MonitorIsland/total?label=%E6%80%BB%E4%B8%8B%E8%BD%BD%E9%87%8F)
+![GitHub Repo stars](https://img.shields.io/github/stars/LiuYan-xwx/MonitorIsland)
+
+
 </div>
 
 ## 简介
