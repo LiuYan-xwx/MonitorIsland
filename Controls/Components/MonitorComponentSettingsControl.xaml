@@ -18,7 +18,7 @@
     mc:Ignorable="d">
     <ci:ComponentBase.Resources>
         <local:IntervalToStringConverter x:Key="IntervalConverter" />
-        <converters:MonitorOptionToStringConverter x:Key="MonitorOptionConverter" />
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
         <converters:MonitorTypeToDiskVisibilityConverter x:Key="DiskVisibilityConverter" />
         <converters:MonitorTypeToUnitVisibilityConverter x:Key="UnitVisibilityConverter" />
         <converters:MonitorTypeToCpuTemperatureSensorVisibilityConverter x:Key="CpuTemperatureSensorVisibilityConverter" />
@@ -49,7 +49,7 @@
                             SelectedItem="{Binding Settings.MonitorType, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:MonitorOption}">
-                                    <TextBlock Text="{Binding Converter={StaticResource MonitorOptionConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
