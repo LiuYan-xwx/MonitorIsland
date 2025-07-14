@@ -23,16 +23,6 @@
         <converters:MonitorTypeToUnitVisibilityConverter x:Key="UnitVisibilityConverter" />
         <converters:MonitorTypeToCpuTemperatureSensorVisibilityConverter x:Key="CpuTemperatureSensorVisibilityConverter" />
         <converters:DisplayUnitToStringConverter x:Key="DisplayUnitConverter" />
-
-        <!--  使用 ObjectDataProvider 提供枚举值  -->
-        <ObjectDataProvider
-            x:Key="MonitorOptionsProvider"
-            MethodName="GetValues"
-            ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:MonitorOption" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
     </ci:ComponentBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
         <ScrollViewer>
@@ -45,7 +35,7 @@
                     <ci:SettingsCard.Switcher>
                         <ComboBox
                             MinWidth="110"
-                            ItemsSource="{Binding Source={StaticResource MonitorOptionsProvider}}"
+                            ItemsSource="{Binding MonitorOptions}"
                             SelectedItem="{Binding Settings.MonitorType, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type models:MonitorOption}">

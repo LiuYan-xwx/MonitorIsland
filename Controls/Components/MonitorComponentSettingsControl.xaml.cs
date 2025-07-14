@@ -1,5 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using Microsoft.Extensions.Logging;
+using MonitorIsland.Extensions;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
@@ -27,6 +28,8 @@ namespace MonitorIsland.Controls.Components
             Logger = logger;
             InitializeComponent();
         }
+
+        public MonitorOption[] MonitorOptions { get; } = MonitorOptionExtensions.DisplayOrder;
 
         private void MonitorComponentSettingsControl_OnLoaded(object sender, RoutedEventArgs e)
         {

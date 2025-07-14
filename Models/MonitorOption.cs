@@ -13,11 +13,6 @@ namespace MonitorIsland.Models
         [Description("内存使用量")]
         MemoryUsage,
         /// <summary>
-        /// 内存使用率
-        /// </summary>
-        [Description("内存使用率")]
-        MemoryUsageRate,
-        /// <summary>
         /// CPU 利用率
         /// </summary>
         [Description("CPU 利用率")]
@@ -31,6 +26,11 @@ namespace MonitorIsland.Models
         /// 磁盘空间
         /// </summary>
         [Description("磁盘空间")]
-        DiskSpace
+        DiskSpace,
+        /// <summary>
+        /// 内存使用率
+        /// </summary>
+        [Description("内存使用率")]
+        MemoryUsageRate
     }
 }
