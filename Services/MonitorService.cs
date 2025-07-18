@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
+using MonitorIsland.Helpers;
 using System.Diagnostics;
 using System.IO;
 
@@ -10,7 +11,7 @@ namespace MonitorIsland.Services
     public class MonitorService(ILogger<MonitorService> logger) : IMonitorService
     {
         private readonly Dictionary<string, ISensor> _temperatureSensors = [];
-        private readonly ulong _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+        private readonly ulong _totalMemory = MemoryHelper.GetTotalPhysicalMemory();
 
         private readonly Lazy<PerformanceCounter> _memoryCounter = new(() =>
         {

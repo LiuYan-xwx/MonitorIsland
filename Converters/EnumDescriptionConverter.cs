@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
-using System.Windows.Data;
+using Avalonia.Data.Converters;
 
 namespace MonitorIsland.Converters
 {
@@ -10,7 +10,7 @@ namespace MonitorIsland.Converters
     /// </summary>
     public class EnumDescriptionConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is Enum enumValue)
             {
@@ -21,7 +21,7 @@ namespace MonitorIsland.Converters
             return string.Empty;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException("ConvertBack is not supported for EnumDescriptionConverter.");
         }

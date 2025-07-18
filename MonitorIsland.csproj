@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
-		<UseWPF>true</UseWPF>
+		<UseWPF>false</UseWPF>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PlatformTarget>x64</PlatformTarget>
 		<EnableDynamicLoading>True</EnableDynamicLoading>
@@ -21,10 +21,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClassIsland.PluginSdk" Version="1.6.2">
+		<PackageReference Include="ClassIsland.PluginSdk" Version="1.7.103-dev-v2">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,13 +1,13 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
-using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Threading;
+using Avalonia.Threading;
+using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -17,7 +17,7 @@ namespace MonitorIsland.Controls.Components
     [ComponentInfo(
         "AE533FE2-A53F-4104-8C38-37DA018A98BB",
         "监控",
-        PackIconKind.Pulse,
+        "\ue304",
         "监控您电脑的各种信息"
     )]
     public partial class MonitorComponent : ComponentBase<MonitorComponentSettings>
@@ -77,7 +77,7 @@ namespace MonitorIsland.Controls.Components
             }
         }
 
-        private void SelectDefaultCpuTemperatureSensor(List<Models.CpuTemperatureSensorInfo> sensors)
+        private void SelectDefaultCpuTemperatureSensor(List<CpuTemperatureSensorInfo> sensors)
         {
             if (sensors.Count == 0)
             {
@@ -98,7 +98,7 @@ namespace MonitorIsland.Controls.Components
             Settings.SelectedCpuTemperatureSensorId = firstSensor.Id;
         }
 
-        private void MonitorComponent_OnLoaded(object sender, RoutedEventArgs e)
+        private void MonitorComponent_OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs routedEventArgs)
         {
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
             Settings.PropertyChanged += OnSettingsPropertyChanged;
@@ -109,7 +109,7 @@ namespace MonitorIsland.Controls.Components
             _timer.Start();
         }
 
-        private void MonitorComponent_OnUnloaded(object sender, RoutedEventArgs e)
+        private void MonitorComponent_OnUnloaded(object? sender, RoutedEventArgs routedEventArgs)
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;

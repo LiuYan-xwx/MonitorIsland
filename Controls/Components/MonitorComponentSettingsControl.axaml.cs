@@ -1,4 +1,5 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using Avalonia.Data.Converters;
+using ClassIsland.Core.Abstractions.Controls;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Extensions;
 using MonitorIsland.Interfaces;
@@ -10,8 +11,8 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
+using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components
 {
@@ -31,7 +32,7 @@ namespace MonitorIsland.Controls.Components
 
         public MonitorOption[] MonitorOptions { get; } = MonitorOptionExtensions.DisplayOrder;
 
-        private void MonitorComponentSettingsControl_OnLoaded(object sender, RoutedEventArgs e)
+        private void MonitorComponentSettingsControl_OnLoaded(object? sender, RoutedEventArgs routedEventArgs)
         {
             if (AvailableDriveNames.Count == 0)
             {
@@ -58,13 +59,13 @@ namespace MonitorIsland.Controls.Components
             }
         }
 
-        [GeneratedRegex("[^0-9]+")]
-        private static partial Regex NumberRegex();
-        void TextBoxNumberCheck(object sender, TextCompositionEventArgs e)
-        {
-            Regex re = NumberRegex();
-            e.Handled = re.IsMatch(e.Text);
-        }
+        //[GeneratedRegex("[^0-9]+")]
+        //private static partial Regex NumberRegex();
+        //void TextBoxNumberCheck(object sender, TextCompositionEventArgs e)
+        //{
+        //    Regex re = NumberRegex();
+        //    e.Handled = re.IsMatch(e.Text);
+        //}
     }
 
     public class IntervalToStringConverter : IValueConverter

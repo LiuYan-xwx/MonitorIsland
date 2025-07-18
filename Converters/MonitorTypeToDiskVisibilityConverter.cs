@@ -1,22 +1,21 @@
 ﻿using MonitorIsland.Models;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
+using Avalonia.Data.Converters;
 
 namespace MonitorIsland.Converters
 {
     public class MonitorTypeToDiskVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is MonitorOption monitorType)
             {
-                return monitorType == MonitorOption.DiskSpace ? Visibility.Visible : Visibility.Collapsed;
+                return monitorType == MonitorOption.DiskSpace;
             }
-            return Visibility.Collapsed;
+            return false;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

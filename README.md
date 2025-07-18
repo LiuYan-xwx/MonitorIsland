@@ -58,8 +58,9 @@
 
 根据 [ClassIsland 开发文档](https://docs.classisland.tech/dev/get-started/devlopment-plugins.html) 配置插件开发环境。  
 
-- `内存使用量`、`内存使用率` 和 `CPU 利用率` 我用了 `PerformanceCounter` 获取
-- `磁盘空间` 我用了 `DriveInfo` 获取
+- `内存使用量`、`内存使用率` 使用了 `PerformanceCounter` 获取可用内存，并通过 `kernel32` API 获取总内存
+- `CPU 利用率` 使用了 `PerformanceCounter` 获取
+- `磁盘空间` 使用了 `DriveInfo` 获取
 - `CPU 温度` 使用了第三方库获取
 
 ## 反馈与贡献
