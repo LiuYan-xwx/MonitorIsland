@@ -5,7 +5,7 @@ namespace MonitorIsland.Helpers
     public static class MemoryHelper
     {
         [StructLayout(LayoutKind.Sequential)]
-        private struct MEMORYSTATUSEX
+        private struct MEMORY_INFO
         {
             public uint dwLength;
             public uint dwMemoryLoad;
@@ -18,8 +18,9 @@ namespace MonitorIsland.Helpers
             public ulong ullAvailExtendedVirtual;
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool GlobalMemoryStatusEx([In, Out] ref MEMORYSTATUSEX lpBuffer);
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GlobalMemoryStatusEx(ref MEMORY_INFO mi);
 
         /// <summary>
         /// 获取系统总物理内存大小
@@ -28,17 +29,12 @@ namespace MonitorIsland.Helpers
         /// <exception cref="InvalidOperationException">无法获取系统内存信息时抛出</exception>
         public static ulong GetTotalPhysicalMemory()
         {
-            var memStatus = new MEMORYSTATUSEX
+            var memoryInfo = new MEMORY_INFO
             {
-                dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>()
+                dwLength = (uint)Marshal.SizeOf<MEMORY_INFO>()
             };
-
-            if (GlobalMemoryStatusEx(ref memStatus))
-            {
-                return memStatus.ullTotalPhys;
-            }
-
-            return 0;
+            GlobalMemoryStatusEx(ref memoryInfo);
+            return memoryInfo.ullTotalPhys;
         }
     }
 }
