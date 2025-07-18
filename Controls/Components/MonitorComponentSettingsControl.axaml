@@ -32,8 +32,8 @@
             <StackPanel>
                 <controls:SettingsExpander
                     Margin="0,0,0,6"
-                    Description="选择要监控的项目"
-                    Header="显示监控信息"
+                    Description="选择要监控的东西"
+                    Header="监控项目"
                     IconSource="{ci:FluentIconSource &#xEE21;}">
                     <controls:SettingsExpander.Footer>
                         <ComboBox
@@ -90,12 +90,12 @@
                                            Header="显示设置"
                                            Description="更改前缀等设置"
                                            IsExpanded="True"
-                                           IconSource="{ci:FluentIconSource &#xF171;}">
+                                           IconSource="{ci:FluentIconSource &#xF17E;}">
 
                     <controls:SettingsExpanderItem
                         Description="显示在数据前面的提示文字"
                         Content="前缀"
-                        IconSource="{ci:FluentIconSource &#xF17E;}">
+                        IconSource="{ci:FluentIconSource &#xF171;}">
                         <controls:SettingsExpanderItem.Footer>
                             <TextBox MinWidth="150"
                                      Text="{Binding Settings.DisplayPrefix, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
