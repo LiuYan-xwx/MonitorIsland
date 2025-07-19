@@ -12,6 +12,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using Avalonia.Controls;
+using Avalonia.Input;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components
@@ -59,38 +61,5 @@ namespace MonitorIsland.Controls.Components
             }
         }
 
-        //[GeneratedRegex("[^0-9]+")]
-        //private static partial Regex NumberRegex();
-        //void TextBoxNumberCheck(object sender, TextCompositionEventArgs e)
-        //{
-        //    Regex re = NumberRegex();
-        //    e.Handled = re.IsMatch(e.Text);
-        //}
     }
-
-    public class IntervalToStringConverter : IValueConverter
-    {
-        public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value is int intValue)
-            {
-                return intValue.ToString(culture);
-            }
-            return 1000;
-        }
-
-        public object ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value is string strValue && int.TryParse(strValue, NumberStyles.Integer, culture, out int i))
-            {
-                if (i < 250)
-                {
-                    return 250;
-                }
-                return i;
-            }
-            return 1000;
-        }
-    }
-
 }
