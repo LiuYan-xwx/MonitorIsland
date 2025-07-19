@@ -1,10 +1,9 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using Microsoft.Extensions.Logging;
+using MonitorIsland.Helpers;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
-using MonitorIsland.Helpers;
 using System.Diagnostics;
-using System.IO;
 
 namespace MonitorIsland.Services
 {

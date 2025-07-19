@@ -1,12 +1,11 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using Avalonia.Threading;
+using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.ComponentModel;
-using System.Windows;
-using Avalonia.Threading;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components

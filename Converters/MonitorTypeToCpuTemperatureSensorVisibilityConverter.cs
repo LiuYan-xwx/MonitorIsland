@@ -1,6 +1,6 @@
+using Avalonia.Data.Converters;
 using MonitorIsland.Models;
 using System.Globalization;
-using Avalonia.Data.Converters;
 
 namespace MonitorIsland.Converters
 {

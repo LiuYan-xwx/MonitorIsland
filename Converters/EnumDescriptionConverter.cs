@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Avalonia.Data.Converters;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
-using Avalonia.Data.Converters;
 
 namespace MonitorIsland.Converters
 {

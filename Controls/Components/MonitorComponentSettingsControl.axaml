@@ -28,9 +28,9 @@
         <ScrollViewer>
             <StackPanel>
                 <controls:SettingsExpander
-                    Margin="0,0,0,6"
-                    Description="选择要监控的东西"
                     Header="监控项目"
+                    Description="选择要监控的东西"
+                    Margin="0,0,0,6"
                     IconSource="{ci:FluentIconSource &#xEE21;}">
                     <controls:SettingsExpander.Footer>
                         <ComboBox
@@ -47,9 +47,9 @@
                 </controls:SettingsExpander>
 
                 <controls:SettingsExpander
-                    Margin="0,0,0,6"
-                    Description="选择要监控的磁盘盘符"
                     Header="磁盘盘符"
+                    Description="选择要监控的磁盘盘符"
+                    Margin="0,0,0,6"
                     IconSource="{ci:FluentIconSource &#xE610;}"
                     IsVisible="{Binding Settings.MonitorType, Converter={StaticResource DiskVisibilityConverter}}">
                     <controls:SettingsExpander.Footer>
@@ -61,9 +61,9 @@
                 </controls:SettingsExpander>
 
                 <controls:SettingsExpander
-                    Margin="0,0,0,6"
-                    Description="选择要监控的 CPU 温度传感器"
                     Header="CPU 温度传感器"
+                    Description="选择要监控的 CPU 温度传感器"
+                    Margin="0,0,0,6"
                     IconSource="{ci:FluentIconSource &#xE304;}"
                     IsVisible="{Binding Settings.MonitorType, Converter={StaticResource CpuTemperatureSensorVisibilityConverter}}">
                     <controls:SettingsExpander.Footer>
@@ -82,9 +82,9 @@
                 </controls:SettingsExpander>
 
                 <controls:SettingsExpander
-                    Margin="0,0,0,6"
-                    Description="更改前缀等设置"
                     Header="显示设置"
+                    Description="更改前缀等设置"
+                    Margin="0,0,0,6"
                     IconSource="{ci:FluentIconSource &#xF17E;}"
                     IsExpanded="True"
                     TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
@@ -118,9 +118,9 @@
                 </controls:SettingsExpander>
 
                 <controls:SettingsExpander
-                    Margin="0,0,0,6"
-                    Description="设置更新数值的频率（最低 250ms 刷新一次，默认 1000ms）"
                     Header="刷新间隔（ms）"
+                    Description="设置更新数值的频率（最低 250ms 刷新一次，默认 1000ms）"
+                    Margin="0,0,0,6"
                     IconSource="{ci:FluentIconSource &#xF361;}">
                     <controls:SettingsExpander.Footer>
                         <StackPanel Orientation="Horizontal">

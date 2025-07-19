@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MonitorIsland.Controls.Components;
-using MonitorIsland.Models;
 using System.Text.Json.Serialization;
 
 namespace MonitorIsland.Models.ComponentSettings

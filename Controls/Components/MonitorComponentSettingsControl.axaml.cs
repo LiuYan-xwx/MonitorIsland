@@ -1,19 +1,9 @@
-﻿using Avalonia.Data.Converters;
-using ClassIsland.Core.Abstractions.Controls;
+﻿using ClassIsland.Core.Abstractions.Controls;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Extensions;
-using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Input;
-using Avalonia.Controls;
-using Avalonia.Input;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components
