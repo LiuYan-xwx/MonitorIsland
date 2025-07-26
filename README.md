@@ -12,6 +12,9 @@
 
 </div>
 
+> [!TIP]
+> 如果您正在使用 ClassIsland 2.0 预览版本，可以前往 Actions 下载 **ci2** 分支的构建产物，其已完成对 CI 2.0 的基本兼容
+
 ## 简介
 
 这是一个 [ClassIsland](https://github.com/ClassIsland/ClassIsland) 插件，提供了一个 `监控` 组件，可以实时监控和显示系统各类硬件资源的使用状态。
