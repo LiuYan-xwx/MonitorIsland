@@ -7,6 +7,11 @@ namespace MonitorIsland.Services
     /// </summary>
     public class MonitorValueFormatter
     {
+        // 字节转换常量
+        private const float BytesToMB = 1024f * 1024f;
+        private const float BytesToGB = 1024f * 1024f * 1024f;
+        private const float BytesToTB = 1024f * 1024f * 1024f * 1024f;
+
         /// <summary>
         /// 根据监控类型和单位格式化监控值
         /// </summary>
@@ -44,9 +49,9 @@ namespace MonitorIsland.Services
         {
             return unit switch
             {
-                DisplayUnit.MB => (value / 1024 / 1024, "MB"),
-                DisplayUnit.GB => (value / 1024 / 1024 / 1024, "GB"),
-                DisplayUnit.TB => (value / 1024 / 1024 / 1024 / 1024, "TB"),
+                DisplayUnit.MB => (value / BytesToMB, "MB"),
+                DisplayUnit.GB => (value / BytesToGB, "GB"),
+                DisplayUnit.TB => (value / BytesToTB, "TB"),
                 DisplayUnit.Percent => (value, "%"),
                 DisplayUnit.Celsius => (value, "°C"),
                 _ => (value, "")
