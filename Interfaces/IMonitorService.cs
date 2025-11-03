@@ -8,14 +8,11 @@ namespace MonitorIsland.Interfaces
     public interface IMonitorService : IDisposable
     {
         /// <summary>
-        /// 获取指定监控类型格式化后的值。
+        /// 获取指定监控类型的原始值。
         /// </summary>
-        /// <param name="monitorType">监控类型枚举。</param>
-        /// <param name="unit">显示单位</param>
-        /// <param name="driveName">磁盘盘符（仅在监控磁盘空间时使用）</param>
-        /// <param name="cpuTemperatureSensorId">CPU温度传感器ID（仅在监控CPU温度时使用）</param>
-        /// <returns>格式化后的监控值字符串。</returns>
-        string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null, string? cpuTemperatureSensorId = null);
+        /// <param name="request">监控请求参数</param>
+        /// <returns>监控值（单位：字节、百分比或摄氏度）</returns>
+        float? GetMonitorValue(MonitorRequest request);
 
         /// <summary>
         /// 获取当前内存使用量（单位：字节）。
