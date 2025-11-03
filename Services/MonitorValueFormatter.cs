@@ -7,10 +7,11 @@ namespace MonitorIsland.Services
     /// </summary>
     public class MonitorValueFormatter
     {
-        // 字节转换常量
-        private const float BytesToMB = 1024f * 1024f;
-        private const float BytesToGB = 1024f * 1024f * 1024f;
-        private const float BytesToTB = 1024f * 1024f * 1024f * 1024f;
+        // 字节转换常量 - 使用逐级定义以提高可读性和可维护性
+        private const float BytesToKB = 1024f;
+        private const float BytesToMB = BytesToKB * 1024f;
+        private const float BytesToGB = BytesToMB * 1024f;
+        private const float BytesToTB = BytesToGB * 1024f;
 
         /// <summary>
         /// 根据监控类型和单位格式化监控值
