@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
+using MonitorIsland.Services;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
@@ -50,9 +51,16 @@ namespace MonitorIsland.Controls.Components
             if (monitorType == MonitorOption.CpuTemperature && string.IsNullOrEmpty(Settings.SelectedCpuTemperatureSensorId))
                 return;
 
-            var driveName = monitorType == MonitorOption.DiskSpace ? Settings.DriveName : null;
-            var cpuTemperatureSensorId = monitorType == MonitorOption.CpuTemperature ? Settings.SelectedCpuTemperatureSensorId : null;
-            var displayValue = await Task.Run(() => MonitorService.GetFormattedMonitorValue(monitorType, Settings.SelectedUnit, driveName, cpuTemperatureSensorId));
+            var request = new MonitorRequest
+            {
+                MonitorType = monitorType,
+                Unit = Settings.SelectedUnit,
+                DriveName = monitorType == MonitorOption.DiskSpace ? Settings.DriveName : null,
+                CpuTemperatureSensorId = monitorType == MonitorOption.CpuTemperature ? Settings.SelectedCpuTemperatureSensorId : null
+            };
+
+            var rawValue = await Task.Run(() => MonitorService.GetMonitorValue(request));
+            var displayValue = MonitorValueFormatter.Format(rawValue, request.MonitorType, request.Unit);
 
             Settings.DisplayData = displayValue;
         }

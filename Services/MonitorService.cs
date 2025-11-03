@@ -37,41 +37,16 @@ namespace MonitorIsland.Services
 
         private int _disposed;
 
-        public string GetFormattedMonitorValue(MonitorOption monitorType, DisplayUnit unit, string? driveName = null, string? cpuTemperatureSensorId = null)
+        public float? GetMonitorValue(MonitorRequest request)
         {
-            return monitorType switch
+            return request.MonitorType switch
             {
-                MonitorOption.MemoryUsage => FormatValue(GetMemoryUsage(), unit, "F1"),
-                MonitorOption.MemoryUsageRate => FormatValue(GetMemoryUsage() / _totalMemory * 100, unit, "F2"),
-                MonitorOption.CpuUsage => FormatValue(GetCpuUsage(), unit, "F2"),
-                MonitorOption.CpuTemperature => FormatValue(GetCpuTemperature(cpuTemperatureSensorId), unit, "F1"),
-                MonitorOption.DiskSpace => FormatValue(GetDiskFreeSpace(driveName ?? "C"), unit, "F1"),
-                _ => "未知类型"
-            };
-        }
-
-        private static string FormatValue(float? value, DisplayUnit unit, string format = "")
-        {
-            if (!value.HasValue)
-                return "N/A";
-
-            var (convertedValue, unitString) = ConvertValue(value.Value, unit);
-
-            return string.IsNullOrEmpty(format)
-                ? $"{convertedValue} {unitString}"
-                : $"{convertedValue.ToString(format)} {unitString}";
-        }
-
-        private static (float, string) ConvertValue(float value, DisplayUnit unit)
-        {
-            return unit switch
-            {
-                DisplayUnit.MB => (value / 1024 / 1024, "MB"),
-                DisplayUnit.GB => (value / 1024 / 1024 / 1024, "GB"),
-                DisplayUnit.TB => (value / 1024 / 1024 / 1024 / 1024, "TB"),
-                DisplayUnit.Percent => (value, "%"),
-                DisplayUnit.Celsius => (value, "°C"),
-                _ => (value, "")
+                MonitorOption.MemoryUsage => GetMemoryUsage(),
+                MonitorOption.MemoryUsageRate => GetMemoryUsage() / _totalMemory * 100,
+                MonitorOption.CpuUsage => GetCpuUsage(),
+                MonitorOption.CpuTemperature => GetCpuTemperature(request.CpuTemperatureSensorId),
+                MonitorOption.DiskSpace => GetDiskFreeSpace(request.DriveName ?? "C"),
+                _ => null
             };
         }
 
