@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./icon2.png" alt="MonitorIsland Logo" height="100">
+<img src="https://github.com/LiuYan-xwx/MonitorIsland/blob/master/icon2.png" alt="MonitorIsland Logo" height="100">
 
 # MonitorIsland
 
@@ -11,6 +11,9 @@
 
 
 </div>
+
+> [!TIP]
+> 如果您正在使用 ClassIsland 2.0 预览版本，可以前往 Actions 下载 **ci2.0** 分支的构建产物，其已完成对 CI 2.0 的基本兼容
 
 ## 简介
 

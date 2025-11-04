@@ -33,6 +33,7 @@ jobs:
         with:
           path: |
             ./cipx/*.cipx
+          name: MonitorIsland-Actions
       
       - name: Upload APP to release
         uses: ncipollo/release-action@v1
