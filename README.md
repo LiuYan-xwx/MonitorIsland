@@ -43,6 +43,9 @@
 > [!WARNING]
 > ~~由于我也不知道什么原因~~，插件需要 ClassIsland 版本 **≥ 1.6.2.0** 才能运行。
 
+> [!WARNING]
+> 即使 ClassIsland 2.0 支持跨平台，但本插件目前只支持 **Windows** 系统！
+
 - 在插件市场找到 `MonitorIsland` 并安装。
 - 有时插件索引还没更新或者访问不了，可以前往 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 下载最新 `.cipx` 文件，手动安装。
 
