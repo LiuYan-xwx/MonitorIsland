@@ -12,9 +12,6 @@
 
 </div>
 
-> [!TIP]
-> 如果您正在使用 ClassIsland 2.0 预览版本，可以前往 Actions 下载 **ci2.0** 分支的构建产物，其已完成对 CI 2.0 的基本兼容
-
 ## 简介
 
 这是一个 [ClassIsland](https://github.com/ClassIsland/ClassIsland) 插件，提供了一个 `监控` 组件，可以实时监控和显示系统各类硬件资源的使用状态。
@@ -41,13 +38,15 @@
 ## 安装
 
 > [!WARNING]
-> ~~由于我也不知道什么原因~~，插件需要 ClassIsland 版本 **≥ 1.6.2.0** 才能运行。
-
-> [!WARNING]
 > 即使 ClassIsland 2.0 支持跨平台，但本插件目前只支持 **Windows** 系统！
 
 - 在插件市场找到 `MonitorIsland` 并安装。
-- 有时插件索引还没更新或者访问不了，可以前往 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 下载最新 `.cipx` 文件，手动安装。
+- 有时插件索引还没更新或者访问不了，可以前往 [Releases](https://github.com/LiuYan-xwx/MonitorIsland/releases) 下载 `.cipx` 文件，手动安装。
+
+## 版本说明
+- 如果您正在使用 2.0 即 Avalonia 版本的 ClassIsland，您需要下载 Tag 为 **1.8 往上**的版本
+- 如果您正在使用 1.0 即 WPF 版本的 ClassIsland，您需要下载 Tag 为 **1.7.\*** 的版本
+- 此意为向后兼容，插件更新将会面对两个版本的 CI 同时发版，面向 CI 2.0 的会正常增加版本号，面向 CI 1.0 的只会在 **1.7.\*** 之后增加 Patch 版本号
 
 ## 使用方法
 
