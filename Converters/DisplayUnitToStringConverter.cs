@@ -1,6 +1,8 @@
 using Avalonia.Data.Converters;
 using MonitorIsland.Models;
+using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 
 namespace MonitorIsland.Converters
 {
@@ -11,15 +13,9 @@ namespace MonitorIsland.Converters
             if (value is not DisplayUnit unit)
                 return string.Empty;
 
-            return unit switch
-            {
-                DisplayUnit.MB => "MB",
-                DisplayUnit.GB => "GB",
-                DisplayUnit.TB => "TB",
-                DisplayUnit.Percent => "%",
-                DisplayUnit.Celsius => "¡ãC",
-                _ => string.Empty
-            };
+            var fieldInfo = unit.GetType().GetField(unit.ToString());
+            var descriptionAttribute = fieldInfo?.GetCustomAttribute<DescriptionAttribute>();
+            return descriptionAttribute?.Description ?? unit.ToString();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
