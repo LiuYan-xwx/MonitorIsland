@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/LiuYan-xwx/MonitorIsland/blob/master/icon2.png" alt="MonitorIsland Logo" height="100">
+<img src="https://github.com/LiuYan-xwx/MonitorIsland/blob/1935a387e1dfecfdde4e31bc609090c9823061e4/icon2.png" alt="MonitorIsland Logo" height="100">
 
 # MonitorIsland
 
