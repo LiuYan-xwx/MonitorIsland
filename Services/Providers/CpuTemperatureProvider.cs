@@ -6,7 +6,7 @@ using MonitorIsland.Models;
 namespace MonitorIsland.Services.Providers
 {
     /// <summary>
-    /// CPUÎÂ¶È¼à¿ØÌá¹©Æ÷
+    /// CPUï¿½Â¶È¼ï¿½ï¿½ï¿½á¹©ï¿½ï¿½
     /// </summary>
     public class CpuTemperatureProvider : IMonitorProvider
     {
@@ -27,7 +27,7 @@ namespace MonitorIsland.Services.Providers
             _logger = logger;
             _computer = new Lazy<Computer>(() =>
             {
-                _logger.LogDebug("³õÊ¼»¯Ó²¼þ¼à¿Ø×é¼þ");
+                _logger.LogDebug("ï¿½ï¿½Ê¼ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 var computer = new Computer
                 {
                     IsCpuEnabled = true
@@ -42,13 +42,13 @@ namespace MonitorIsland.Services.Providers
         {
             try
             {
-                // Ô¤¼ÓÔØ´«¸ÐÆ÷ÁÐ±í
+                // Ô¤ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
                 LoadAvailableSensors();
-                _logger.LogInformation("CPUÎÂ¶È¼à¿ØÌá¹©Æ÷³õÊ¼»¯³É¹¦£¬ÕÒµ½ {Count} ¸ö´«¸ÐÆ÷", _temperatureSensors.Count);
+                _logger.LogInformation("CPUï¿½Â¶È¼ï¿½ï¿½ï¿½á¹©ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½Òµï¿½ {Count} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", _temperatureSensors.Count);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CPUÎÂ¶È¼à¿ØÌá¹©Æ÷³õÊ¼»¯Ê§°Ü");
+                _logger.LogError(ex, "CPUï¿½Â¶È¼ï¿½ï¿½ï¿½á¹©ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ê§ï¿½ï¿½");
                 IsAvailable = false;
             }
         }
@@ -62,13 +62,13 @@ namespace MonitorIsland.Services.Providers
             {
                 if (string.IsNullOrEmpty(request.CpuTemperatureSensorId))
                 {
-                    _logger.LogWarning("Î´Ö¸¶¨ CPU ÎÂ¶È´«¸ÐÆ÷ID");
+                    _logger.LogWarning("Î´Ö¸ï¿½ï¿½ CPU ï¿½Â¶È´ï¿½ï¿½ï¿½ï¿½ï¿½ID");
                     return null;
                 }
 
                 if (!_temperatureSensors.TryGetValue(request.CpuTemperatureSensorId, out var sensor))
                 {
-                    _logger.LogWarning("Î´ÕÒµ½Ö¸¶¨µÄ CPU ÎÂ¶È´«¸ÐÆ÷ID: {SensorId}", request.CpuTemperatureSensorId);
+                    _logger.LogWarning("Î´ï¿½Òµï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ CPU ï¿½Â¶È´ï¿½ï¿½ï¿½ï¿½ï¿½ID: {SensorId}", request.CpuTemperatureSensorId);
                     return null;
                 }
 
@@ -77,11 +77,11 @@ namespace MonitorIsland.Services.Providers
                 if (sensor.Value.HasValue)
                     return sensor.Value.Value;
 
-                _logger.LogWarning("´«¸ÐÆ÷ {SensorId} Ã»ÓÐ¿ÉÓÃµÄÎÂ¶ÈÖµ", request.CpuTemperatureSensorId);
+                _logger.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {SensorId} Ã»ï¿½Ð¿ï¿½ï¿½Ãµï¿½ï¿½Â¶ï¿½Öµ", request.CpuTemperatureSensorId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "»ñÈ¡ CPU ÎÂ¶ÈÊ§°Ü");
+                _logger.LogError(ex, "ï¿½ï¿½È¡ CPU ï¿½Â¶ï¿½Ê§ï¿½ï¿½");
             }
 
             return null;
@@ -90,11 +90,11 @@ namespace MonitorIsland.Services.Providers
         public List<CpuTemperatureSensorInfo> GetAvailableSensors()
         {
             LoadAvailableSensors();
-            return _temperatureSensors.Select(kvp => new CpuTemperatureSensorInfo
+            return _temperatureSensors.Select(sensorPair => new CpuTemperatureSensorInfo
             {
-                Id = kvp.Key,
-                Name = kvp.Value.Name,
-                HardwareName = kvp.Value.Hardware.Name
+                Id = sensorPair.Key,
+                Name = sensorPair.Value.Name,
+                HardwareName = sensorPair.Value.Hardware.Name
             }).ToList();
         }
 
@@ -106,11 +106,11 @@ namespace MonitorIsland.Services.Providers
             {
                 var computer = _computer.Value;
 
-                foreach (var hardware in computer.Hardware.Where(h => h.HardwareType == HardwareType.Cpu))
+                foreach (var hardware in computer.Hardware.Where(hw => hw.HardwareType == HardwareType.Cpu))
                 {
                     hardware.Update();
 
-                    foreach (var sensor in hardware.Sensors.Where(s => s.SensorType == SensorType.Temperature))
+                    foreach (var sensor in hardware.Sensors.Where(sen => sen.SensorType == SensorType.Temperature))
                     {
                         var sensorId = $"{hardware.Identifier}_{sensor.Identifier}";
                         _temperatureSensors[sensorId] = sensor;
@@ -119,7 +119,7 @@ namespace MonitorIsland.Services.Providers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "¼ÓÔØ¿ÉÓÃ CPU ÎÂ¶È´«¸ÐÆ÷Ê§°Ü");
+                _logger.LogError(ex, "ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½ CPU ï¿½Â¶È´ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
             }
         }
 
@@ -132,7 +132,7 @@ namespace MonitorIsland.Services.Providers
             {
                 _computer.Value.Close();
                 _temperatureSensors.Clear();
-                _logger.LogDebug("ÊÍ·ÅÓ²¼þ¼à¿Ø×é¼þ×ÊÔ´");
+                _logger.LogDebug("ï¿½Í·ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´");
             }
         }
     }

@@ -7,34 +7,34 @@ namespace MonitorIsland.Helpers
         [StructLayout(LayoutKind.Sequential)]
         private struct MEMORY_INFO
         {
-            public uint dwLength;
-            public uint dwMemoryLoad;
-            public ulong ullTotalPhys;
-            public ulong ullAvailPhys;
-            public ulong ullTotalPageFile;
-            public ulong ullAvailPageFile;
-            public ulong ullTotalVirtual;
-            public ulong ullAvailVirtual;
-            public ulong ullAvailExtendedVirtual;
+            public uint Length;
+            public uint MemoryLoad;
+            public ulong TotalPhysical;
+            public ulong AvailablePhysical;
+            public ulong TotalPageFile;
+            public ulong AvailablePageFile;
+            public ulong TotalVirtual;
+            public ulong AvailableVirtual;
+            public ulong AvailableExtendedVirtual;
         }
 
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GlobalMemoryStatusEx(ref MEMORY_INFO mi);
+        private static extern bool GlobalMemoryStatusEx(ref MEMORY_INFO memoryInfo);
 
         /// <summary>
-        /// »ñÈ¡ÏµÍ³×ÜÎïÀíÄÚ´æ´óÐ¡
+        /// ï¿½ï¿½È¡ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½Ð¡
         /// </summary>
-        /// <returns>×ÜÎïÀíÄÚ´æ´óÐ¡£¨×Ö½Ú£©</returns>
-        /// <exception cref="InvalidOperationException">ÎÞ·¨»ñÈ¡ÏµÍ³ÄÚ´æÐÅÏ¢Ê±Å×³ö</exception>
+        /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½Ö½Ú£ï¿½</returns>
+        /// <exception cref="InvalidOperationException">ï¿½Þ·ï¿½ï¿½ï¿½È¡ÏµÍ³ï¿½Ú´ï¿½ï¿½ï¿½Ï¢Ê±ï¿½×³ï¿½</exception>
         public static ulong GetTotalPhysicalMemory()
         {
             var memoryInfo = new MEMORY_INFO
             {
-                dwLength = (uint)Marshal.SizeOf<MEMORY_INFO>()
+                Length = (uint)Marshal.SizeOf<MEMORY_INFO>()
             };
             GlobalMemoryStatusEx(ref memoryInfo);
-            return memoryInfo.ullTotalPhys;
+            return memoryInfo.TotalPhysical;
         }
     }
 }

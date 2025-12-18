@@ -73,7 +73,7 @@ namespace MonitorIsland.Controls.Components
 
                 // 如果当前没有选择传感器或选择的传感器不在可用列表中，使用默认选择逻辑
                 if (string.IsNullOrEmpty(Settings.SelectedCpuTemperatureSensorId) ||
-                    !sensors.Any(s => s.Id == Settings.SelectedCpuTemperatureSensorId))
+                    !sensors.Any(sensor => sensor.Id == Settings.SelectedCpuTemperatureSensorId))
                 {
                     SelectDefaultCpuTemperatureSensor(sensors);
                 }
@@ -93,7 +93,7 @@ namespace MonitorIsland.Controls.Components
             }
 
             // 优先选择"CPU Package"传感器
-            var cpuPackageSensor = sensors.FirstOrDefault(s => s.Name == "CPU Package");
+            var cpuPackageSensor = sensors.FirstOrDefault(sensor => sensor.Name == "CPU Package");
             if (cpuPackageSensor != null)
             {
                 Settings.SelectedCpuTemperatureSensorId = cpuPackageSensor.Id;
