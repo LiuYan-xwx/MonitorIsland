@@ -10,17 +10,17 @@ namespace MonitorIsland.Services
     {
         private readonly ILogger<MonitorService> Logger = logger;
 
-        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance)
+        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance)
         {
             try
             {
                 var value = providerInstance.GetData();
-                return value;
+                return Task.FromResult<string?>(value);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "从提供器 {ProviderName} 获取数据时出现错误", providerInstance.GetType()?.GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
-                return null;
+                return Task.FromResult<string?>(null);
             }
         }
     }
