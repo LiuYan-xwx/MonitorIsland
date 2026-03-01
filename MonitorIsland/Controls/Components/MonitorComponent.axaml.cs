@@ -81,6 +81,8 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
+            Settings.SelectedProviderBase?.Dispose();
+            Settings.SelectedProviderBase = null;
         }
 
         private void OnSettingsPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -104,12 +106,19 @@ namespace MonitorIsland.Controls.Components
             }
 
             var selected = Settings.SelectedProvider;
+            var oldProvider = Settings.SelectedProviderBase;
 
             var providerInstance = MonitorProviderBase.GetInstance(selected);
             if (providerInstance is null)
             {
                 return;
             }
+
+            if (oldProvider is not null && !ReferenceEquals(oldProvider, providerInstance))
+            {
+                oldProvider.Dispose();
+            }
+
             var baseType = providerInstance.GetType().BaseType;
             if (baseType is not null
                 && baseType.IsGenericType
