@@ -128,7 +128,10 @@ namespace MonitorIsland.Controls.Components
             Settings.SelectedProviderBase = providerInstance;
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             Settings.SelectedUnit = selected.SelectedUnit;
-            Settings.DisplayPrefix = providerInstance.DefaultPrefix;
+            if (string.IsNullOrWhiteSpace(Settings.DisplayPrefix))
+            {
+                Settings.DisplayPrefix = providerInstance.DefaultPrefix;
+            }
             
             // 网络流量特殊处理：根据单位自动设置小数位
             if (selected.Id == "monitorisland.networktraffic" && selected.SelectedUnit.HasValue)
