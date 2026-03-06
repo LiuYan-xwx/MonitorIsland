@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace MonitorIsland.Models
 {
     /// <summary>
-    /// œ‘ æµ•Œª
+    /// ÊòæÁ§∫Âçï‰Ωç
     /// </summary>
     public enum DisplayUnit
     {
@@ -19,7 +19,19 @@ namespace MonitorIsland.Models
         [Description("%")]
         Percent,
 
-        [Description("°„C")]
-        Celsius
+        [Description("¬∞C")]
+        Celsius,
+
+        [Description("MB/s")]
+        MBps,
+
+        [Description("KB/s")]
+        KBps,
+
+        [Description("Mbps")]
+        Mbps,
+
+        [Description("Kbps")]
+        Kbps
     }
 }

@@ -54,6 +54,25 @@ namespace MonitorIsland.Controls.Components
                 case nameof(Settings.SelectedProvider):
                     UpdateProviderSettingsControl();
                     break;
+                
+                // 新增：单位变化时自动调整小数位
+                case nameof(Settings.SelectedUnit):
+                    OnSelectedUnitChanged();
+                    break;
+            }
+        }
+        
+        private void OnSelectedUnitChanged()
+        {
+            if (Settings.SelectedProvider?.Id == "monitorisland.networktraffic" 
+                && Settings.SelectedUnit.HasValue)
+            {
+                Settings.DecimalPlaces = Settings.SelectedUnit.Value switch
+                {
+                    DisplayUnit.Mbps or DisplayUnit.Kbps => 1,
+                    DisplayUnit.MBps or DisplayUnit.KBps => 2,
+                    _ => 2
+                };
             }
         }
 

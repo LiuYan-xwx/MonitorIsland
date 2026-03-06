@@ -20,11 +20,12 @@ public class Plugin : PluginBase
         services.AddComponent<MonitorComponent, MonitorComponentSettingsControl>();
         services.AddSingleton<IMonitorService, MonitorService>();
 
-        // ×¢²á¼à¿ØÌá¹©·½
+        // æ³¨å†Œç›‘æ§æä¾›æ–¹
         services.AddMonitorProvider<MemoryUsageProvider>();
         services.AddMonitorProvider<CpuUsageProvider>();
         services.AddMonitorProvider<MemoryUsageRateProvider>();
         services.AddMonitorProvider<DiskSpaceProvider, DiskSpaceSettingsControl>();
         services.AddMonitorProvider<ClassIslandMemoryUsageProvider>();
+        services.AddMonitorProvider<NetworkTrafficProvider, NetworkTrafficSettingsControl>();
     }
 }

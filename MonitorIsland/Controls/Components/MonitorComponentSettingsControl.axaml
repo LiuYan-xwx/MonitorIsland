@@ -19,6 +19,7 @@
     mc:Ignorable="d">
     <ci:ComponentBase.Resources>
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converters:NetworkTrafficVisibilityConverter x:Key="NetworkTrafficVisibilityConverter" />
     </ci:ComponentBase.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MonitorComponentSettingsControl}}">
         <ScrollViewer>
@@ -84,10 +85,12 @@
                             <ToggleSwitch IsChecked="{Binding Settings.ShowUnit, Mode=TwoWay}" />
                         </controls:SettingsExpanderItem.Footer>
                     </controls:SettingsExpanderItem>
+                    <!-- 网络流量时隐藏保留位数 -->
                     <controls:SettingsExpanderItem
                         Content="保留位数"
                         Description="数据需要保留的小数位数，四舍五入"
-                        IconSource="{ci:FluentIconSource &#xE619;}">
+                        IconSource="{ci:FluentIconSource &#xE619;}"
+                        IsVisible="{Binding Settings.SelectedProviderId, Converter={StaticResource NetworkTrafficVisibilityConverter}}">
                         <controls:SettingsExpanderItem.Footer>
                             <NumericUpDown
                                 Increment="1"

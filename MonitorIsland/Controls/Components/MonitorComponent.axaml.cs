@@ -129,6 +129,17 @@ namespace MonitorIsland.Controls.Components
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             Settings.SelectedUnit = selected.SelectedUnit;
             Settings.DisplayPrefix = providerInstance.DefaultPrefix;
+            
+            // 网络流量特殊处理：根据单位自动设置小数位
+            if (selected.Id == "monitorisland.networktraffic" && selected.SelectedUnit.HasValue)
+            {
+                Settings.DecimalPlaces = selected.SelectedUnit.Value switch
+                {
+                    DisplayUnit.Mbps or DisplayUnit.Kbps => 1,
+                    DisplayUnit.MBps or DisplayUnit.KBps => 2,
+                    _ => 2
+                };
+            }
         }
     }
 }
