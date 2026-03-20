@@ -77,13 +77,8 @@ namespace MonitorIsland.Controls.Components
             }
 
             // 深拷贝
-            Settings.SelectedProvider = new MonitorProvider
-            {
-                Id = template.Id,
-                Name = template.Name,
-                SelectedUnit = template.SelectedUnit,
-                Settings = null
-            };
+            Settings.SelectedProvider = template.CopyWithoutSettings();
+
         }
 
         private void UpdateProviderSettingsControl()

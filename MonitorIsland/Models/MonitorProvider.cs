@@ -32,5 +32,19 @@ namespace MonitorIsland.Models
         [ObservableProperty]
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         private object? _settings;
+
+        /// <summary>
+        /// 深拷贝基础字段
+        /// </summary>
+        public MonitorProvider CopyWithoutSettings()
+        {
+            return new MonitorProvider
+            {
+                Id = Id,
+                Name = Name,
+                SelectedUnit = SelectedUnit,
+                Settings = null
+            };
+        }
     }
 }
