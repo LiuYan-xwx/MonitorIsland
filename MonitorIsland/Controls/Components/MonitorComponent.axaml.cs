@@ -54,7 +54,10 @@ namespace MonitorIsland.Controls.Components
                 Logger.LogWarning("没有选择监控提供方");
                 return;
             }
-            var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase) ?? "N/A";
+
+            var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
+            var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
+
             if (double.TryParse(value, out var number))
             {
                 Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero).ToString();
@@ -122,11 +125,10 @@ namespace MonitorIsland.Controls.Components
                 }
                 selected.Settings = settings;
             }
-            var availableUnits = IMonitorService.MonitorProviderInfos[selected.Id].AvailableUnits;
-            providerInstance.SelectedUnit = selected.SelectedUnit;
+
             Settings.SelectedProviderBase = providerInstance;
+            var availableUnits = IMonitorService.MonitorProviderInfos[selected.Id].AvailableUnits;
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
-            Settings.SelectedUnit = selected.SelectedUnit;
         }
 
         private void ChangeProvider()

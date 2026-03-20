@@ -15,12 +15,13 @@ namespace MonitorIsland.Providers
     {
         public override string DefaultPrefix => "ClassIsland内存：";
 
-        public override string? GetData()
+        public override string? GetData(MonitorRequest request)
         {
             var memory = ByteSize.FromBytes(OperatingSystem.IsMacOS()
-            ? Process.GetCurrentProcess().WorkingSet64
-            : Process.GetCurrentProcess().PrivateMemorySize64);
-            return SelectedUnit switch
+                ? Process.GetCurrentProcess().WorkingSet64
+                : Process.GetCurrentProcess().PrivateMemorySize64);
+
+            return request.SelectedUnit switch
             {
                 DisplayUnit.MB => memory.MebiBytes.ToString(),
                 DisplayUnit.GB => memory.GibiBytes.ToString(),

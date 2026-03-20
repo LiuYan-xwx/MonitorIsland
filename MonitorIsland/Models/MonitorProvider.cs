@@ -21,12 +21,6 @@ namespace MonitorIsland.Models
         private string _name = string.Empty;
 
         /// <summary>
-        /// 当前选择的显示单位
-        /// </summary>
-        [ObservableProperty]
-        private DisplayUnit? _selectedUnit;
-
-        /// <summary>
         /// 监控项设置。
         /// </summary>
         [ObservableProperty]
@@ -42,7 +36,6 @@ namespace MonitorIsland.Models
             {
                 Id = Id,
                 Name = Name,
-                SelectedUnit = SelectedUnit,
                 Settings = null
             };
         }

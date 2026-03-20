@@ -17,14 +17,14 @@ namespace MonitorIsland.Providers
         public override string DefaultPrefix => "内存使用量：";
 
         private readonly ByteSize _totalMemory = ByteSize.FromBytes(MemoryHelper.GetTotalPhysicalMemory());
-
         private readonly PerformanceCounter _memoryCounter = new("Memory", "Available Bytes");
 
-        public override string? GetData()
+        public override string? GetData(MonitorRequest request)
         {
             var availableMemory = ByteSize.FromBytes(_memoryCounter.NextValue());
             var usedMemory = _totalMemory - availableMemory;
-            return SelectedUnit switch
+
+            return request.SelectedUnit switch
             {
                 DisplayUnit.MB => usedMemory.MebiBytes.ToString(),
                 DisplayUnit.GB => usedMemory.GibiBytes.ToString(),

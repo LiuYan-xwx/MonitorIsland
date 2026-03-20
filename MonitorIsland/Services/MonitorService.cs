@@ -2,6 +2,7 @@
 using MonitorIsland.Abstractions;
 using MonitorIsland.Attributes;
 using MonitorIsland.Interfaces;
+using MonitorIsland.Models;
 using System.Reflection;
 
 namespace MonitorIsland.Services
@@ -10,11 +11,11 @@ namespace MonitorIsland.Services
     {
         private readonly ILogger<MonitorService> Logger = logger;
 
-        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance)
+        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request)
         {
             try
             {
-                var value = providerInstance.GetData();
+                var value = providerInstance.GetData(request);
                 return value;
             }
             catch (Exception ex)

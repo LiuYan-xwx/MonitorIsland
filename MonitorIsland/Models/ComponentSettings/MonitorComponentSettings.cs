@@ -42,13 +42,5 @@ namespace MonitorIsland.Models.ComponentSettings
         [ObservableProperty]
         private int _refreshInterval = 1000;
 
-        partial void OnSelectedUnitChanged(DisplayUnit? value)
-        {
-            if (SelectedProvider is not null && SelectedProviderBase is not null)
-            {
-                SelectedProviderBase.SelectedUnit = value;
-                SelectedProvider.SelectedUnit = value;
-            }
-        }
     }
 }

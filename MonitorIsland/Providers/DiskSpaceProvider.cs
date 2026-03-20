@@ -15,14 +15,16 @@ namespace MonitorIsland.Providers
     {
         public override string DefaultPrefix => "磁盘: ";
 
-        public override string? GetData()
+        public override string? GetData(MonitorRequest request)
         {
             var driveName = Settings.DriveName ?? "C:\\";
             var drive = new DriveInfo(driveName);
             if (!drive.IsReady)
                 return null;
+
             var freeSpace = ByteSize.FromBytes(drive.TotalFreeSpace);
-            return SelectedUnit switch
+
+            return request.SelectedUnit switch
             {
                 DisplayUnit.MB => freeSpace.MebiBytes.ToString(),
                 DisplayUnit.GB => freeSpace.GibiBytes.ToString(),

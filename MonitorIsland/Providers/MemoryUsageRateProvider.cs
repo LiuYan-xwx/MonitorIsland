@@ -19,7 +19,7 @@ namespace MonitorIsland.Providers
 
         private readonly ulong _totalMemory = MemoryHelper.GetTotalPhysicalMemory();
 
-        public override string? GetData()
+        public override string? GetData(MonitorRequest monitorRequest)
         {
             var availableBytes = _memoryCounter.NextValue();
             return ((_totalMemory - availableBytes) / _totalMemory * 100).ToString();

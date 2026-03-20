@@ -15,11 +15,11 @@ namespace MonitorIsland.Providers
         public override string DefaultPrefix => "CPU使用率：";
 
         private readonly PerformanceCounter _cpuCounter = new("Processor", "% Processor Time", "_Total");
-        public override string? GetData()
+
+        public override string? GetData(MonitorRequest request)
         {
             var cpuUsage = _cpuCounter.NextValue();
             return cpuUsage.ToString();
-
         }
     }
 }

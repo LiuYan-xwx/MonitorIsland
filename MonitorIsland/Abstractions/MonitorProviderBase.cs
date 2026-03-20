@@ -13,7 +13,7 @@ namespace MonitorIsland.Abstractions
         /// <summary>
         /// 获取监控值
         /// </summary>
-        public abstract string? GetData();
+        public abstract string? GetData(MonitorRequest request);
 
         internal object? SettingsInternal { get; set; }
 
@@ -21,10 +21,6 @@ namespace MonitorIsland.Abstractions
         /// 默认前缀
         /// </summary>
         public virtual string DefaultPrefix => string.Empty;
-
-        public DisplayUnit? SelectedUnit { get; set; } = null;
-
-
 
         /// <summary>
         /// 获取监控提供方实例
@@ -48,7 +44,6 @@ namespace MonitorIsland.Abstractions
                     monitorProvider.Settings = Activator.CreateInstance(settingsType);
             }
             provider.SettingsInternal = monitorProvider.Settings;
-            provider.SelectedUnit = monitorProvider.SelectedUnit;
 
             return provider;
         }

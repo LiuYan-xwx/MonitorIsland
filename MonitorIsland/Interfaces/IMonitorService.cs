@@ -13,10 +13,10 @@ namespace MonitorIsland.Interfaces
         /// 所有监控提供方信息。
         /// 键为监控提供方 ID，值为监控提供方信息。
         /// </summary>
-        static readonly Dictionary<string, MonitorProviderInfoAttribute> MonitorProviderInfos = [];
+        public static readonly Dictionary<string, MonitorProviderInfoAttribute> MonitorProviderInfos = [];
 
-        static readonly List<MonitorProvider> MonitorProviders = [];
+        public static readonly List<MonitorProvider> MonitorProviders = [];
 
-        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider);
+        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request);
     }
 }
