@@ -60,7 +60,8 @@ namespace MonitorIsland.Controls.Components
 
             if (double.TryParse(value, out var number))
             {
-                Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero).ToString();
+                Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
+                                           .ToString($"F{Settings.DecimalPlaces}");
             }
             else
             {
