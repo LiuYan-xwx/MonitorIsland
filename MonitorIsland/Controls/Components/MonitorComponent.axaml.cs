@@ -127,8 +127,6 @@ namespace MonitorIsland.Controls.Components
             }
 
             Settings.SelectedProviderBase = providerInstance;
-            var availableUnits = IMonitorService.MonitorProviderInfos[selected.Id].AvailableUnits;
-            Settings.AvailableUnits = availableUnits?.ToList() ?? [];
         }
 
         private void ChangeProvider()

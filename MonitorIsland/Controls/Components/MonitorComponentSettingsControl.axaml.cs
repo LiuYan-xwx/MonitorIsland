@@ -27,15 +27,7 @@ namespace MonitorIsland.Controls.Components
         {
             Settings.PropertyChanged += OnSettingsPropertyChanged;
 
-            // 更新 ID
-            //if (!string.IsNullOrWhiteSpace(Settings.SelectedProvider?.Id) &&
-            //    string.IsNullOrWhiteSpace(Settings.SelectedProviderId))
-            //{
-            //    Settings.SelectedProviderId = Settings.SelectedProvider!.Id;
-            //}
-
-            SyncSelectedProviderFromId();
-            UpdateProviderSettingsControl();
+            LoadProvider();
         }
 
         private void MonitorComponentSettingsControl_OnUnloaded(object? sender, RoutedEventArgs routedEventArgs)
@@ -48,26 +40,26 @@ namespace MonitorIsland.Controls.Components
             switch (e.PropertyName)
             {
                 case nameof(Settings.SelectedProviderId):
-                    SyncSelectedProviderFromId();
-                    break;
-
-                case nameof(Settings.SelectedProvider):
-                    UpdateProviderSettingsControl();
+                    if (!string.IsNullOrWhiteSpace(Settings.SelectedProviderId))
+                    {
+                        ChangeProvider();
+                    }
                     break;
             }
         }
 
-        private void SyncSelectedProviderFromId()
+        private void LoadProvider()
         {
-            var id = Settings.SelectedProviderId;
-
-            if (string.IsNullOrWhiteSpace(id))
+            if (Settings.SelectedProvider is null)
             {
                 return;
             }
-            // 如果当前已经是该 Id 的独立快照，就不动它（保留其 Settings/SelectedUnit）
-            if (Settings.SelectedProvider is { } current && current.Id == id)
-                return;
+            UpdateProviderSettingsControl();
+        }
+
+        private void ChangeProvider()
+        {
+            var id = Settings.SelectedProviderId!;
 
             var template = MonitorProviders.FirstOrDefault(p => p.Id == id);
             if (template is null)
@@ -79,6 +71,10 @@ namespace MonitorIsland.Controls.Components
             // 深拷贝
             Settings.SelectedProvider = template.CopyWithoutSettings();
 
+            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+            Settings.AvailableUnits = availableUnits?.ToList() ?? [];
+            Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
+            UpdateProviderSettingsControl() ;
         }
 
         private void UpdateProviderSettingsControl()
