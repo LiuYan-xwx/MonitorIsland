@@ -7,6 +7,7 @@ using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.ComponentModel;
+using System.Threading;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace MonitorIsland.Controls.Components
@@ -24,6 +25,7 @@ namespace MonitorIsland.Controls.Components
     {
         private readonly DispatcherTimer _timer;
         private readonly IMonitorService MonitorService;
+        private int _isUpdating;
 
         public ILogger<MonitorComponent> Logger { get; }
 
@@ -49,34 +51,43 @@ namespace MonitorIsland.Controls.Components
         /// </summary>
         private async void UpdateMonitorData()
         {
-            if (Settings.SelectedProviderBase == null)
-            {
-                Logger.LogWarning("没有选择监控提供方");
+            if (Interlocked.Exchange(ref _isUpdating, 1) == 1)
                 return;
-            }
 
-            var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
-            var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
+            try
+            {
+                var providerBase = Settings.SelectedProviderBase;
+                if (providerBase == null)
+                {
+                    Logger.LogWarning("没有选择监控提供方");
+                    return;
+                }
 
-            if (double.TryParse(value, out var number))
-            {
-                Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero).ToString();
+                var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
+                var value = await MonitorService.GetDataFromProviderAsync(providerBase, request) ?? "N/A";
+
+                if (double.TryParse(value, out var number))
+                    Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero).ToString();
+                else
+                    Settings.DisplayData = value;
             }
-            else
+            finally
             {
-                Settings.DisplayData = value;
+                Interlocked.Exchange(ref _isUpdating, 0);
             }
         }
 
-        private void MonitorComponent_OnLoaded(object? sender, RoutedEventArgs routedEventArgs)
+        private async void MonitorComponent_OnLoaded(object? sender, RoutedEventArgs routedEventArgs)
         {
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
             Settings.PropertyChanged += OnSettingsPropertyChanged;
+
             if (Settings.SelectedProvider is not null)
             {
-                LoadProvider();
+                await LoadProviderAsync();
                 Settings.SelectedProviderId = Settings.SelectedProvider.Id;
             }
+
             _timer.Start();
         }
 
@@ -86,7 +97,7 @@ namespace MonitorIsland.Controls.Components
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
         }
 
-        private void OnSettingsPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private async void OnSettingsPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -94,48 +105,46 @@ namespace MonitorIsland.Controls.Components
                     _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
                     break;
                 case nameof(Settings.SelectedProvider):
-                    ChangeProvider();
+                    await ChangeProviderAsync();
                     break;
             }
         }
 
-        private void LoadProvider()
+        private async Task LoadProviderAsync()
         {
-            if (Settings.SelectedProvider is null)
-            {
-                return;
-            }
             var selected = Settings.SelectedProvider;
-
-            var providerInstance = MonitorProviderBase.GetInstance(selected);
-            if (providerInstance is null)
-            {
+            if (selected is null)
                 return;
-            }
-            var baseType = providerInstance.GetType().BaseType;
-            if (baseType is not null
-                && baseType.IsGenericType
-                && baseType.GetGenericTypeDefinition() == typeof(MonitorProviderBase<>))
-            {
-                var settingsType = baseType.GetGenericArguments()[0];
-                var settings = selected.Settings;
-                if (settings?.GetType() != settingsType)
-                {
-                    settings = Activator.CreateInstance(settingsType);
-                }
-                selected.Settings = settings;
-            }
 
-            Settings.SelectedProviderBase = providerInstance;
+            var providerInstance = await Task.Run(() => MonitorProviderBase.GetInstance(selected));
+            if (providerInstance is null)
+                return;
+
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                // 这段逻辑会写 selected.Settings / Settings.SelectedProviderBase：放 UI 线程更稳
+                var baseType = providerInstance.GetType().BaseType;
+                if (baseType is not null
+                    && baseType.IsGenericType
+                    && baseType.GetGenericTypeDefinition() == typeof(MonitorProviderBase<>))
+                {
+                    var settingsType = baseType.GetGenericArguments()[0];
+                    var settings = selected.Settings;
+                    if (settings?.GetType() != settingsType)
+                        settings = Activator.CreateInstance(settingsType);
+
+                    selected.Settings = settings;
+                }
+
+                Settings.SelectedProviderBase = providerInstance;
+            });
         }
 
-        private void ChangeProvider()
+        private async Task ChangeProviderAsync()
         {
-            LoadProvider();
+            await LoadProviderAsync();
             if (Settings.SelectedProviderBase is not null)
-            {
                 Settings.DisplayPrefix = Settings.SelectedProviderBase.DefaultPrefix;
-            }
         }
     }
 }
