@@ -33,7 +33,7 @@ jobs:
         with:
           path: |
             ./MonitorIsland/cipx/*.cipx
-          name: MonitorIsland-ActionsBuild
+          name: MonitorIsland-${{ github.sha }}
       
       - name: Upload APP to release
         uses: ncipollo/release-action@v1
