@@ -33,7 +33,8 @@ namespace MonitorIsland.Helpers
             {
                 dwLength = (uint)Marshal.SizeOf<MEMORY_INFO>()
             };
-            GlobalMemoryStatusEx(ref memoryInfo);
+            if (!GlobalMemoryStatusEx(ref memoryInfo))
+                throw new InvalidOperationException("无法获取系统内存信息");
             return memoryInfo.ullTotalPhys;
         }
     }
