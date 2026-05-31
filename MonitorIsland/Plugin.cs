@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MonitorIsland.Controls.Components;
 using MonitorIsland.Controls.MonitorProviderSettingsControls;
-using MonitorIsland.Extentions;
+using MonitorIsland.Extensions;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Providers;
 using MonitorIsland.Services;

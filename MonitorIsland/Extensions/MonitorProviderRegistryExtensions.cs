@@ -4,7 +4,7 @@ using MonitorIsland.Attributes;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models;
 
-namespace MonitorIsland.Extentions
+namespace MonitorIsland.Extensions
 {
     /// <summary>
     /// 监控提供方注册扩展方法
