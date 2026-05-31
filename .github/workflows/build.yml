@@ -29,7 +29,7 @@ jobs:
         run: pwsh -ep bypass ./tools/publish.ps1
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           path: |
             ./MonitorIsland/cipx/*.cipx
