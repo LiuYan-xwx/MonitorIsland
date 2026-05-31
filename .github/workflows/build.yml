@@ -4,8 +4,13 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build_app:
+    permissions:
+      contents: write
     runs-on: windows-latest
     name: Build
     steps:
