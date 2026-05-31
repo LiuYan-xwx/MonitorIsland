@@ -15,8 +15,7 @@ namespace MonitorIsland.Services
         {
             try
             {
-                var value = providerInstance.GetData(request);
-                return value;
+                return await Task.Run(() => providerInstance.GetData(request));
             }
             catch (Exception ex)
             {
