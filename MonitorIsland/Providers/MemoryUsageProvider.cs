@@ -19,6 +19,15 @@ namespace MonitorIsland.Providers
         private readonly ByteSize _totalMemory = ByteSize.FromBytes(MemoryHelper.GetTotalPhysicalMemory());
         private readonly PerformanceCounter _memoryCounter = new("Memory", "Available Bytes");
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _memoryCounter?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public override string? GetData(MonitorRequest request)
         {
             var availableMemory = ByteSize.FromBytes(_memoryCounter.NextValue());
