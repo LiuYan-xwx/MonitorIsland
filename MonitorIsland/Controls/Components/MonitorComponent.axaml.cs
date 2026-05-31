@@ -50,10 +50,7 @@ namespace MonitorIsland.Controls.Components
         private async void UpdateMonitorData()
         {
             if (Settings.SelectedProviderBase == null)
-            {
-                Logger.LogWarning("没有选择监控提供方");
                 return;
-            }
 
             var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
             var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
