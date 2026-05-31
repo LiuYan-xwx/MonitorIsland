@@ -19,6 +19,11 @@ namespace MonitorIsland.Providers
 
         private readonly ulong _totalMemory = MemoryHelper.GetTotalPhysicalMemory();
 
+        public MemoryUsageRateProvider()
+        {
+            _memoryCounter.NextValue();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

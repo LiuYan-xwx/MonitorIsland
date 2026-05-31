@@ -16,6 +16,11 @@ namespace MonitorIsland.Providers
 
         private readonly PerformanceCounter _cpuCounter = new("Processor", "% Processor Time", "_Total");
 
+        public CpuUsageProvider()
+        {
+            _cpuCounter.NextValue();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
