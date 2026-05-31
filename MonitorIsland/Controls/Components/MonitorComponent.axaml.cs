@@ -27,7 +27,7 @@ namespace MonitorIsland.Controls.Components
 
         public ILogger<MonitorComponent> Logger { get; }
 
-        private List<MonitorProvider> MonitorProviders => IMonitorService.MonitorProviders;
+        private IEnumerable<MonitorProvider> MonitorProviders => IMonitorService.MonitorProviders;
 
         public MonitorComponent(ILogger<MonitorComponent> logger, IMonitorService monitorService)
         {

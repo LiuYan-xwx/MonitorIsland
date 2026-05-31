@@ -15,7 +15,7 @@ namespace MonitorIsland.Controls.Components
     public partial class MonitorComponentSettingsControl : ComponentBase<MonitorComponentSettings>
     {
         public ILogger<MonitorComponentSettingsControl> Logger { get; }
-        public List<MonitorProvider> MonitorProviders => IMonitorService.MonitorProviders;
+        public IEnumerable<MonitorProvider> MonitorProviders => IMonitorService.MonitorProviders;
 
         public MonitorComponentSettingsControl(ILogger<MonitorComponentSettingsControl> logger)
         {

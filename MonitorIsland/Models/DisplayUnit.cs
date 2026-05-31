@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace MonitorIsland.Models
 {
     /// <summary>
-    /// œ‘ æµ•Œª
+    /// ÊòæÁ§∫Âçï‰Ωç
     /// </summary>
     public enum DisplayUnit
     {
@@ -19,7 +19,7 @@ namespace MonitorIsland.Models
         [Description("%")]
         Percent,
 
-        [Description("°„C")]
+        [Description("¬∞C")]
         Celsius
     }
 }
