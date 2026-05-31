@@ -85,6 +85,10 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
+            if (Settings.SelectedProviderBase is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
 
         private void OnSettingsPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -127,6 +131,10 @@ namespace MonitorIsland.Controls.Components
                 selected.Settings = settings;
             }
 
+            if (Settings.SelectedProviderBase is IDisposable oldDisposable)
+            {
+                oldDisposable.Dispose();
+            }
             Settings.SelectedProviderBase = providerInstance;
         }
 
