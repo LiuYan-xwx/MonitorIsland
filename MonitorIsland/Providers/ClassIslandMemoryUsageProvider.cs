@@ -15,11 +15,22 @@ namespace MonitorIsland.Providers
     {
         public override string DefaultPrefix => "ClassIsland内存：";
 
+        private readonly Process _process = Process.GetCurrentProcess();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _process?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public override string? GetData(MonitorRequest request)
         {
             var memory = ByteSize.FromBytes(OperatingSystem.IsMacOS()
-                ? Process.GetCurrentProcess().WorkingSet64
-                : Process.GetCurrentProcess().PrivateMemorySize64);
+                ? _process.WorkingSet64
+                : _process.PrivateMemorySize64);
 
             return request.SelectedUnit switch
             {
