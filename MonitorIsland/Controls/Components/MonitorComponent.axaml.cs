@@ -24,6 +24,7 @@ namespace MonitorIsland.Controls.Components
     {
         private readonly DispatcherTimer _timer;
         private readonly IMonitorService MonitorService;
+        private readonly SemaphoreSlim _updateLock = new(1, 1);
 
         public ILogger<MonitorComponent> Logger { get; }
 
@@ -39,30 +40,46 @@ namespace MonitorIsland.Controls.Components
             _timer.Tick += OnTimer_Ticked;
         }
 
-        private void OnTimer_Ticked(object? sender, EventArgs e)
+        private async void OnTimer_Ticked(object? sender, EventArgs e)
         {
-            UpdateMonitorData();
+            await UpdateMonitorDataAsync();
         }
 
         /// <summary>
         /// 更新监控数据
         /// </summary>
-        private async void UpdateMonitorData()
+        private async Task UpdateMonitorDataAsync()
         {
-            if (Settings.SelectedProviderBase == null)
+            if (!await _updateLock.WaitAsync(0))
+            {
                 return;
-
-            var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
-            var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
-
-            if (double.TryParse(value, out var number))
-            {
-                Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
-                                           .ToString($"F{Settings.DecimalPlaces}");
             }
-            else
+
+            try
             {
-                Settings.DisplayData = value;
+                if (Settings.SelectedProviderBase == null)
+                    return;
+
+                var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
+                var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
+
+                if (double.TryParse(value, out var number))
+                {
+                    Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
+                                               .ToString($"F{Settings.DecimalPlaces}");
+                }
+                else
+                {
+                    Settings.DisplayData = value;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "更新监控数据时出现错误");
+            }
+            finally
+            {
+                _updateLock.Release();
             }
         }
 
@@ -82,6 +99,7 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
+            _updateLock.Dispose();
             if (Settings.SelectedProviderBase is IDisposable disposable)
             {
                 disposable.Dispose();
