@@ -99,7 +99,6 @@ namespace MonitorIsland.Controls.Components
         {
             _timer.Stop();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
-            _updateLock.Dispose();
             if (Settings.SelectedProviderBase is IDisposable disposable)
             {
                 disposable.Dispose();

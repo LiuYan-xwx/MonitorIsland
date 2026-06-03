@@ -28,6 +28,7 @@ namespace MonitorIsland.Providers
 
         public override string? GetData(MonitorRequest request)
         {
+            _process.Refresh();
             var memory = ByteSize.FromBytes(OperatingSystem.IsMacOS()
                 ? _process.WorkingSet64
                 : _process.PrivateMemorySize64);
