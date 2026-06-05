@@ -11,11 +11,16 @@ namespace MonitorIsland.Services
     {
         private readonly ILogger<MonitorService> Logger = logger;
 
-        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request)
+        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request, CancellationToken cancellationToken = default)
         {
             try
             {
-                return await Task.Run(() => providerInstance.GetData(request));
+                return await Task.Run(() => providerInstance.GetData(request), cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.LogInformation("从提供器 {ProviderName} 获取数据的任务已取消", providerInstance.GetType()?.GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
+                throw;
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using MonitorIsland.Attributes;
 using MonitorIsland.Models;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace MonitorIsland.Interfaces
 {
@@ -18,6 +19,6 @@ namespace MonitorIsland.Interfaces
 
         public static readonly ConcurrentBag<MonitorProvider> MonitorProviders = [];
 
-        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request);
+        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request, CancellationToken cancellationToken = default);
     }
 }

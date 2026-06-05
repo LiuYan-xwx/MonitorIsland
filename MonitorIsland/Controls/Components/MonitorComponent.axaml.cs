@@ -24,7 +24,7 @@ namespace MonitorIsland.Controls.Components
     {
         private readonly DispatcherTimer _timer;
         private readonly IMonitorService MonitorService;
-        private readonly SemaphoreSlim _updateLock = new(1, 1);
+        private CancellationTokenSource? _cts;
 
         public ILogger<MonitorComponent> Logger { get; }
 
@@ -42,26 +42,36 @@ namespace MonitorIsland.Controls.Components
 
         private async void OnTimer_Ticked(object? sender, EventArgs e)
         {
-            await UpdateMonitorDataAsync();
+            if (_cts != null) // 丢弃请求
+                return;
+
+            _cts = new CancellationTokenSource();
+            try
+            {
+                await UpdateMonitorDataAsync(_cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                _cts.Dispose();
+                _cts = null;
+            }
         }
 
         /// <summary>
         /// 更新监控数据
         /// </summary>
-        private async Task UpdateMonitorDataAsync()
+        private async Task UpdateMonitorDataAsync(CancellationToken cancellationToken)
         {
-            if (!await _updateLock.WaitAsync(0))
-            {
-                return;
-            }
-
             try
             {
                 if (Settings.SelectedProviderBase == null)
                     return;
 
                 var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
-                var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request) ?? "N/A";
+                var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken) ?? "N/A";
 
                 if (double.TryParse(value, out var number))
                 {
@@ -73,13 +83,13 @@ namespace MonitorIsland.Controls.Components
                     Settings.DisplayData = value;
                 }
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 Logger.LogWarning(ex, "更新监控数据时出现错误");
-            }
-            finally
-            {
-                _updateLock.Release();
             }
         }
 
@@ -98,6 +108,7 @@ namespace MonitorIsland.Controls.Components
         private void MonitorComponent_OnUnloaded(object? sender, RoutedEventArgs routedEventArgs)
         {
             _timer.Stop();
+            _cts?.Cancel();
             Settings.PropertyChanged -= OnSettingsPropertyChanged;
             if (Settings.SelectedProviderBase is IDisposable disposable)
             {
