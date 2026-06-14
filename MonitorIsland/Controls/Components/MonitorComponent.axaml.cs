@@ -73,6 +73,10 @@ namespace MonitorIsland.Controls.Components
                 var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
                 var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken) ?? "N/A";
 
+                // 如果在等待期间被取消（提供者被切换），丢弃过时结果
+                if (cancellationToken.IsCancellationRequested)
+                    return;
+
                 if (double.TryParse(value, out var number))
                 {
                     Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
@@ -156,15 +160,16 @@ namespace MonitorIsland.Controls.Components
                 selected.Settings = settings;
             }
 
-            if (Settings.SelectedProviderBase is IDisposable oldDisposable)
-            {
-                oldDisposable.Dispose();
-            }
+            // 先设置新提供者，再释放旧的，避免 in-flight 任务访问已释放对象
+            var oldDisposable = Settings.SelectedProviderBase as IDisposable;
             Settings.SelectedProviderBase = providerInstance;
+            oldDisposable?.Dispose();
         }
 
         private void ChangeProvider()
         {
+            // 取消进行中的请求，避免使用已释放的旧提供者
+            _cts?.Cancel();
             LoadProvider();
             if (Settings.SelectedProviderBase is not null)
             {
