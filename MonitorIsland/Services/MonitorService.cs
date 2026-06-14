@@ -13,18 +13,21 @@ namespace MonitorIsland.Services
 
         public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(providerInstance);
+            ArgumentNullException.ThrowIfNull(request);
+
             try
             {
                 return await Task.Run(() => providerInstance.GetData(request), cancellationToken);
             }
             catch (OperationCanceledException)
             {
-                Logger.LogInformation("从提供器 {ProviderName} 获取数据的任务已取消", providerInstance.GetType()?.GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
+                Logger.LogInformation("从提供器 {ProviderName} 获取数据的任务已取消", providerInstance.GetType().GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
                 throw;
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "从提供器 {ProviderName} 获取数据时出现错误", providerInstance.GetType()?.GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
+                Logger.LogError(ex, "从提供器 {ProviderName} 获取数据时出现错误", providerInstance.GetType().GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
                 return null;
             }
         }
