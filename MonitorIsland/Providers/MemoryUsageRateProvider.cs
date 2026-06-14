@@ -35,7 +35,7 @@ namespace MonitorIsland.Providers
 
         public override string? GetData(MonitorRequest monitorRequest)
         {
-            var availableBytes = _memoryCounter.NextValue();
+            var availableBytes = (double)_memoryCounter.NextValue();
             return ((_totalMemory - availableBytes) / _totalMemory * 100).ToString();
         }
     }
