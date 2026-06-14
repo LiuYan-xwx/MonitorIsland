@@ -2,7 +2,6 @@
 using MonitorIsland.Attributes;
 using MonitorIsland.Models;
 using System.Collections.Concurrent;
-using System.Threading;
 
 namespace MonitorIsland.Interfaces
 {
@@ -15,9 +14,9 @@ namespace MonitorIsland.Interfaces
         /// 所有监控提供方信息。
         /// 键为监控提供方 ID，值为监控提供方信息。
         /// </summary>
-        public static readonly ConcurrentDictionary<string, MonitorProviderInfoAttribute> MonitorProviderInfos = new();
+        public static readonly Dictionary<string, MonitorProviderInfoAttribute> MonitorProviderInfos = [];
 
-        public static readonly ConcurrentBag<MonitorProvider> MonitorProviders = [];
+        public static readonly List<MonitorProvider> MonitorProviders = [];
 
         public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request, CancellationToken cancellationToken = default);
     }
