@@ -365,3 +365,5 @@ FodyWeavers.xsd
 
 cipx/
 .idea/
+.claude/
+.mimocode/
