@@ -99,6 +99,9 @@ namespace MonitorIsland.Controls.Components
 
         private void MonitorComponent_OnLoaded(object? sender, RoutedEventArgs routedEventArgs)
         {
+            // 旧版设置迁移
+            Settings.TryMigrateFromOldSettings();
+
             _timer.Interval = TimeSpan.FromMilliseconds(Settings.RefreshInterval);
             Settings.PropertyChanged += OnSettingsPropertyChanged;
             if (Settings.SelectedProvider is not null)
