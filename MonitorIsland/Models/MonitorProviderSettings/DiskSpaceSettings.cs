@@ -6,7 +6,7 @@ namespace MonitorIsland.Models.MonitorProviderSettings
     public partial class DiskSpaceSettings : ObservableObject
     {
         [ObservableProperty]
-        private string _driveName = "C:\\";
+        private string? _driveName;
 
         [ObservableProperty]
         private ObservableCollection<string> _availableDriveNames = [];

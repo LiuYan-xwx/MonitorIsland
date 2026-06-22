@@ -17,7 +17,11 @@ namespace MonitorIsland.Providers
 
         public override string? GetData(MonitorRequest request)
         {
-            var driveName = Settings.DriveName ?? "C:\\";
+            var driveName = Settings.DriveName;
+
+            if (string.IsNullOrEmpty(driveName))
+                return null;
+
             var drive = new DriveInfo(driveName);
             if (!drive.IsReady)
                 return null;
