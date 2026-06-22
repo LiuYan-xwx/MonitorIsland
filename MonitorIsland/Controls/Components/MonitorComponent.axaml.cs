@@ -18,7 +18,7 @@ namespace MonitorIsland.Controls.Components
         "AE533FE2-A53F-4104-8C38-37DA018A98BB",
         "监控",
         "\uEE21",
-        "监控您电脑的各种信息"
+        "监控系统硬件资源使用状态"
     )]
     public partial class MonitorComponent : ComponentBase<MonitorComponentSettings>
     {
