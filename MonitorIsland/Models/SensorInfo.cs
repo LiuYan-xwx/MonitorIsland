@@ -1,14 +1,16 @@
+using LibreHardwareMonitor.Hardware;
+
 namespace MonitorIsland.Models
 {
     /// <summary>
-    /// CPU温度传感器信息
+    /// 传感器信息
     /// </summary>
-    public class CpuTemperatureSensorInfo
+    public class SensorInfo
     {
         /// <summary>
-        /// 传感器的唯一标识符
+        /// 传感器的唯一标识符（LibreHardwareMonitor Identifier）
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public required string Identifier { get; set; }
 
         /// <summary>
         /// 传感器名称
@@ -21,18 +23,23 @@ namespace MonitorIsland.Models
         public string HardwareName { get; set; } = string.Empty;
 
         /// <summary>
+        /// 传感器类型（Temperature、Load、Clock、Fan、Voltage、Power 等）
+        /// </summary>
+        public required SensorType SensorType { get; set; }
+
+        /// <summary>
         /// 显示文本（硬件名称 - 传感器名称）
         /// </summary>
         public string DisplayText => $"{HardwareName} - {Name}";
 
         public override bool Equals(object? obj)
         {
-            return obj is CpuTemperatureSensorInfo other && Id == other.Id;
+            return obj is SensorInfo other && Identifier == other.Identifier;
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Identifier.GetHashCode();
         }
     }
 }

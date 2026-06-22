@@ -1,0 +1,72 @@
+<UserControl
+    x:Class="MonitorIsland.Controls.MonitorProviderSettingsControls.SensorTreePanel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:FluentAvalonia.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MonitorIsland.Models"
+    d:DesignHeight="400"
+    d:DesignWidth="360"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <!--  TreeViewItem 样式  -->
+        <Style Selector="TreeViewItem">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="2,1" />
+            <Setter Property="Padding" Value="6,3" />
+        </Style>
+
+        <!--  悬停高亮  -->
+        <Style Selector="TreeViewItem:pointerover /template/ ContentPresenter#PART_Header">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <!--  选中高亮  -->
+        <Style Selector="TreeViewItem:selected /template/ ContentPresenter#PART_Header">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+    </UserControl.Styles>
+
+    <!--  传感器树形视图  -->
+    <TreeView
+        x:Name="SensorTreeView"
+        MinWidth="300"
+        MinHeight="200"
+        ItemsSource="{Binding SensorTreeNodes}"
+        SelectionChanged="SensorTreeView_SelectionChanged"
+        SelectionMode="Single">
+        <TreeView.ItemTemplate>
+            <TreeDataTemplate DataType="models:SensorTreeNode" ItemsSource="{Binding Children}">
+                <StackPanel
+                    Margin="2"
+                    Orientation="Horizontal"
+                    Spacing="8">
+
+                    <controls:IconSourceElement VerticalAlignment="Center" IconSource="{Binding IconGlyph}" />
+
+                    <!--  节点名称  -->
+                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
+
+                    <!--  传感器类型标签（仅传感器节点可见）  -->
+                    <Border
+                        Margin="6,0,0,0"
+                        Padding="5,1"
+                        VerticalAlignment="Center"
+                        Background="{Binding SensorTypeColorBrush}"
+                        CornerRadius="4"
+                        IsVisible="{Binding IsSensor}">
+                        <TextBlock
+                            FontSize="10"
+                            Foreground="White"
+                            Text="{Binding SensorTypeLabel}" />
+                    </Border>
+                </StackPanel>
+            </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+</UserControl>
