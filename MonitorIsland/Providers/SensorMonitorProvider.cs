@@ -22,19 +22,19 @@ namespace MonitorIsland.Providers
 
         public override string DefaultPrefix => "传感器: ";
 
-        public override string? GetData(MonitorRequest request)
+        public override MonitorDataResult GetData(MonitorRequest request)
         {
             if (Settings.SelectedSensor is null)
-                return null;
+                return MonitorDataResult.Error("未选择传感器");
 
             var sensorId = Settings.SelectedSensor.Identifier;
 
             var value = _hardwareMonitorService.GetSensorValue(sensorId);
 
             if (value == null)
-                return "0";
+                return MonitorDataResult.Success("0", DisplayUnit.Celsius);
 
-            return value.ToString();
+            return MonitorDataResult.Success(value.ToString(), DisplayUnit.Celsius);
         }
     }
 }

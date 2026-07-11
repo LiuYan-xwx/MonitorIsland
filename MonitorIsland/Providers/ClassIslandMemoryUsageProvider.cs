@@ -26,7 +26,7 @@ namespace MonitorIsland.Providers
             base.Dispose(disposing);
         }
 
-        public override string? GetData(MonitorRequest request)
+        public override MonitorDataResult GetData(MonitorRequest request)
         {
             _process.Refresh();
             var memory = ByteSize.FromBytes(OperatingSystem.IsMacOS()
@@ -35,9 +35,9 @@ namespace MonitorIsland.Providers
 
             return request.SelectedUnit switch
             {
-                DisplayUnit.MB => memory.MebiBytes.ToString(),
-                DisplayUnit.GB => memory.GibiBytes.ToString(),
-                _ => null
+                DisplayUnit.MB => MonitorDataResult.Success(memory.MebiBytes.ToString(), DisplayUnit.MB),
+                DisplayUnit.GB => MonitorDataResult.Success(memory.GibiBytes.ToString(), DisplayUnit.GB),
+                _ => MonitorDataResult.Error("未选择有效的显示单位")
             };
         }
     }

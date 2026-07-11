@@ -30,10 +30,10 @@ namespace MonitorIsland.Providers
             base.Dispose(disposing);
         }
 
-        public override string? GetData(MonitorRequest request)
+        public override MonitorDataResult GetData(MonitorRequest request)
         {
             var cpuUsage = _cpuCounter.NextValue();
-            return cpuUsage.ToString();
+            return MonitorDataResult.Success(cpuUsage.ToString(), DisplayUnit.Percent);
         }
     }
 }

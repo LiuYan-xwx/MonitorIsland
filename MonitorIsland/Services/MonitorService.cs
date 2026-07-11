@@ -11,7 +11,7 @@ namespace MonitorIsland.Services
     {
         private readonly ILogger<MonitorService> Logger = logger;
 
-        public async Task<string?> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request, CancellationToken cancellationToken = default)
+        public async Task<MonitorDataResult> GetDataFromProviderAsync(MonitorProviderBase providerInstance, MonitorRequest request, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(providerInstance);
             ArgumentNullException.ThrowIfNull(request);
@@ -28,7 +28,7 @@ namespace MonitorIsland.Services
             catch (Exception ex)
             {
                 Logger.LogError(ex, "从提供器 {ProviderName} 获取数据时出现错误", providerInstance.GetType().GetCustomAttribute<MonitorProviderInfoAttribute>()?.Name);
-                return null;
+                return MonitorDataResult.Error("错误，请查看日志");
             }
         }
     }

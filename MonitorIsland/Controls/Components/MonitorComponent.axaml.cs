@@ -71,20 +71,28 @@ namespace MonitorIsland.Controls.Components
                     return;
 
                 var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
-                var value = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken) ?? "N/A";
+                var result = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken);
 
                 // 如果在等待期间被取消（提供者被切换），丢弃过时结果
                 if (cancellationToken.IsCancellationRequested)
                     return;
 
-                if (double.TryParse(value, out var number))
+                if (result.IsSuccess)
                 {
-                    Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
-                                               .ToString($"F{Settings.DecimalPlaces}");
+                    var displayData = result.Value ?? "N/A";
+                    if (double.TryParse(displayData, out var number))
+                    {
+                        Settings.DisplayData = Math.Round(number, Settings.DecimalPlaces, MidpointRounding.AwayFromZero)
+                                                   .ToString($"F{Settings.DecimalPlaces}");
+                    }
+                    else
+                    {
+                        Settings.DisplayData = displayData;
+                    }
                 }
                 else
                 {
-                    Settings.DisplayData = value;
+                    Settings.DisplayData = result.ErrorMessage ?? "N/A";
                 }
             }
             catch (OperationCanceledException)

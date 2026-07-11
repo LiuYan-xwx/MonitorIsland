@@ -13,7 +13,7 @@ namespace MonitorIsland.Abstractions
         /// <summary>
         /// 获取监控值
         /// </summary>
-        public abstract string? GetData(MonitorRequest request);
+        public abstract MonitorDataResult GetData(MonitorRequest request);
 
         internal object? SettingsInternal { get; set; }
 

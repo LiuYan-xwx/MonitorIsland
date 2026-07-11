@@ -33,17 +33,17 @@ namespace MonitorIsland.Providers
             base.Dispose(disposing);
         }
 
-        public override string? GetData(MonitorRequest request)
+        public override MonitorDataResult GetData(MonitorRequest request)
         {
             var availableMemory = ByteSize.FromBytes(_memoryCounter.NextValue());
             var usedMemory = _totalMemory - availableMemory;
 
             return request.SelectedUnit switch
             {
-                DisplayUnit.MB => usedMemory.MebiBytes.ToString(),
-                DisplayUnit.GB => usedMemory.GibiBytes.ToString(),
-                DisplayUnit.TB => usedMemory.TebiBytes.ToString(),
-                _ => null
+                DisplayUnit.MB => MonitorDataResult.Success(usedMemory.MebiBytes.ToString(), DisplayUnit.MB),
+                DisplayUnit.GB => MonitorDataResult.Success(usedMemory.GibiBytes.ToString(), DisplayUnit.GB),
+                DisplayUnit.TB => MonitorDataResult.Success(usedMemory.TebiBytes.ToString(), DisplayUnit.TB),
+                _ => MonitorDataResult.Error("未选择有效的显示单位")
             };
         }
     }

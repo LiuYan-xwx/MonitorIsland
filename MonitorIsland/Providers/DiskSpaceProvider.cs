@@ -15,25 +15,25 @@ namespace MonitorIsland.Providers
     {
         public override string DefaultPrefix => "磁盘: ";
 
-        public override string? GetData(MonitorRequest request)
+        public override MonitorDataResult GetData(MonitorRequest request)
         {
             var driveName = Settings.DriveName;
 
             if (string.IsNullOrEmpty(driveName))
-                return null;
+                return MonitorDataResult.Error("未选择驱动器");
 
             var drive = new DriveInfo(driveName);
             if (!drive.IsReady)
-                return null;
+                return MonitorDataResult.Error("驱动器未就绪");
 
             var freeSpace = ByteSize.FromBytes(drive.TotalFreeSpace);
 
             return request.SelectedUnit switch
             {
-                DisplayUnit.MB => freeSpace.MebiBytes.ToString(),
-                DisplayUnit.GB => freeSpace.GibiBytes.ToString(),
-                DisplayUnit.TB => freeSpace.TebiBytes.ToString(),
-                _ => null
+                DisplayUnit.MB => MonitorDataResult.Success(freeSpace.MebiBytes.ToString(), DisplayUnit.MB),
+                DisplayUnit.GB => MonitorDataResult.Success(freeSpace.GibiBytes.ToString(), DisplayUnit.GB),
+                DisplayUnit.TB => MonitorDataResult.Success(freeSpace.TebiBytes.ToString(), DisplayUnit.TB),
+                _ => MonitorDataResult.Error("未选择有效的显示单位")
             };
         }
     }

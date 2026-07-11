@@ -33,10 +33,11 @@ namespace MonitorIsland.Providers
             base.Dispose(disposing);
         }
 
-        public override string? GetData(MonitorRequest monitorRequest)
+        public override MonitorDataResult GetData(MonitorRequest monitorRequest)
         {
             var availableBytes = (double)_memoryCounter.NextValue();
-            return ((_totalMemory - availableBytes) / _totalMemory * 100).ToString();
+            var value = (_totalMemory - availableBytes) / _totalMemory * 100;
+            return MonitorDataResult.Success(value.ToString(), DisplayUnit.Percent);
         }
     }
 }

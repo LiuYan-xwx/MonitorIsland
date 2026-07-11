@@ -18,6 +18,6 @@ namespace MonitorIsland.Interfaces
 
         public static readonly List<MonitorProvider> MonitorProviders = [];
 
-        public Task<string?> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request, CancellationToken cancellationToken = default);
+        public Task<MonitorDataResult> GetDataFromProviderAsync(MonitorProviderBase monitorProvider, MonitorRequest request, CancellationToken cancellationToken = default);
     }
 }
