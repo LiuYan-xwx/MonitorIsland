@@ -79,6 +79,7 @@ namespace MonitorIsland.Controls.Components
 
                 if (result.IsSuccess)
                 {
+                    Settings.DisplayedUnit = result.Unit;
                     var displayData = result.Value ?? "N/A";
                     if (double.TryParse(displayData, out var number))
                     {

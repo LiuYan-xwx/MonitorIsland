@@ -24,7 +24,7 @@
             <TextBlock
                 Margin="4,0,0,0"
                 IsVisible="{Binding Settings.ShowUnit}"
-                Text="{Binding Settings.SelectedUnit, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" />
+                Text="{Binding Settings.DisplayedUnit, Mode=OneWay, Converter={StaticResource EnumDescriptionConverter}}" />
         </StackPanel>
     </Grid>
 </ci:ComponentBase>

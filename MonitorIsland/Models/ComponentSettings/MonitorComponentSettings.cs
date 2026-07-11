@@ -14,6 +14,10 @@ namespace MonitorIsland.Models.ComponentSettings
         private string _displayData = string.Empty;
 
         [ObservableProperty]
+        [property: JsonIgnore]
+        private DisplayUnit? _displayedUnit;
+
+        [ObservableProperty]
         private string _displayPrefix = string.Empty;
 
         [ObservableProperty]
