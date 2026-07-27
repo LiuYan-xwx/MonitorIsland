@@ -1,7 +1,6 @@
 ﻿using MonitorIsland.Abstractions;
 using MonitorIsland.Attributes;
 using MonitorIsland.Models;
-using System.Collections.Concurrent;
 
 namespace MonitorIsland.Interfaces
 {

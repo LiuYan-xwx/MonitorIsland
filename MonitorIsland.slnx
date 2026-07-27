@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="MonitorIsland.Abstractions/MonitorIsland.Abstractions.csproj" />
   <Project Path="MonitorIsland/MonitorIsland.csproj" />
+  <Project Path="MonitorIsland.Windows/MonitorIsland.Windows.csproj" />
 </Solution>

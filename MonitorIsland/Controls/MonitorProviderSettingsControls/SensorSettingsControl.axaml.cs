@@ -2,9 +2,10 @@ using ClassIsland.Core.Abstractions.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using MonitorIsland.Abstractions;
+using MonitorIsland.Abstractions.Interfaces;
+using MonitorIsland.Abstractions.Models;
 using MonitorIsland.Models;
 using MonitorIsland.Models.MonitorProviderSettings;
-using MonitorIsland.Services;
 using System.Collections.ObjectModel;
 
 namespace MonitorIsland.Controls.MonitorProviderSettingsControls;
@@ -12,19 +13,22 @@ namespace MonitorIsland.Controls.MonitorProviderSettingsControls;
 public partial class SensorSettingsControl : MonitorProviderControlBase<SensorMonitorSettings>
 {
     private readonly ILogger<SensorSettingsControl> _logger;
-    private readonly HardwareMonitorService _hardwareMonitorService;
+    private readonly IHardwareMonitorService _hardwareMonitorService;
 
     public ObservableCollection<SensorTreeNode> SensorTreeNodes { get; } = [];
 
-    public SensorSettingsControl(ILogger<SensorSettingsControl> logger,
-                                 HardwareMonitorService hardwareMonitorService)
+    public SensorSettingsControl(
+        ILogger<SensorSettingsControl> logger,
+        IHardwareMonitorService hardwareMonitorService)
     {
         InitializeComponent();
         _logger = logger;
         _hardwareMonitorService = hardwareMonitorService;
     }
 
-    private void MonitorProviderControlBase_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void MonitorProviderControlBase_Loaded(
+        object? sender,
+        Avalonia.Interactivity.RoutedEventArgs e)
     {
         UpdateSelectedSensorDisplay();
     }
@@ -34,14 +38,34 @@ public partial class SensorSettingsControl : MonitorProviderControlBase<SensorMo
         try
         {
             SensorTreeNodes.Clear();
-            if (_hardwareMonitorService.IsReady == false)
+            if (!_hardwareMonitorService.IsSupported)
             {
-                await _hardwareMonitorService.ReadyTask;
+                _logger.LogInformation("当前平台不支持硬件传感器");
+                return;
             }
-            var treeNodes = _hardwareMonitorService.GetSensorTree();
-            foreach (var node in treeNodes)
+
+            if (!_hardwareMonitorService.IsReady)
+                await _hardwareMonitorService.ReadyTask;
+
+            foreach (var group in _hardwareMonitorService.GetSensorGroups())
             {
-                SensorTreeNodes.Add(node);
+                var hardwareNode = new SensorTreeNode
+                {
+                    DisplayName = group.Name,
+                    HardwareKind = group.HardwareKind
+                };
+
+                foreach (var sensor in group.Sensors)
+                {
+                    hardwareNode.Children.Add(new SensorTreeNode
+                    {
+                        DisplayName = sensor.Name,
+                        IsSensor = true,
+                        Sensor = sensor
+                    });
+                }
+
+                SensorTreeNodes.Add(hardwareNode);
             }
         }
         catch (Exception ex)
@@ -52,11 +76,11 @@ public partial class SensorSettingsControl : MonitorProviderControlBase<SensorMo
 
     private void OnSensorSelected(object? sender, SensorInfo? sensor)
     {
-        if (sensor != null)
-        {
-            Settings.SelectedSensor = sensor;
-            UpdateSelectedSensorDisplay();
-        }
+        if (sensor is null)
+            return;
+
+        Settings.SelectedSensor = sensor;
+        UpdateSelectedSensorDisplay();
     }
 
     private void UpdateSelectedSensorDisplay()

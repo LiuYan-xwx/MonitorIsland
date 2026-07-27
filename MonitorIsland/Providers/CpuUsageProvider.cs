@@ -1,7 +1,7 @@
-﻿using MonitorIsland.Abstractions;
+using MonitorIsland.Abstractions;
 using MonitorIsland.Attributes;
+using MonitorIsland.Helpers;
 using MonitorIsland.Models;
-using System.Diagnostics;
 
 namespace MonitorIsland.Providers
 {
@@ -12,28 +12,18 @@ namespace MonitorIsland.Providers
         [DisplayUnit.Percent])]
     public class CpuUsageProvider : MonitorProviderBase
     {
+        private readonly SystemMetrics _systemMetrics = SystemMetrics.Instance;
+
         public override string DefaultPrefix => "CPU使用率：";
-
-        private readonly PerformanceCounter _cpuCounter = new("Processor", "% Processor Time", "_Total");
-
-        public CpuUsageProvider()
-        {
-            _cpuCounter.NextValue();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _cpuCounter?.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         public override MonitorDataResult GetData(MonitorRequest request)
         {
-            var cpuUsage = _cpuCounter.NextValue();
-            return MonitorDataResult.Success(cpuUsage.ToString(), DisplayUnit.Percent);
+            double? cpuUsage = _systemMetrics.GetCpuUsage();
+
+            return cpuUsage is null
+                ? MonitorDataResult.Error("当前平台暂不支持 CPU 使用率")
+                : MonitorDataResult.Success(cpuUsage.Value.ToString(), DisplayUnit.Percent);
         }
+
     }
 }

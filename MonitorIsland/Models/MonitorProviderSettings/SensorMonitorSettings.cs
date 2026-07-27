@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using MonitorIsland.Abstractions.Models;
 using System.Collections.ObjectModel;
 
 namespace MonitorIsland.Models.MonitorProviderSettings
