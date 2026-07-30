@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Windows.Win32;
+using Windows.Win32.System.SystemInformation;
 
 namespace MonitorIsland.Helpers;
 
@@ -28,13 +30,13 @@ internal sealed class WindowsSystemMetrics
 
     public ulong? GetTotalMemory()
     {
-        var memoryInfo = new MemoryStatusEx
+        var memoryInfo = new MEMORYSTATUSEX()
         {
-            Length = (uint)Marshal.SizeOf<MemoryStatusEx>()
+            dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>()
         };
 
-        return GlobalMemoryStatusEx(ref memoryInfo)
-            ? memoryInfo.TotalPhysical
+        return PInvoke.GlobalMemoryStatusEx(ref memoryInfo)
+            ? memoryInfo.ullTotalPhys
             : null;
     }
 
@@ -54,23 +56,4 @@ internal sealed class WindowsSystemMetrics
             return null;
         }
     }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MemoryStatusEx
-    {
-        public uint Length;
-        public uint MemoryLoad;
-        public ulong TotalPhysical;
-        public ulong AvailablePhysical;
-        public ulong TotalPageFile;
-        public ulong AvailablePageFile;
-        public ulong TotalVirtual;
-        public ulong AvailableVirtual;
-        public ulong AvailableExtendedVirtual;
-    }
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx(
-        ref MemoryStatusEx memoryStatus);
 }
