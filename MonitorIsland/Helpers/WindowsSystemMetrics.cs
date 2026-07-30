@@ -56,23 +56,4 @@ internal sealed class WindowsSystemMetrics
             return null;
         }
     }
-
-    //[StructLayout(LayoutKind.Sequential)]
-    //private struct MemoryStatusEx
-    //{
-    //    public uint Length;
-    //    public uint MemoryLoad;
-    //    public ulong TotalPhysical;
-    //    public ulong AvailablePhysical;
-    //    public ulong TotalPageFile;
-    //    public ulong AvailablePageFile;
-    //    public ulong TotalVirtual;
-    //    public ulong AvailableVirtual;
-    //    public ulong AvailableExtendedVirtual;
-    //}
-
-    //[DllImport("kernel32.dll", SetLastError = true)]
-    //[return: MarshalAs(UnmanagedType.Bool)]
-    //private static extern bool GlobalMemoryStatusEx(
-    //    ref MemoryStatusEx memoryStatus);
 }
