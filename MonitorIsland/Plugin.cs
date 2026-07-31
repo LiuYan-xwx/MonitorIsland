@@ -5,11 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MonitorIsland.Abstractions.Extensions;
 using MonitorIsland.Abstractions.Interfaces;
 using MonitorIsland.Controls.Components;
 using MonitorIsland.Controls.MonitorProviderSettingsControls;
-using MonitorIsland.Extensions;
-using MonitorIsland.Interfaces;
 using MonitorIsland.Providers;
 using MonitorIsland.Services;
 

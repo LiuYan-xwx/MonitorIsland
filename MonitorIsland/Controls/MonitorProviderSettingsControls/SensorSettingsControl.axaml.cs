@@ -1,7 +1,7 @@
 using ClassIsland.Core.Abstractions.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using MonitorIsland.Abstractions;
+using MonitorIsland.Abstractions.Controls;
 using MonitorIsland.Abstractions.Interfaces;
 using MonitorIsland.Abstractions.Models;
 using MonitorIsland.Models;

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using MonitorIsland.Abstractions;
+using MonitorIsland.Abstractions.Controls;
 using MonitorIsland.Models.MonitorProviderSettings;
 
 namespace MonitorIsland.Controls.MonitorProviderSettingsControls;
@@ -21,7 +21,7 @@ public partial class DiskSpaceSettingsControl : MonitorProviderControlBase<DiskS
 
     private void LoadAvailableDrives()
     {
-        if(Settings.AvailableDriveNames.Count > 0)
+        if (Settings.AvailableDriveNames.Count > 0)
         {
             return;
         }

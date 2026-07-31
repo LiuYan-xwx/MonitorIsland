@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MonitorIsland.Abstractions;
+using CommunityToolkit.Mvvm.ComponentModel;
+using MonitorIsland.Abstractions.Interfaces;
 using MonitorIsland.Abstractions.Models;
-using MonitorIsland.Interfaces;
+using MonitorIsland.Abstractions.Providers;
 using MonitorIsland.Models.MonitorProviderSettings;
 using System.Text.Json.Serialization;
 

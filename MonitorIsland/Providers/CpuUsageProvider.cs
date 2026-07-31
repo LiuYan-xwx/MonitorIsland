@@ -1,7 +1,7 @@
-using MonitorIsland.Abstractions;
-using MonitorIsland.Attributes;
+using MonitorIsland.Abstractions.Attributes;
+using MonitorIsland.Abstractions.Models;
+using MonitorIsland.Abstractions.Providers;
 using MonitorIsland.Helpers;
-using MonitorIsland.Models;
 
 namespace MonitorIsland.Providers
 {

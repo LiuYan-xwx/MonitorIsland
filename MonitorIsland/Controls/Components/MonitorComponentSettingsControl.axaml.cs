@@ -1,8 +1,8 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+using ClassIsland.Core.Abstractions.Controls;
 using Microsoft.Extensions.Logging;
-using MonitorIsland.Abstractions;
-using MonitorIsland.Interfaces;
-using MonitorIsland.Models;
+using MonitorIsland.Abstractions.Controls;
+using MonitorIsland.Abstractions.Interfaces;
+using MonitorIsland.Abstractions.Models;
 using MonitorIsland.Models.ComponentSettings;
 using System.ComponentModel;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
@@ -77,7 +77,7 @@ namespace MonitorIsland.Controls.Components
             var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
-            UpdateProviderSettingsControl() ;
+            UpdateProviderSettingsControl();
         }
 
         private void UpdateProviderSettingsControl()

@@ -1,1 +1,1 @@
-﻿GlobalMemoryStatusEx
+GlobalMemoryStatusEx

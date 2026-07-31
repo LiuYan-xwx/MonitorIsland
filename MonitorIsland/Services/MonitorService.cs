@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using MonitorIsland.Abstractions;
-using MonitorIsland.Attributes;
-using MonitorIsland.Interfaces;
-using MonitorIsland.Models;
+using Microsoft.Extensions.Logging;
+using MonitorIsland.Abstractions.Attributes;
+using MonitorIsland.Abstractions.Interfaces;
+using MonitorIsland.Abstractions.Models;
+using MonitorIsland.Abstractions.Providers;
 using System.Reflection;
 
 namespace MonitorIsland.Services
