@@ -8,6 +8,6 @@ public sealed class WindowsBackend : IMonitorIslandBackend
 {
     public void Initialize(IServiceCollection services)
     {
-        //services.AddSingleton<IHardwareMonitorService, WindowsHardwareMonitorService>();
+        services.AddSingleton<IHardwareMonitorService, WindowsHardwareMonitorService>();
     }
 }
