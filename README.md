@@ -28,10 +28,12 @@
 ## 截图
 
 **主界面**  
-![主界面示例](https://github.com/user-attachments/assets/d1d6f477-d211-4aa8-8a20-b4c7aee08632)  
+<img width="1063" height="73" alt="主界面示例" src="https://github.com/user-attachments/assets/1deb2c70-f7df-40dc-aaca-5af5575f52ae" />
 
 **设置**  
-![设置示例](https://github.com/user-attachments/assets/f279d0e8-d0a0-40b8-919a-4d0058ded8fa)  
+<img width="1313" height="786" alt="设置界面示例" src="https://github.com/user-attachments/assets/6cc137fb-e7eb-4cf8-8063-938c1aedd26a" />
+
+<img width="1222" height="194" alt="image" src="https://github.com/user-attachments/assets/b665b924-2a3c-4c76-9334-45a24f5a8247" />
 
 > 图片仅为示例，实际效果以当前版本为准。
 
