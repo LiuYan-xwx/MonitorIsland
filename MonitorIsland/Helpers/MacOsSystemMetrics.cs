@@ -10,7 +10,9 @@ internal sealed class MacOsSystemMetrics
     private const int HostCpuLoadInfoFlavor = 3;
     private const int HostVmInfoFlavor = 2;
     private const int Success = 0;
+    private const uint MachPortNull = 0;
 
+    private static readonly uint TaskSelf = TaskSelfTrap();
     private readonly object _cpuLock = new();
 
     private bool _hasCpuSample;
@@ -79,18 +81,27 @@ internal sealed class MacOsSystemMetrics
         {
             var statistics = new VmStatistics();
             uint count = (uint)(Marshal.SizeOf<VmStatistics>() / sizeof(int));
-            if (GetVmStatistics(
-                    MachHostSelf(),
-                    HostVmInfoFlavor,
-                    ref statistics,
-                    ref count) != Success)
+            uint host = MachHostSelf();
+            try
             {
-                return null;
-            }
+                if (host == MachPortNull ||
+                    GetVmStatistics(
+                        host,
+                        HostVmInfoFlavor,
+                        ref statistics,
+                        ref count) != Success)
+                {
+                    return null;
+                }
 
-            ulong availablePages =
-                (ulong)statistics.FreeCount + statistics.InactiveCount;
-            return availablePages * (ulong)Environment.SystemPageSize;
+                ulong availablePages =
+                    (ulong)statistics.FreeCount + statistics.InactiveCount;
+                return availablePages * (ulong)Environment.SystemPageSize;
+            }
+            finally
+            {
+                ReleaseMachPort(host);
+            }
         }
         catch
         {
@@ -107,26 +118,41 @@ internal sealed class MacOsSystemMetrics
         {
             var cpuLoad = new HostCpuLoadInfo();
             uint count = (uint)(Marshal.SizeOf<HostCpuLoadInfo>() / sizeof(int));
-            if (GetCpuStatistics(
-                    MachHostSelf(),
-                    HostCpuLoadInfoFlavor,
-                    ref cpuLoad,
-                    ref count) != Success)
+            uint host = MachHostSelf();
+            try
             {
-                return false;
-            }
+                if (host == MachPortNull ||
+                    GetCpuStatistics(
+                        host,
+                        HostCpuLoadInfoFlavor,
+                        ref cpuLoad,
+                        ref count) != Success)
+                {
+                    return false;
+                }
 
-            idle = cpuLoad.Idle;
-            total = (ulong)cpuLoad.User +
-                cpuLoad.System +
-                cpuLoad.Idle +
-                cpuLoad.Nice;
-            return true;
+                idle = cpuLoad.Idle;
+                total = (ulong)cpuLoad.User +
+                    cpuLoad.System +
+                    cpuLoad.Idle +
+                    cpuLoad.Nice;
+                return true;
+            }
+            finally
+            {
+                ReleaseMachPort(host);
+            }
         }
         catch
         {
             return false;
         }
+    }
+
+    private static void ReleaseMachPort(uint port)
+    {
+        if (port != MachPortNull && TaskSelf != MachPortNull)
+            _ = MachPortDeallocate(TaskSelf, port);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -160,6 +186,12 @@ internal sealed class MacOsSystemMetrics
 
     [DllImport(LibSystem, EntryPoint = "mach_host_self")]
     private static extern uint MachHostSelf();
+
+    [DllImport(LibSystem, EntryPoint = "task_self_trap")]
+    private static extern uint TaskSelfTrap();
+
+    [DllImport(LibSystem, EntryPoint = "mach_port_deallocate")]
+    private static extern int MachPortDeallocate(uint task, uint name);
 
     [DllImport(LibSystem, EntryPoint = "host_statistics")]
     private static extern int GetCpuStatistics(
