@@ -20,6 +20,9 @@ namespace MonitorIsland.Models
         Percent,
 
         [Description("°C")]
-        Celsius
+        Celsius,
+
+        [Description("自动")]
+        Auto
     }
 }

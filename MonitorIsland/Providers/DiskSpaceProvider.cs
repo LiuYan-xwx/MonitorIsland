@@ -30,9 +30,9 @@ namespace MonitorIsland.Providers
 
             return request.SelectedUnit switch
             {
-                DisplayUnit.MB => MonitorDataResult.Success(freeSpace.MebiBytes.ToString(), DisplayUnit.MB),
-                DisplayUnit.GB => MonitorDataResult.Success(freeSpace.GibiBytes.ToString(), DisplayUnit.GB),
-                DisplayUnit.TB => MonitorDataResult.Success(freeSpace.TebiBytes.ToString(), DisplayUnit.TB),
+                DisplayUnit.MB => MonitorDataResult.Success(freeSpace.MebiBytes.ToString()),
+                DisplayUnit.GB => MonitorDataResult.Success(freeSpace.GibiBytes.ToString()),
+                DisplayUnit.TB => MonitorDataResult.Success(freeSpace.TebiBytes.ToString()),
                 _ => MonitorDataResult.Error("未选择有效的显示单位")
             };
         }

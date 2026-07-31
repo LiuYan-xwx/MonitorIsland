@@ -10,7 +10,7 @@ namespace MonitorIsland.Providers
         "monitorisland.classislandmemoryusage",
         "ClassIsland 内存使用",
         "监控 ClassIsland 的内存使用情况",
-        [DisplayUnit.MB, DisplayUnit.GB])]
+        [DisplayUnit.MB, DisplayUnit.GB, DisplayUnit.Auto])]
     public class ClassIslandMemoryUsageProvider : MonitorProviderBase
     {
         public override string DefaultPrefix => "ClassIsland内存：";
@@ -35,8 +35,9 @@ namespace MonitorIsland.Providers
 
             return request.SelectedUnit switch
             {
-                DisplayUnit.MB => MonitorDataResult.Success(memory.MebiBytes.ToString(), DisplayUnit.MB),
-                DisplayUnit.GB => MonitorDataResult.Success(memory.GibiBytes.ToString(), DisplayUnit.GB),
+                DisplayUnit.Auto => MonitorDataResult.Success(memory.LargestWholeNumberBinaryValue.ToString(), memory.LargestWholeNumberBinarySymbol is "MiB" ? DisplayUnit.MB : DisplayUnit.GB),
+                DisplayUnit.MB => MonitorDataResult.Success(memory.MebiBytes.ToString()),
+                DisplayUnit.GB => MonitorDataResult.Success(memory.GibiBytes.ToString()),
                 _ => MonitorDataResult.Error("未选择有效的显示单位")
             };
         }

@@ -22,7 +22,7 @@ namespace MonitorIsland.Providers
 
             return cpuUsage is null
                 ? MonitorDataResult.Error("当前平台暂不支持 CPU 使用率")
-                : MonitorDataResult.Success(cpuUsage.Value.ToString(), DisplayUnit.Percent);
+                : MonitorDataResult.Success(cpuUsage.Value.ToString());
         }
 
     }

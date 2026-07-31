@@ -71,7 +71,7 @@ namespace MonitorIsland.Controls.Components
                     return;
 
                 var request = MonitorRequest.FromSelectedUnit(Settings.SelectedUnit);
-                var result = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken);
+                MonitorDataResult result = await MonitorService.GetDataFromProviderAsync(Settings.SelectedProviderBase, request, cancellationToken);
 
                 // 如果在等待期间被取消（提供者被切换），丢弃过时结果
                 if (cancellationToken.IsCancellationRequested)
@@ -79,7 +79,15 @@ namespace MonitorIsland.Controls.Components
 
                 if (result.IsSuccess)
                 {
-                    Settings.DisplayedUnit = result.Unit;
+                    if (Settings.SelectedUnit == DisplayUnit.Auto || result.Unit is not null)
+                    {
+                        Settings.DisplayedUnit = result.Unit;
+                    }
+                    else
+                    {
+                        Settings.DisplayedUnit = Settings.SelectedUnit;
+                    }
+
                     var displayData = result.Value ?? "N/A";
                     if (double.TryParse(displayData, out var number))
                     {

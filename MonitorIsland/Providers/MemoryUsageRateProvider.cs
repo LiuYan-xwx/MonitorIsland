@@ -31,7 +31,7 @@ namespace MonitorIsland.Providers
             double value = (_totalMemory.Value - availableBytes.Value)
                            / _totalMemory.Value
                            * 100;
-            return MonitorDataResult.Success(value.ToString(), DisplayUnit.Percent);
+            return MonitorDataResult.Success(value.ToString());
         }
     }
 }

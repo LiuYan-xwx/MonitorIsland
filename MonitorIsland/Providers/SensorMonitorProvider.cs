@@ -28,6 +28,6 @@ public class SensorMonitorProvider(IHardwareMonitorService hardwareMonitorServic
         if (value is null)
             return MonitorDataResult.Error("传感器当前不可用");
 
-        return MonitorDataResult.Success(value.Value.ToString(), DisplayUnit.Celsius);
+        return MonitorDataResult.Success(value.Value.ToString());
     }
 }

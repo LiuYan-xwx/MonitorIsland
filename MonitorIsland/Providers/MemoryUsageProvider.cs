@@ -34,15 +34,9 @@ public class MemoryUsageProvider : MonitorProviderBase
 
         return request.SelectedUnit switch
         {
-            DisplayUnit.MB => MonitorDataResult.Success(
-                usedMemory.MebiBytes.ToString(),
-                DisplayUnit.MB),
-            DisplayUnit.GB => MonitorDataResult.Success(
-                usedMemory.GibiBytes.ToString(),
-                DisplayUnit.GB),
-            DisplayUnit.TB => MonitorDataResult.Success(
-                usedMemory.TebiBytes.ToString(),
-                DisplayUnit.TB),
+            DisplayUnit.MB => MonitorDataResult.Success(usedMemory.MebiBytes.ToString()),
+            DisplayUnit.GB => MonitorDataResult.Success(usedMemory.GibiBytes.ToString()),
+            DisplayUnit.TB => MonitorDataResult.Success(usedMemory.TebiBytes.ToString()),
             _ => MonitorDataResult.Error("未选择有效的显示单位")
         };
     }
