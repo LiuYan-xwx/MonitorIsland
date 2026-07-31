@@ -38,14 +38,14 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: |
-            ./MonitorIsland/cipx/*.cipx
+            ./cipx/*.cipx
           name: MonitorIsland-${{ github.sha }}
       
       - name: Upload APP to release
         uses: ncipollo/release-action@v1
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         with:
-          artifacts: "./MonitorIsland/cipx/*.cipx"
+          artifacts: "./cipx/*.cipx"
           draft: true
-          bodyFile: ./MonitorIsland/cipx/checksums.md
+          bodyFile: ./cipx/checksums.md
           token: ${{ secrets.GITHUB_TOKEN }}

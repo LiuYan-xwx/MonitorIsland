@@ -1,7 +1,16 @@
-$cipxPath = "./MonitorIsland/cipx"
+$ErrorActionPreference = "Stop"
+
+$cipxPath = "./cipx"
 $publishPath = "./MonitorIsland/bin/Release/net8.0/publish"
 
+if (Test-Path -Path $publishPath)
+{
+    Remove-Item $publishPath -Recurse -Force
+}
+
 dotnet publish ./MonitorIsland/MonitorIsland.csproj -c Release
+
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 if (Test-Path -Path $cipxPath)
 {

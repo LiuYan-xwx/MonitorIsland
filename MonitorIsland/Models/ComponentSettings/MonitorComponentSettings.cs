@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LibreHardwareMonitor.Hardware;
 using MonitorIsland.Abstractions;
+using MonitorIsland.Abstractions.Models;
 using MonitorIsland.Interfaces;
 using MonitorIsland.Models.MonitorProviderSettings;
 using System.Text.Json.Serialization;
@@ -141,7 +141,7 @@ namespace MonitorIsland.Models.ComponentSettings
                             SelectedSensor = new()
                             {
                                 Identifier = identifier,
-                                SensorType = SensorType.Temperature
+                                SensorType = SensorKind.Temperature
                             }
                         };
                         break;

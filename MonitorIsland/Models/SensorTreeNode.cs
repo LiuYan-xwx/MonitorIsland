@@ -2,7 +2,7 @@ using Avalonia.Media;
 using ClassIsland.Core.Helpers.UI;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAvalonia.UI.Controls;
-using LibreHardwareMonitor.Hardware;
+using MonitorIsland.Abstractions.Models;
 using System.Collections.ObjectModel;
 
 namespace MonitorIsland.Models
@@ -41,39 +41,55 @@ namespace MonitorIsland.Models
         private bool _isExpanded = false;
 
         /// <summary>
-        /// Fluent 图标 Glyph（硬件节点使用，按 HardwareType 分配）
+        /// 硬件类型（硬件节点使用）
         /// </summary>
-        public IconSource HardwareIconGlyph { get; set; } = IconExpressionHelper.Parse("lucide(\uE0F1)");
+        public HardwareKind HardwareKind { get; set; }
 
         /// <summary>
         /// 节点显示的图标 Glyph（硬件节点返回对应硬件图标，传感器节点返回温度计图标）
         /// </summary>
-        public IconSource IconGlyph => IsSensor ? IconExpressionHelper.Parse("fluent(\uF1B4)") : HardwareIconGlyph;
+        public IconSource IconGlyph => IsSensor
+            ? IconExpressionHelper.Parse("fluent(\uF1B4)")
+            : HardwareKind switch
+            {
+                HardwareKind.Cpu => IconExpressionHelper.Parse("lucide(\uE0AD)"),
+                HardwareKind.Gpu => IconExpressionHelper.Parse("lucide(\uE66F)"),
+                HardwareKind.Motherboard => IconExpressionHelper.Parse("lucide(\uE408)"),
+                HardwareKind.Storage => IconExpressionHelper.Parse("lucide(\uE0F1)"),
+                HardwareKind.Memory => IconExpressionHelper.Parse("lucide(\uE44A)"),
+                HardwareKind.Network => IconExpressionHelper.Parse("lucide(\uE129)"),
+                HardwareKind.Battery => IconExpressionHelper.Parse("lucide(\uE059)"),
+                HardwareKind.SuperIo => IconExpressionHelper.Parse("lucide(\uE4ED)"),
+                HardwareKind.Cooler => IconExpressionHelper.Parse("lucide(\uE37D)"),
+                _ => IconExpressionHelper.Parse("lucide(\uE565)")
+            };
 
         /// <summary>
         /// 传感器类型显示文本（仅传感器叶子节点有值）
         /// </summary>
         public string? SensorTypeLabel => Sensor?.SensorType switch
         {
-            SensorType.Temperature => "温度",
-            SensorType.Load => "负载",
-            SensorType.Clock => "频率",
-            SensorType.Fan => "风扇",
-            SensorType.Flow => "流量",
-            SensorType.Control => "控制",
-            SensorType.Level => "液位",
-            SensorType.Power => "功耗",
-            SensorType.Data => "数据",
-            SensorType.Voltage => "电压",
-            SensorType.Current => "电流",
-            SensorType.Factor => "系数",
-            SensorType.Frequency => "频率",
-            SensorType.Energy => "能量",
-            SensorType.Noise => "噪声",
-            SensorType.Humidity => "湿度",
-            SensorType.Throughput => "吞吐",
-            SensorType.TimeSpan => "时间",
-            SensorType.SmallData => "小数据",
+            SensorKind.Temperature => "温度",
+            SensorKind.Load => "负载",
+            SensorKind.Clock => "频率",
+            SensorKind.Fan => "风扇",
+            SensorKind.Flow => "流量",
+            SensorKind.Control => "控制",
+            SensorKind.Level => "液位",
+            SensorKind.Power => "功耗",
+            SensorKind.Data => "数据",
+            SensorKind.Voltage => "电压",
+            SensorKind.Current => "电流",
+            SensorKind.Factor => "系数",
+            SensorKind.Frequency => "频率",
+            SensorKind.Energy => "能量",
+            SensorKind.Noise => "噪声",
+            SensorKind.Humidity => "湿度",
+            SensorKind.Throughput => "吞吐",
+            SensorKind.TimeSpan => "时间",
+            SensorKind.Timing => "时序",
+            SensorKind.SmallData => "小数据",
+            SensorKind.Conductivity => "电导率",
             _ => null
         };
 
@@ -82,20 +98,20 @@ namespace MonitorIsland.Models
         /// </summary>
         public IBrush? SensorTypeColorBrush => Sensor?.SensorType switch
         {
-            SensorType.Temperature => BrushFor("#FF7043"),
-            SensorType.Load => BrushFor("#42A5F5"),
-            SensorType.Clock => BrushFor("#AB47BC"),
-            SensorType.Fan => BrushFor("#26C6DA"),
-            SensorType.Power => BrushFor("#FFCA28"),
-            SensorType.Voltage => BrushFor("#66BB6A"),
-            SensorType.Current => BrushFor("#EF5350"),
-            SensorType.Frequency => BrushFor("#AB47BC"),
-            SensorType.Energy => BrushFor("#FFCA28"),
-            SensorType.Flow => BrushFor("#26C6DA"),
-            SensorType.Control => BrushFor("#42A5F5"),
-            SensorType.Level => BrushFor("#8D6E63"),
-            SensorType.Noise => BrushFor("#BDBDBD"),
-            SensorType.Humidity => BrushFor("#42A5F5"),
+            SensorKind.Temperature => BrushFor("#FF7043"),
+            SensorKind.Load => BrushFor("#42A5F5"),
+            SensorKind.Clock => BrushFor("#AB47BC"),
+            SensorKind.Fan => BrushFor("#26C6DA"),
+            SensorKind.Power => BrushFor("#FFCA28"),
+            SensorKind.Voltage => BrushFor("#66BB6A"),
+            SensorKind.Current => BrushFor("#EF5350"),
+            SensorKind.Frequency => BrushFor("#AB47BC"),
+            SensorKind.Energy => BrushFor("#FFCA28"),
+            SensorKind.Flow => BrushFor("#26C6DA"),
+            SensorKind.Control => BrushFor("#42A5F5"),
+            SensorKind.Level => BrushFor("#8D6E63"),
+            SensorKind.Noise => BrushFor("#BDBDBD"),
+            SensorKind.Humidity => BrushFor("#42A5F5"),
             _ => BrushFor("#BDBDBD")
         };
 

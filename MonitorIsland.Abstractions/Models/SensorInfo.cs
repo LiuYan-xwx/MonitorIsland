@@ -1,6 +1,4 @@
-using LibreHardwareMonitor.Hardware;
-
-namespace MonitorIsland.Models
+namespace MonitorIsland.Abstractions.Models
 {
     /// <summary>
     /// 传感器信息
@@ -25,7 +23,7 @@ namespace MonitorIsland.Models
         /// <summary>
         /// 传感器类型（Temperature、Load、Clock、Fan、Voltage、Power 等）
         /// </summary>
-        public required SensorType SensorType { get; set; }
+        public required SensorKind SensorType { get; set; }
 
         /// <summary>
         /// 显示文本（硬件名称 - 传感器名称）

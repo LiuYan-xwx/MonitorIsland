@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using MonitorIsland.Abstractions.Models;
 using MonitorIsland.Models;
 using System.Collections.ObjectModel;
 
