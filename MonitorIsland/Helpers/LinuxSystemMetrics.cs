@@ -79,10 +79,8 @@ internal sealed class LinuxSystemMetrics
                 ' ',
                 StringSplitOptions.RemoveEmptyEntries |
                 StringSplitOptions.TrimEntries);
-            if (parts.Length < 5)
-                return false;
 
-            for (int i = 1; i < parts.Length; i++)
+            for (int i = 1; i <= 8; i++)
             {
                 if (!ulong.TryParse(
                         parts[i],
