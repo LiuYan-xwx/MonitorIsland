@@ -54,6 +54,9 @@ namespace MonitorIsland.Controls.Components
             {
                 return;
             }
+            var id = Settings.SelectedProviderId!;
+            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+            Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             UpdateProviderSettingsControl();
         }
 
