@@ -56,6 +56,8 @@ body:
       options:
         - Windows 11
         - Windows 10
-        - Linux（？）
+        - Linux
+        - MacOS
+        - Android
         - 其他
       default: 0
