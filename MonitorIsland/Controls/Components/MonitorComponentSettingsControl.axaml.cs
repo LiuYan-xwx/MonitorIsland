@@ -25,6 +25,7 @@ namespace MonitorIsland.Controls.Components
 
         private void MonitorComponentSettingsControl_OnLoaded(object? sender, RoutedEventArgs routedEventArgs)
         {
+            Settings.TryMigrateFromOldSettings();
             Settings.PropertyChanged += OnSettingsPropertyChanged;
 
             LoadProvider();
@@ -54,15 +55,33 @@ namespace MonitorIsland.Controls.Components
             {
                 return;
             }
-            var id = Settings.SelectedProviderId!;
-            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+
+            var id = ResolveProviderId();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                Logger.LogWarning("无法加载监控提供方：ProviderId 为空");
+                return;
+            }
+            if (!IMonitorService.MonitorProviderInfos.TryGetValue(id, out var providerInfo))
+            {
+                Logger.LogWarning("无法加载监控提供方：找不到 ProviderInfo {ProviderId}", id);
+                return;
+            }
+
+            Settings.SelectedProviderId = id;
+            var availableUnits = providerInfo.AvailableUnits;
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             UpdateProviderSettingsControl();
         }
 
         private void ChangeProvider()
         {
-            var id = Settings.SelectedProviderId!;
+            var id = ResolveProviderId();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                Logger.LogWarning("找不到监控提供方: ProviderId 为空");
+                return;
+            }
 
             var template = MonitorProviders.FirstOrDefault(p => p.Id == id);
             if (template is null)
@@ -73,11 +92,25 @@ namespace MonitorIsland.Controls.Components
 
             // 深拷贝
             Settings.SelectedProvider = template.CopyWithoutSettings();
+            Settings.SelectedProviderId = id;
 
-            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+            if (!IMonitorService.MonitorProviderInfos.TryGetValue(id, out var providerInfo))
+            {
+                Logger.LogWarning("找不到监控提供方信息: {ProviderId}", id);
+                return;
+            }
+
+            var availableUnits = providerInfo.AvailableUnits;
             Settings.AvailableUnits = availableUnits?.ToList() ?? [];
             Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
             UpdateProviderSettingsControl();
+        }
+
+        private string? ResolveProviderId()
+        {
+            return !string.IsNullOrWhiteSpace(Settings.SelectedProviderId)
+                ? Settings.SelectedProviderId
+                : Settings.SelectedProvider?.Id;
         }
 
         private void UpdateProviderSettingsControl()
