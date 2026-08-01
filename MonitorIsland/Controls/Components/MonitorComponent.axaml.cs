@@ -124,7 +124,6 @@ namespace MonitorIsland.Controls.Components
             if (Settings.SelectedProvider is not null)
             {
                 LoadProvider();
-                Settings.SelectedProviderId = Settings.SelectedProvider.Id;
             }
             _timer.Start();
         }
@@ -184,6 +183,11 @@ namespace MonitorIsland.Controls.Components
             var oldDisposable = Settings.SelectedProviderBase as IDisposable;
             Settings.SelectedProviderBase = providerInstance;
             oldDisposable?.Dispose();
+
+            var id = Settings.SelectedProvider.Id;
+            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+            Settings.AvailableUnits = availableUnits?.ToList() ?? [];
+            Settings.SelectedProviderId = id;
         }
 
         private void ChangeProvider()
@@ -194,6 +198,7 @@ namespace MonitorIsland.Controls.Components
             if (Settings.SelectedProviderBase is not null)
             {
                 Settings.DisplayPrefix = Settings.SelectedProviderBase.DefaultPrefix;
+                Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
             }
         }
     }

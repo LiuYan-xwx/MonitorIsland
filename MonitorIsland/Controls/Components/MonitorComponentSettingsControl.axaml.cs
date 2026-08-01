@@ -71,9 +71,9 @@ namespace MonitorIsland.Controls.Components
             // 深拷贝
             Settings.SelectedProvider = template.CopyWithoutSettings();
 
-            var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
-            Settings.AvailableUnits = availableUnits?.ToList() ?? [];
-            Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
+            //var availableUnits = IMonitorService.MonitorProviderInfos[id].AvailableUnits;
+            //Settings.AvailableUnits = availableUnits?.ToList() ?? [];
+            //Settings.SelectedUnit = Settings.AvailableUnits.FirstOrDefault();
             UpdateProviderSettingsControl();
         }
 
