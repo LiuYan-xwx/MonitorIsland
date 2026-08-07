@@ -23,5 +23,8 @@ public enum DisplayUnit
     Celsius,
 
     [Description("自动")]
-    Auto
+    Auto,
+
+    [Description("无单位")]
+    Unitless,
 }
