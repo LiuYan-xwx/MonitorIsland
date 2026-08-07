@@ -26,6 +26,25 @@ public static class MonitorProviderRegistryExtensions
     }
 
     /// <summary>
+    /// 使用工厂方法注册监控提供方（无设置控件）
+    /// </summary>
+    /// <typeparam name="TProvider">监控提供方类型</typeparam>
+    /// <param name="services">服务集合</param>
+    /// <param name="implementationFactory">用于创建监控提供方的工厂方法</param>
+    public static IServiceCollection AddMonitorProvider<TProvider>(
+        this IServiceCollection services,
+        Func<IServiceProvider, TProvider> implementationFactory)
+        where TProvider : MonitorProviderBase
+    {
+        ArgumentNullException.ThrowIfNull(implementationFactory);
+
+        var info = RegisterProviderInfo(typeof(TProvider));
+        services.AddKeyedTransient<MonitorProviderBase>(info.Id,
+            (serviceProvider, _) => implementationFactory(serviceProvider));
+        return services;
+    }
+
+    /// <summary>
     /// 注册监控提供方（带设置控件）
     /// </summary>
     /// <typeparam name="TProvider">监控提供方类型</typeparam>
@@ -38,6 +57,76 @@ public static class MonitorProviderRegistryExtensions
         var info = RegisterProviderInfo(typeof(TProvider));
         services.AddKeyedTransient<MonitorProviderBase, TProvider>(info.Id);
         services.AddKeyedTransient<MonitorProviderControlBase, TSettingsControl>(info.Id);
+        return services;
+    }
+
+    /// <summary>
+    /// 使用工厂方法注册监控提供方（带设置控件）
+    /// </summary>
+    /// <typeparam name="TProvider">监控提供方类型</typeparam>
+    /// <typeparam name="TSettingsControl">设置控件类型</typeparam>
+    /// <param name="services">服务集合</param>
+    /// <param name="implementationFactory">用于创建监控提供方的工厂方法</param>
+    public static IServiceCollection AddMonitorProvider<TProvider, TSettingsControl>(
+        this IServiceCollection services,
+        Func<IServiceProvider, TProvider> implementationFactory)
+        where TProvider : MonitorProviderBase
+        where TSettingsControl : MonitorProviderControlBase
+    {
+        ArgumentNullException.ThrowIfNull(implementationFactory);
+
+        var info = RegisterProviderInfo(typeof(TProvider));
+        services.AddKeyedTransient<MonitorProviderBase>(info.Id,
+            (serviceProvider, _) => implementationFactory(serviceProvider));
+        services.AddKeyedTransient<MonitorProviderControlBase, TSettingsControl>(info.Id);
+        return services;
+    }
+
+    /// <summary>
+    /// 使用工厂方法注册设置控件
+    /// </summary>
+    /// <typeparam name="TProvider">监控提供方类型</typeparam>
+    /// <typeparam name="TSettingsControl">设置控件类型</typeparam>
+    /// <param name="services">服务集合</param>
+    /// <param name="settingsControlFactory">用于创建设置控件的工厂方法</param>
+    public static IServiceCollection AddMonitorProvider<TProvider, TSettingsControl>(
+        this IServiceCollection services,
+        Func<IServiceProvider, TSettingsControl> settingsControlFactory)
+        where TProvider : MonitorProviderBase
+        where TSettingsControl : MonitorProviderControlBase
+    {
+        ArgumentNullException.ThrowIfNull(settingsControlFactory);
+
+        var info = RegisterProviderInfo(typeof(TProvider));
+        services.AddKeyedTransient<MonitorProviderBase, TProvider>(info.Id);
+        services.AddKeyedTransient<MonitorProviderControlBase>(info.Id,
+            (serviceProvider, _) => settingsControlFactory(serviceProvider));
+        return services;
+    }
+
+    /// <summary>
+    /// 使用工厂方法注册监控提供方和设置控件
+    /// </summary>
+    /// <typeparam name="TProvider">监控提供方类型</typeparam>
+    /// <typeparam name="TSettingsControl">设置控件类型</typeparam>
+    /// <param name="services">服务集合</param>
+    /// <param name="implementationFactory">用于创建监控提供方的工厂方法</param>
+    /// <param name="settingsControlFactory">用于创建设置控件的工厂方法</param>
+    public static IServiceCollection AddMonitorProvider<TProvider, TSettingsControl>(
+        this IServiceCollection services,
+        Func<IServiceProvider, TProvider> implementationFactory,
+        Func<IServiceProvider, TSettingsControl> settingsControlFactory)
+        where TProvider : MonitorProviderBase
+        where TSettingsControl : MonitorProviderControlBase
+    {
+        ArgumentNullException.ThrowIfNull(implementationFactory);
+        ArgumentNullException.ThrowIfNull(settingsControlFactory);
+
+        var info = RegisterProviderInfo(typeof(TProvider));
+        services.AddKeyedTransient<MonitorProviderBase>(info.Id,
+            (serviceProvider, _) => implementationFactory(serviceProvider));
+        services.AddKeyedTransient<MonitorProviderControlBase>(info.Id,
+            (serviceProvider, _) => settingsControlFactory(serviceProvider));
         return services;
     }
 
