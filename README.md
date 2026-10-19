@@ -96,7 +96,7 @@
 - 本项目使用了以下的第三方库：
   - [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)
   - [ByteSize](https://github.com/omar/ByteSize)
-- 开发过程中使用了 Copilot 辅助
+- 开发过程中使用了 AI 辅助
 
 ## 贡献者
 
